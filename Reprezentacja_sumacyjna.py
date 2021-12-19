@@ -11,7 +11,7 @@ class ReprezentacjaFormyKanonicznejSumacyjnej:
 
     def binary_length(self):
         max_element = max(self.postac_sumacyjna)
-        binary_len = len(bin(max_element))-2 # bin(4) = '0b100'
+        binary_len = len(bin(max_element))-2  # bin(4) = '0b100'
         return binary_len
 
     def df_binary_all_combinations(self):
@@ -19,7 +19,7 @@ class ReprezentacjaFormyKanonicznejSumacyjnej:
         df = pd.DataFrame(
             [[int(num)
               for num in f"{int(bin(x)[2:]):04d}"]
-             for x in range(0, 16)], # binary from 0000 to 1111
+             for x in range(0, 16)],  # binary from 0000 to 1111
             index=np.arange(0, len_**2, 1),
             columns=[chr(x) for x in range(ord('A'), ord('A')+len_)] # [A, B, C, ..., A + bin_len]
         )
@@ -34,6 +34,5 @@ class ReprezentacjaFormyKanonicznejSumacyjnej:
                    for binary_num in range(len_col)]
         return df
 
-rep = ReprezentacjaFormyKanonicznejSumacyjnej([0, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
-print(rep.bin_repr())
-print(rep.set_Y_column())
+    def return_df(self):
+        return self.set_Y_column()
