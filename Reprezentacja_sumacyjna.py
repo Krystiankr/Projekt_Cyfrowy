@@ -18,10 +18,10 @@ class ReprezentacjaFormyKanonicznejSumacyjnej:
         len_ = self.binary_length()
         df = pd.DataFrame(
             [[int(num)
-              for num in f"{int(bin(x)[2:]):04d}"]
-             for x in range(0, 16)],  # binary from 0000 to 1111
+              for num in f"{int(bin(x)[2:]):04d}"]  # 'repr bin' =  0000
+             for x in range(0, len_**2)],  # e.g. 3, from 000-111, e.g. 4, 0000-1111
             index=np.arange(0, len_**2, 1),
-            columns=[chr(x) for x in range(ord('A'), ord('A')+len_)] # [A, B, C, ..., A + bin_len]
+            columns=[chr(x) for x in range(ord('A'), ord('A')+len_)]  # [A, B, C, ..., A + bin_len]
         )
         return df
 
