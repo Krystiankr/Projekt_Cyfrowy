@@ -1,6 +1,7 @@
 import operator
 import pandas as pd
 from typing import List
+import re
 import numpy as np
 from collections import Counter, defaultdict, OrderedDict
 from Reprezentacja_sumacyjna import ReprezentacjaFormyKanonicznejSumacyjnej
@@ -10,8 +11,9 @@ class SelekcjaImplikantow:
     df: pd.DataFrame
     len_binary: int
 
-    def __init__(self, postac_sumacyjna):
-        rep = ReprezentacjaFormyKanonicznejSumacyjnej(postac_sumacyjna)
+    def __init__(self, min_term: List[int], dont_care: List[int]):
+        self.dont_care = dont_care
+        rep = ReprezentacjaFormyKanonicznejSumacyjnej(min_term)
         self.df = rep.return_df()
         self.len_binary = self.df.shape[1] - 1
 
@@ -69,13 +71,17 @@ class SelekcjaImplikantow:
     #  Koniec mojego etapu, wypisanie pasujących par jako 'x' wybralem -1
     def print_final_first_group(self):
         final_dict = self.combine_each_group()
-        print(final_dict)
+        #print(final_dict)
         for key, items in final_dict.items():
             print(f"Group {key}")
             print(f"Items:")
             for item in items:
                 print(item)
 
-postac_sum = [0, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-sel = SelekcjaImplikantow(postac_sum)
-sel.print_final_first_group()
+
+if __name__ == "__main__":
+    postac_sum = [0, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    dont_care = [1, 4]
+    sel = SelekcjaImplikantow(postac_sum, dont_care)
+    print(sel.return_df())
+    sel.print_final_first_group()
