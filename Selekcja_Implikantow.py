@@ -78,10 +78,21 @@ class SelekcjaImplikantow:
             for item in items:
                 print(item)
 
+def method(tekst: str) -> List[int]:
+    formated_tekst = re.findall(r'\d+', tekst) # e.g. ['1', '3', '1', '1', ...]
+    set_ = set(formated_tekst)
+    list_ = list(set_)
+    list_ = [int(x) for x in list_]
+    sorted_list = sorted(list_)
+    # only values < 15
+    sorted_list = [x for x in sorted_list if x < 16]
+    return sorted_list
 
 if __name__ == "__main__":
-    postac_sum = [0, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
+    wejscie = "9,8,10,33123,3,***qweqweqw "
+    wejscie = method(wejscie)
     dont_care = [1, 4]
-    sel = SelekcjaImplikantow(postac_sum, dont_care)
+    sel = SelekcjaImplikantow(wejscie, dont_care)
     sel.print_final_first_group()
     print(sel.return_df())
