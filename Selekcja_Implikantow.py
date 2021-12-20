@@ -83,5 +83,5 @@ if __name__ == "__main__":
     postac_sum = [0, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     dont_care = [1, 4]
     sel = SelekcjaImplikantow(postac_sum, dont_care)
-    print(sel.return_df())
     sel.print_final_first_group()
+    print(sel.return_df())
