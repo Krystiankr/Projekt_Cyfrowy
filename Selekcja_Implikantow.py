@@ -19,24 +19,24 @@ class SelekcjaImplikantow:
         return self.df
 
     def first_group_col(self):
-        self.df["count(1)"] = df.apply(lambda x: sum(x[:-1])
+        self.df["count(1)"] = self.df.apply(lambda x: sum(x[:-1])
                                        if x[-1] == 1
                                        else -1, axis=1)
 
-    def print_first_group(self):
+    def not_finished_first_group(self):
         group_dict = defaultdict(list)
         self.first_group_col()
         df2 = self.df[self.df["count(1)"] != -1]
         df2_sorted = df2.sort_values(by=['count(1)'])
         group_len = df2['count(1)'].unique()
-        print(f"Unique elements {group_len}")
+        # print(f"Unique elements {group_len}")
         flag = 0
         for row in df2_sorted.values:
             if row[-1] == flag:
-                print(f"Group[{row[-1]}]")
+                # print(f"Group[{row[-1]}]")
                 flag += 1
             group_dict[row[-1]].append(row[:-2])
-        print(group_dict)
+        # print(group_dict)
         return group_dict
 
     def check_pair(self, bin1: np.ndarray, bin2: np.ndarray) -> bool:
@@ -50,7 +50,7 @@ class SelekcjaImplikantow:
 
     def combine_each_group(self):
         result_dict = defaultdict(List[List[int]])
-        group_dict = self.print_first_group()
+        group_dict = self.not_finished_first_group()
         for key, items in group_dict.items():
             if key + 1 in group_dict.keys():
                 result_dict[(key, key+1)] = []
@@ -78,6 +78,4 @@ class SelekcjaImplikantow:
 
 postac_sum = [0, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 sel = SelekcjaImplikantow(postac_sum)
-df = sel.return_df()
-print(df)
 sel.print_final_first_group()
