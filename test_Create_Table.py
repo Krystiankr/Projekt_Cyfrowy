@@ -26,6 +26,14 @@ class TestCreateTable(TestCase):
         expect = ['0001', '0010', '0011']
         self.assertEqual(expect, actual)
 
+    def test_fewBoth_value(self):
+        var1 = '0,2,3'
+        var2 = '4,7'
+        df = CreateTable(var1, var2).get_df()
+        actual = df['Liczba Binarna'].tolist()
+        actual.sort()
+        expect = ['0000', '0010', '0011', '0100', '0111']
+        self.assertEqual(expect, actual)
 
     def test_with_incorrect_value(self):
         var1 = '1,d,3'
