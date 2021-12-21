@@ -1,5 +1,6 @@
 from typing import List, Union
 import re
+import pandas as pd
 from Selekcja_Implikantow import SelekcjaImplikantow
 
 
@@ -13,6 +14,15 @@ class CreateTable:
         wejscie = self._merge_list(self.minterm, self.dont_care)
         if wejscie:
             self.table = SelekcjaImplikantow(wejscie)
+
+    def get_df(self):
+        df2 = pd.DataFrame({})
+        df_mix = self.table.return_df().apply(lambda x: [x[-1], ''.join(x[:-3].astype(str)), x[-2]], axis=1).reset_index()
+        df2[['Liczba jedynek', 'Liczba Binarna', 'Y']] = df_mix[0].tolist()#, df_mix['index']
+        df2["Liczba Dziesiętna"] = df_mix['index']
+        df2 = df2[df2.Y == 1]
+        df2.drop(columns='Y', inplace=True)
+        return df2
 
     def return_df(self):
         if self.table:

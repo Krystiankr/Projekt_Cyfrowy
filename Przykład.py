@@ -8,6 +8,7 @@ if __name__ == "__main__":
     # wprowadzone jest ograniczenie liczb to max 40
     # table.get_minterm() -> zwraca wejsciowy minterm w typie List[int]
     # table.get_dont_care() -> to samo co wyżej
+    # table.get_df() -> wyswietla ladny widok df
 
     table = CreateTable("11,2,23", "2 3")
     print(table.return_df())
@@ -15,3 +16,4 @@ if __name__ == "__main__":
     table.print_first_group()
     print(table.minterm)
     print(table.dont_care)
+    print(table.get_df())
