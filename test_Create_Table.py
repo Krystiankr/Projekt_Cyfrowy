@@ -19,7 +19,7 @@ class TestCreateTable(TestCase):
         self.assertEqual(actual, expect)
 
 
-    def test_incorrect_value(self):
+    def test_with_incorrect_value(self):
         var1 = '1,d,3'
         var2 = '4,e,11'
         df = CreateTable(var1, var2).get_df()
@@ -72,4 +72,14 @@ class TestCreateTable(TestCase):
         actual = df['Liczba Dziesiętna'].tolist()
         actual.sort()
         expect = [0, 1, 2, 4, 5, 7, 9, 12]
+        self.assertEqual(actual, expect)
+
+    def test_wrong_value(self):
+        var1 = 'xds'
+        var2 = 'asd'
+        df = CreateTable(var1, var2).get_df()
+        print(df)
+        actual = df['Liczba Dziesiętna'].tolist()
+        actual.sort()
+        expect = []
         self.assertEqual(actual, expect)
