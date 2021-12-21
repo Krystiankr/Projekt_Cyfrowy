@@ -73,6 +73,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tableView.setModel(self.model)
 
         print(wejscie['Liczba jedynek'].values)
+        self.tableView.setSpan(0, 0, 2, 1)
 
 
 
