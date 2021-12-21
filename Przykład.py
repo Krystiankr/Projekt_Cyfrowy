@@ -7,7 +7,7 @@ if __name__ == "__main__":
     # table.print_first_group() -> wypisuje w ładny sposob poszczególne grupy i ich elementy
     # wprowadzone jest ograniczenie liczb to max 40
 
-    table = CreateTable()
+    table = CreateTable("11,2,23", "2 3")
     print(table.return_df())
     print(table.first_group())
     table.print_first_group()
