@@ -8,7 +8,9 @@ class CreateTable:
     table: Union[SelekcjaImplikantow, int] = 0
 
     def __init__(self, min_term: str = '', dont_care: str = '') -> None:
-        wejscie = self._merge_list(str(min_term), str(dont_care))
+        self.minterm = self._str_to_list(min_term)
+        self.dont_care = self._str_to_list(dont_care)
+        wejscie = self._merge_list(self.minterm, self.dont_care)
         if wejscie:
             self.table = SelekcjaImplikantow(wejscie)
 
@@ -16,6 +18,12 @@ class CreateTable:
         if self.table:
             return self.table.return_df()
         return 0
+
+    def get_minterm(self):
+        return self.minterm
+
+    def get_dont_care(self):
+        return self.dont_care
 
     def first_group(self):
         if self.table:
@@ -27,8 +35,8 @@ class CreateTable:
             self.table.print_final_first_group()
         return 0
 
-    def _merge_list(self, l1: str = '', l2: str = '') -> List[int]:
-        list_ = self._str_to_list(l1) + self._str_to_list(l2)
+    def _merge_list(self, l1: List[int] = [], l2: List[int] = []) -> List[int]:
+        list_ = l1 + l2
         sorted_list = sorted(list_)
         # only values < 15
         sorted_list = [x for x in sorted_list if x <= 40]
