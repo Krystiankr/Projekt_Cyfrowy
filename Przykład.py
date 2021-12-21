@@ -10,7 +10,7 @@ if __name__ == "__main__":
     # table.get_dont_care() -> to samo co wyżej
     # table.get_df() -> wyswietla ladny widok df
 
-    table = CreateTable("11,2,23", "2 3")
+    table = CreateTable("0, 1, 2 3 6 7 8 11")
     print(table.return_df())
     print(table.first_group())
     table.print_first_group()
