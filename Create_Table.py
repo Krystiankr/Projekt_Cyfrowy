@@ -16,6 +16,8 @@ class CreateTable:
             self.table = SelekcjaImplikantow(wejscie)
 
     def get_df(self):
+        if not self.table:
+            return pd.DataFrame()
         df2 = pd.DataFrame({})
         df_mix = self.table.return_df().apply(lambda x: [x[-1], ''.join(x[:-2].astype(str)), x[-2]], axis=1).reset_index()
         df2[['Liczba jedynek', 'Liczba Binarna', 'Y']] = df_mix[0].tolist()#, df_mix['index']
@@ -29,7 +31,7 @@ class CreateTable:
     def return_df(self):
         if self.table:
             return self.table.return_df()
-        return 0
+        return pd.DataFrame()
 
     def get_minterm(self):
         return self.minterm
@@ -40,7 +42,7 @@ class CreateTable:
     def first_group(self):
         if self.table:
             return self.table.combine_each_group()
-        return 0
+        return pd.DataFrame()
 
     def print_first_group(self):
         if self.table:

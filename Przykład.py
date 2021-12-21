@@ -9,7 +9,7 @@ if __name__ == "__main__":
     # table.get_minterm() -> zwraca wejsciowy minterm w typie List[int]
     # table.get_dont_care() -> to samo co wyżej
     # table.get_df() -> wyswietla ladny widok df
-
+    #
     table = CreateTable("0, 1, 2 3 6 7 8 11")
     print(table.return_df())
     print(table.first_group())
@@ -18,10 +18,4 @@ if __name__ == "__main__":
     print(table.dont_care)
     print(table.get_df())
 # zmiana
-    print("Zmiana")
 
-    print("Zmiana2")
-
-    print("Zmiena Karola")
-
-    print("Krystian")
