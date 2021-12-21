@@ -7,19 +7,25 @@ class CreateTable:
 
     table: Union[SelekcjaImplikantow, int] = 0
 
-    def __init__(self, min_term, dont_care) -> None:
+    def __init__(self, min_term: str = '', dont_care: str = '') -> None:
         wejscie = self._merge_list(str(min_term), str(dont_care))
         if wejscie:
             self.table = SelekcjaImplikantow(wejscie)
 
     def return_df(self):
-        return self.table.return_df()
+        if self.table:
+            return self.table.return_df()
+        return 0
 
     def first_group(self):
-        return self.table.combine_each_group()
+        if self.table:
+            return self.table.combine_each_group()
+        return 0
 
     def print_first_group(self):
-        self.table.print_final_first_group()
+        if self.table:
+            self.table.print_final_first_group()
+        return 0
 
     def _merge_list(self, l1: str = '', l2: str = '') -> List[int]:
         list_ = self._str_to_list(l1) + self._str_to_list(l2)
