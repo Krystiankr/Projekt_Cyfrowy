@@ -19,3 +19,5 @@ if __name__ == "__main__":
     print(table.get_df())
 # zmiana
     print("Zmiana")
+
+    print("Zmiana2")
