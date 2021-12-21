@@ -22,8 +22,12 @@ class TestCreateTable(TestCase):
     def test_incorrect_value(self):
         var1 = '1,d,3'
         var2 = '4,e,11'
-        self.obj = CreateTable(var1, var2)
-        print(self.obj.get_df())
+        df = CreateTable(var1, var2).get_df()
+        actual = df['Liczba Dziesiętna'].tolist()
+        actual.sort()
+        expect = [1, 3, 4, 11]
+        self.assertEqual(actual, expect)
+
 
     def test_white_value(self):
         var1 = '1 2 3 5 7'
