@@ -22,7 +22,6 @@ class TestCreateTable(TestCase):
         var1 = '1,2,3'
         df = CreateTable(var1).get_df()
         actual = df['Liczba Binarna'].tolist()
-        print(actual)
         actual.sort()
         expect = ['0001', '0010', '0011']
         self.assertEqual(expect, actual)
