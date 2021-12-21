@@ -53,21 +53,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
-        # data = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
-        #                      [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
-        #                      [3, '0111', 7], [3, '1101', 11]]),
-        #            columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
-        #
-        # print(data)
-
-        # self.model = TableModel(data)
-        # self.tableView.setModel(self.model)
-
         self.lnDontCare.setEnabled(False)
         self.chbDontCare.setCheckState(Qt.Unchecked)
         self.chbDontCare.stateChanged.connect(self.ChangingState)
 
         self.btnFind.clicked.connect(self.GetData)
+
+        # self.btnFind.setStyleSheet("background-color: blue")
+        # self.tableView.setStyleSheet("border: 1px solid black")
+
+        wejscie = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
+                                     [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
+                                     [3, '0111', 7], [3, '1101', 11]]),
+                           columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
+
+        self.tableView.setFrameShape(QFrame.HLine)
+
+        self.model = TableModel(wejscie)
+        self.tableView.setModel(self.model)
+
+        print(wejscie['Liczba jedynek'].values)
+
+
+
+        #self.tableView.setSpan(0,0,2,1)
+
+
+
+
+
+
+
+        # header = QTableView.horizontalHeader(self.tableView)
+        # header.setFrameStyle(QFrame.Box | QFrame.Plain)
+        # header.setLineWidth(1)
+        # self.tableView.setHorizontalHeader(header)
+
 
 
     def GetData(self, s):
@@ -86,6 +107,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         print("TUTAJ")
         wynik = CreateTable(getMinterm, getDontCare).get_df()
+
         print("WYNIK: ", wynik)
         self.model = TableModel(wynik)
         self.tableView.setModel(self.model)
@@ -115,11 +137,6 @@ app.exec_()
 #===========================================
 
 
-new = pd.DataFrame
-if new.empty:
-    print("K")
-
-
 
 
 
@@ -132,15 +149,14 @@ if new.empty:
 
 #
 
-# print(wynik)
-#
-# data = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
-#                               [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
-#                               [3, '0111', 7], [3, '1101', 11]]),
-#                     columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
-#
-# list = data['Liczba Dziesiętna'].tolist()
-# print(list)
+
+
+data = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
+                              [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
+                              [3, '0111', 7], [3, '1101', 11]]),
+                    columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
+
+
 
 
 
