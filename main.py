@@ -57,29 +57,39 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                              [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
                              [3, '0111', 7], [3, '1101', 11]]),
                    columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
-        # data = np.array([[1, 9, 2], [1, 0, -1], [3, 5, 2], [3, 3, 2],
-        #                  [5, 8, 9], ])
 
         print(data)
         self.model = TableModel(data)
         self.tableView.setModel(self.model)
 
-
         self.lnDontCare.setEnabled(False)
         self.chbDontCare.setCheckState(Qt.Unchecked)
         self.chbDontCare.stateChanged.connect(self.ChangingState)
 
-        self.btnFind.clicked.connect(self.wypelnij)
+        self.btnFind.clicked.connect(self.GetData)
 
 
-    def wypelnij(self, s):
+    def GetData(self, s):
+
+        # sprawdzenie czy wprowadzono dane
         if self.lnMinterm.displayText() == '':
-            print("Nic nie ma")
+            button = QMessageBox.information(self, "Brak danych", "Podaj mintermy")
             return
-        wynik = self.lnMinterm.displayText()
-        print(wynik)
 
-        self.label_2.setText(str(wejscie))
+        # przekazanie danych z formantów do metod
+        getMinterm = self.lnMinterm.displayText()
+        getDontCare = self.lnDontCare.displayText()
+
+        if not self.chbDontCare.isChecked():
+            getDontCare = ''
+
+        # print("TUTAJ")
+        # wynik = CreateTable(getMinterm, getDontCare).get_df()
+        # print("WYNIK: ", wynik)
+        # self.model = TableModel(wynik)
+        # self.tableView.setModel(self.model)
+
+
 
     def ChangingState(self, s):
         s == Qt.Checked
@@ -94,50 +104,32 @@ app = QApplication(sys.argv)
 #app.setStyle('Fusion')
 
 window = MainWindow()
-palette = QPalette()
-palette.setColor(QPalette.Window, QColor(0, 128, 255))
-palette.setColor(QPalette.WindowText, Qt.white)
-app.setPalette(palette)
+# palette = QPalette()
+# palette.setColor(QPalette.Window, QColor(0, 128, 255))
+# palette.setColor(QPalette.WindowText, Qt.white)
+
 window.show()
 app.exec_()
 
+#===========================================
 
-
-
-
-# lista1 = [1,2]
-# lista2 = [4,5]
-#
-# wejscie = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
-#                              [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
-#                              [3, '0111', 7], [3, '1101', 11]]),
-#                    columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
-#
-# print(wejscie)
-
-lista1 = "0,1,2,3,11"
+lista1 = "asdasd"
 lista2 = "4,5,9"
 lista3 = "1,3"
 
-wynik = CreateTable(lista1, lista2)
-print(wynik.return_df())
-print(wynik.get_df())
-print()
+wynik = CreateTable(lista1, lista2).get_df()
 
 
 
+print(wynik)
 
-# data = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
-#                                          [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
-#                                          [3, '0111', 7], [3, '1101', 11]]))
-#
-#
-# for key, item in data.groupby(1):
-#     print(key, item)
+data = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
+                              [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
+                              [3, '0111', 7], [3, '1101', 11]]),
+                    columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
 
-
-
-
+list = data['Liczba Dziesiętna'].tolist()
+print(list)
 
 
 
