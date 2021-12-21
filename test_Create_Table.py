@@ -16,7 +16,16 @@ class TestCreateTable(TestCase):
         actual = df['Liczba Dziesiętna'].tolist()
         actual.sort()
         expect = [1, 2, 3, 4, 9, 11]
-        self.assertEqual(actual, expect)
+        self.assertEqual(expect, actual)
+
+    def test_few_value(self):
+        var1 = '1,2,3'
+        df = CreateTable(var1).get_df()
+        actual = df['Liczba Binarna'].tolist()
+        print(actual)
+        actual.sort()
+        expect = ['0001', '0010', '0011']
+        self.assertEqual(expect, actual)
 
 
     def test_with_incorrect_value(self):
@@ -26,7 +35,7 @@ class TestCreateTable(TestCase):
         actual = df['Liczba Dziesiętna'].tolist()
         actual.sort()
         expect = [1, 3, 4, 11]
-        self.assertEqual(actual, expect)
+        self.assertEqual(expect, actual)
 
 
     def test_white_value(self):
@@ -36,7 +45,8 @@ class TestCreateTable(TestCase):
         actual = df['Liczba Dziesiętna'].tolist()
         actual.sort()
         expect = [1, 2, 3, 4, 5, 7, 9, 12]
-        self.assertEqual(actual, expect)
+        self.assertEqual(expect, actual)
+
 
     def test_duplicate_value(self):
         var1 = '1 2 4 5 9'
@@ -45,7 +55,7 @@ class TestCreateTable(TestCase):
         actual = df['Liczba Dziesiętna'].tolist()
         actual.sort()
         expect = [1, 2, 3, 4, 5, 9, 12]
-        self.assertEqual(actual, expect)
+        self.assertEqual(expect, actual)
 
     def test_onlyMinterm_value(self):
         var1 = '1 2 4 5 9'
@@ -54,16 +64,16 @@ class TestCreateTable(TestCase):
         actual = df['Liczba Dziesiętna'].tolist()
         actual.sort()
         expect = [1, 2, 4, 5, 9]
-        self.assertEqual(actual, expect)
+        self.assertEqual(expect, actual)
 
-    def test_donCare_MinterNone_value(self):
+    def test_onlyDontCare_value(self):
         var1 = ''
         var2 = '1, 2, 3, 4'
         df = CreateTable(var1, var2).get_df()
         actual = df['Liczba Dziesiętna'].tolist()
         actual.sort()
         expect = [1, 2, 3, 4]
-        self.assertEqual(actual, expect)
+        self.assertEqual(expect, actual)
 
     def test_mix_value(self):
         var1 = '1-2-4-5-9-12-x'
@@ -72,7 +82,7 @@ class TestCreateTable(TestCase):
         actual = df['Liczba Dziesiętna'].tolist()
         actual.sort()
         expect = [0, 1, 2, 4, 5, 7, 9, 12]
-        self.assertEqual(actual, expect)
+        self.assertEqual(expect, actual)
 
     def test_wrong_value(self):
         var1 = 'xds'
@@ -82,4 +92,4 @@ class TestCreateTable(TestCase):
         actual = df['Liczba Dziesiętna'].tolist()
         actual.sort()
         expect = []
-        self.assertEqual(actual, expect)
+        self.assertEqual(expect, actual)

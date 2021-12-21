@@ -53,14 +53,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
-        data = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
-                             [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
-                             [3, '0111', 7], [3, '1101', 11]]),
-                   columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
+        # data = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
+        #                      [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
+        #                      [3, '0111', 7], [3, '1101', 11]]),
+        #            columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
+        #
+        # print(data)
 
-        print(data)
-        self.model = TableModel(data)
-        self.tableView.setModel(self.model)
+        # self.model = TableModel(data)
+        # self.tableView.setModel(self.model)
 
         self.lnDontCare.setEnabled(False)
         self.chbDontCare.setCheckState(Qt.Unchecked)
@@ -83,11 +84,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not self.chbDontCare.isChecked():
             getDontCare = ''
 
-        # print("TUTAJ")
-        # wynik = CreateTable(getMinterm, getDontCare).get_df()
-        # print("WYNIK: ", wynik)
-        # self.model = TableModel(wynik)
-        # self.tableView.setModel(self.model)
+        print("TUTAJ")
+        wynik = CreateTable(getMinterm, getDontCare).get_df()
+        print("WYNIK: ", wynik)
+        self.model = TableModel(wynik)
+        self.tableView.setModel(self.model)
 
 
 
@@ -113,23 +114,30 @@ app.exec_()
 
 #===========================================
 
-lista1 = "asdasd"
-lista2 = "4,5,9"
-lista3 = "1,3"
-
-wynik = CreateTable(lista1, lista2).get_df()
 
 
 
-print(wynik)
 
-data = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
-                              [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
-                              [3, '0111', 7], [3, '1101', 11]]),
-                    columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
 
-list = data['Liczba Dziesiętna'].tolist()
-print(list)
+
+
+
+
+
+
+
+
+#
+
+# print(wynik)
+#
+# data = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
+#                               [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
+#                               [3, '0111', 7], [3, '1101', 11]]),
+#                     columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
+#
+# list = data['Liczba Dziesiętna'].tolist()
+# print(list)
 
 
 
