@@ -18,3 +18,4 @@ if __name__ == "__main__":
     print(table.dont_care)
     print(table.get_df())
 # zmiana
+    print("Zmiana")
