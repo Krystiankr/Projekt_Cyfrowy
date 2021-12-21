@@ -115,6 +115,9 @@ app.exec_()
 #===========================================
 
 
+new = pd.DataFrame
+if new.empty:
+    print("K")
 
 
 
