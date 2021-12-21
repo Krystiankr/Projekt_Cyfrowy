@@ -8,7 +8,7 @@ class CreateTable:
     table: Union[SelekcjaImplikantow, int] = 0
 
     def __init__(self, min_term, dont_care) -> None:
-        wejscie = self._merge_list(min_term, dont_care)
+        wejscie = self._merge_list(str(min_term), str(dont_care))
         if wejscie:
             self.table = SelekcjaImplikantow(wejscie)
 
@@ -25,7 +25,7 @@ class CreateTable:
         list_ = self._str_to_list(l1) + self._str_to_list(l2)
         sorted_list = sorted(list_)
         # only values < 15
-        sorted_list = [x for x in sorted_list if x < 16]
+        sorted_list = [x for x in sorted_list if x <= 40]
         return sorted_list
 
     @staticmethod
