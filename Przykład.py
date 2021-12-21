@@ -23,3 +23,5 @@ if __name__ == "__main__":
     print("Zmiana2")
 
     print("Zmiena Karola")
+
+    print("Krystian")
