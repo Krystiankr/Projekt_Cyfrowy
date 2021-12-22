@@ -1,19 +1,13 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-import pandas as pd
-import numpy as np
-from typing import Any, List, Callable, Union
-from fractions import Fraction
-from PyQt5 import QtWidgets, uic
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QTextEdit
-
-from MainWindow import Ui_MainWindow
-from Create_Table import CreateTable
-
 import sys
+from typing import List
 
+from PyQt5 import QtCore
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+
+from Create_Table import CreateTable
+from MainWindow import Ui_MainWindow
 
 
 class TableModel(QtCore.QAbstractTableModel):
@@ -23,7 +17,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
     def data(self, index, role):
         if role == Qt.DisplayRole:
-        # Note: self._data[index.row()][index.column()] will also work
+            # Note: self._data[index.row()][index.column()] will also work
             value = self._data.iloc[index.row(), index.column()]
             return str(value)
 
@@ -43,7 +37,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    def __init__(self, *args, obj=None, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
@@ -67,17 +61,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.model = TableModel(wejscie)
         # self.tableView.setModel(self.model)
 
-
-        #self.tableView.setSpan(0,0,2,1)
+        # self.tableView.setSpan(0,0,2,1)
         # header = QTableView.horizontalHeader(self.tableView)
         # header.setFrameStyle(QFrame.Box | QFrame.Plain)
         # header.setLineWidth(1)
         # self.tableView.setHorizontalHeader(header)
 
-
     # Metoda scala komórki w kolumnie Liczba jedynek
     # Przyjmuje formant TableView, w którym sprawdzamy wiersze oraz tablice z danymi
     def MergeRow(self, Table: QTableView, tab: [List]):
+        # usunięcie aktualnych scalan
+        Table.clearSpans()
+
         start = 0
         stop = len(tab)
 
@@ -89,13 +84,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     count += 1
                 else:
                     break
-            if (count > 1):
+            if count > 1:
                 Table.setSpan(start, 0, count, 1)
                 print(f"{start}, 0, {count}, 1")
             start = x
 
+        tmp = Table.rowSpan(0,0)
+        print(f"Span: {tmp}")
 
-    def GetData(self, s):
+    def GetData(self):
         # sprawdzenie czy wprowadzono dane
         if self.lnMinterm.displayText() == '':
             button = QMessageBox.information(self, "Brak danych", "Podaj mintermy")
@@ -117,18 +114,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tableView.setModel(self.model)
         self.MergeRow(self.tableView, wynik['Liczba jedynek'].values)
 
-
     def ChangingState(self, s):
         s == Qt.Checked
         print(s)
-        if s == 2:        # Checked
+        if s == 2:  # Checked
             self.lnDontCare.setEnabled(True)
-        if s == 0:        # Unchecked
+        if s == 0:  # Unchecked
             self.lnDontCare.setEnabled(False)
 
 
-
-#============================================================================================
+# ============================================================================================
 
 
 app = QApplication(sys.argv)
@@ -138,17 +133,7 @@ window = MainWindow()
 window.show()
 app.exec_()
 
-#===========================================
-
-
-
-
-
-
-
-
-
-
+# ===========================================
 
 
 #
@@ -183,10 +168,3 @@ app.exec_()
 #
 # print("KONIEC")
 #
-
-
-
-
-
-
-
