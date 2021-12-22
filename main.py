@@ -6,6 +6,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
+
+
 from Create_Table import CreateTable
 from MainWindow import Ui_MainWindow
 
@@ -46,6 +48,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.chbDontCare.stateChanged.connect(self.ChangingState)
 
         self.btnFind.clicked.connect(self.GetData)
+
 
         # self.btnFind.setStyleSheet("background-color: blue")
         # self.tableView.setStyleSheet("border: 1px solid black")
