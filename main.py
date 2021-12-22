@@ -6,6 +6,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 
 
 from Create_Table import CreateTable
@@ -18,10 +20,30 @@ class TableModel(QtCore.QAbstractTableModel):
         self._data = data
 
     def data(self, index, role):
+
+        if role == Qt.TextAlignmentRole:
+            value = self._data.iloc[index.row(), index.column()]
+
+            if isinstance(value, str) or isinstance(value, int):
+                return Qt.AlignCenter | Qt.AlignVCenter
+
+        if role == Qt.TextAlignmentRole:
+            return Qt.AlignCenter
+
+        if role == Qt.ForegroundRole:
+            value = self._data.iloc[index.row(), index.column()]
+            value = int(value)
+            print(index.column())
+            if value > 0 and index.column() == 4:
+                return QtGui.QColor("red")
+
         if role == Qt.DisplayRole:
             # Note: self._data[index.row()][index.column()] will also work
             value = self._data.iloc[index.row(), index.column()]
             return str(value)
+
+
+
 
     def rowCount(self, index):
         return self._data.shape[0]
@@ -49,6 +71,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.btnFind.clicked.connect(self.GetData)
 
+        # ustawienie czcionek
+        font = QFont("Script MT Bold")
+        self.label_6.setFont(font)
+        font = QFont("Open Sans")
+        self.btnFind.setFont(font)
+
+        # formatowanie tablic
+
+
+        font = QFont("Open Sans", 12)
+        self.tblBinary.setFont(font)
+
+        self.tblBinary.horizontalHeader().setDefaultSectionSize(30)
+        self.tblBinary.verticalHeader().setDefaultSectionSize(30)
+
+        self.tblBinary.horizontalHeader().setFont(QFont("Open Sans", 12))
+
+
+        self.tblBinary.horizontalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         # self.btnFind.setStyleSheet("background-color: blue")
         # self.tableView.setStyleSheet("border: 1px solid black")
@@ -69,6 +123,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # header.setFrameStyle(QFrame.Box | QFrame.Plain)
         # header.setLineWidth(1)
         # self.tableView.setHorizontalHeader(header)
+
 
     # Metoda scala komórki w kolumnie Liczba jedynek
     # Przyjmuje formant TableView, w którym sprawdzamy wiersze oraz tablice z danymi
@@ -92,8 +147,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 print(f"{start}, 0, {count}, 1")
             start = x
 
-        tmp = Table.rowSpan(0,0)
-        print(f"Span: {tmp}")
+
 
     def GetData(self):
         # sprawdzenie czy wprowadzono dane
@@ -116,6 +170,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.model = TableModel(wynik)
         self.tableView.setModel(self.model)
         self.MergeRow(self.tableView, wynik['Liczba jedynek'].values)
+
+        tabBinary = CreateTable(getMinterm, getDontCare).return_df()
+        self.model1 = TableModel(tabBinary)
+        self.tblBinary.setModel(self.model1)
 
     def ChangingState(self, s):
         s == Qt.Checked

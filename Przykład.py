@@ -17,6 +17,7 @@ if __name__ == "__main__":
     print(table.minterm)
     print(table.dont_care)
     print(table.get_df())
-    print("Karol zmienia niby w branchu")
-# zmiana
+
+    print(table.return_df())
+
 
