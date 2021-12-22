@@ -1,4 +1,4 @@
-from Create_Table import CreateTable
+from Create_Table import CreateTable, CreateFirstGroup
 
 
 if __name__ == "__main__":
@@ -10,12 +10,9 @@ if __name__ == "__main__":
     # table.get_dont_care() -> to samo co wyżej
     # table.get_df() -> wyswietla ladny widok df
     #
-    table = CreateTable("0, 1, 2 3 6 7 8 11")
-    print(table.return_df())
-    print(table.first_group())
-    table.print_first_group()
-    print(table.minterm)
-    print(table.dont_care)
-    print(table.get_df())
+    table = CreateTable("4, 8, 10, 11, 12, 15", "9, 14")
+    print(table)
+
+    CreateFirstGroup("0, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15")
 # zmiana
 
