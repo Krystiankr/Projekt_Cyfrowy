@@ -67,29 +67,37 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                      [3, '0111', 7], [3, '1101', 11]]),
                            columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
 
-        self.tableView.setFrameShape(QFrame.HLine)
 
+        # formatowanie tableView
+        self.tableView.setFrameShape(QFrame.HLine)
         self.model = TableModel(wejscie)
         self.tableView.setModel(self.model)
 
-        print(wejscie['Liczba jedynek'].values)
-        self.tableView.setSpan(0, 0, 2, 1)
-
-
 
         #self.tableView.setSpan(0,0,2,1)
-
-
-
-
-
-
 
         # header = QTableView.horizontalHeader(self.tableView)
         # header.setFrameStyle(QFrame.Box | QFrame.Plain)
         # header.setLineWidth(1)
         # self.tableView.setHorizontalHeader(header)
 
+
+    def MergeRow(self, Table: QTableView, tab: [List]):
+        start = 0
+        stop = len(tab)
+
+        while start < stop - 1:
+            num = tab[start]
+            count = 1
+            for x in range(start + 1, stop):
+                if (tab[x] == num):
+                    count += 1
+                else:
+                    break
+            if (count > 1):
+                Table.setSpan(start, 0, count, 1)
+                print(f"{start}, 0, {count}, 1")
+            start = x
 
 
     def GetData(self, s):
@@ -113,6 +121,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.model = TableModel(wynik)
         self.tableView.setModel(self.model)
 
+        self.MergeRow(self.tableView, wynik['Liczba jedynek'].values)
+
 
 
     def ChangingState(self, s):
@@ -125,12 +135,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
 app = QApplication(sys.argv)
-#app.setStyle('Fusion')
 
 window = MainWindow()
-# palette = QPalette()
-# palette.setColor(QPalette.Window, QColor(0, 128, 255))
-# palette.setColor(QPalette.WindowText, Qt.white)
 
 window.show()
 app.exec_()
@@ -150,19 +156,36 @@ app.exec_()
 
 #
 
-
-
-data = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
-                              [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
-                              [3, '0111', 7], [3, '1101', 11]]),
-                    columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
-
-
-
-
-
-
-
+#
+#
+# data = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
+#                               [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
+#                               [3, '0111', 7], [3, '1101', 11]]),
+#                     columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
+#
+# print(data['Liczba jedynek'].values)
+#
+# listaJedynek = data['Liczba jedynek'].values
+#
+#
+# start = 0
+# count = 0
+# stop = len(listaJedynek)
+#
+# while start < stop:
+#     num = listaJedynek[start]
+#     count = 1
+#     for x in range(start+1, stop):
+#         if (listaJedynek[x] == num):
+#             count += 1
+#         else:
+#             break
+#     if(count > 1):
+#         print(f"{start}, 0, {count}, 1")
+#     start = x
+#
+# print("KONIEC")
+#
 
 
 
