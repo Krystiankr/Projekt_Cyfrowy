@@ -62,20 +62,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.btnFind.setStyleSheet("background-color: blue")
         # self.tableView.setStyleSheet("border: 1px solid black")
 
-        wejscie = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
-                                     [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
-                                     [3, '0111', 7], [3, '1101', 11]]),
-                           columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
-
-
-        # formatowanie tableView
-        self.tableView.setFrameShape(QFrame.HLine)
-        self.model = TableModel(wejscie)
-        self.tableView.setModel(self.model)
+        # wejscie = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
+        #                              [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
+        #                              [3, '0111', 7], [3, '1101', 11]]),
+        #                    columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
+        #
+        #
+        # # formatowanie tableView
+        # self.tableView.setFrameShape(QFrame.HLine)
+        # self.model = TableModel(wejscie)
+        # self.tableView.setModel(self.model)
 
 
         #self.tableView.setSpan(0,0,2,1)
-
         # header = QTableView.horizontalHeader(self.tableView)
         # header.setFrameStyle(QFrame.Box | QFrame.Plain)
         # header.setLineWidth(1)
@@ -122,7 +121,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tableView.setModel(self.model)
 
         self.MergeRow(self.tableView, wynik['Liczba jedynek'].values)
-
 
 
     def ChangingState(self, s):
