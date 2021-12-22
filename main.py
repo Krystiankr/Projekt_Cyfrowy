@@ -7,20 +7,14 @@ from typing import Any, List, Callable, Union
 from fractions import Fraction
 from PyQt5 import QtWidgets, uic
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 from PyQt5.QtWidgets import QTextEdit
 
 from MainWindow import Ui_MainWindow
 from Create_Table import CreateTable
-from Selekcja_Implikantow import SelekcjaImplikantow
-
 
 import sys
 
-# wejscie = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
-#                              [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
-#                              [3, '0111', 7], [3, '1101', 11]]),
-#                    columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
+
 
 class TableModel(QtCore.QAbstractTableModel):
     def __init__(self, data):
@@ -81,6 +75,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.tableView.setHorizontalHeader(header)
 
 
+    # Metoda scala komórki w kolumnie Liczba jedynek
+    # Przyjmuje formant TableView, w którym sprawdzamy wiersze oraz tablice z danymi
     def MergeRow(self, Table: QTableView, tab: [List]):
         start = 0
         stop = len(tab)
@@ -100,7 +96,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
     def GetData(self, s):
-
         # sprawdzenie czy wprowadzono dane
         if self.lnMinterm.displayText() == '':
             button = QMessageBox.information(self, "Brak danych", "Podaj mintermy")
@@ -110,16 +105,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         getMinterm = self.lnMinterm.displayText()
         getDontCare = self.lnDontCare.displayText()
 
+        # jeżeli nie zaznaczono wartości nieokreślonych zignoruj wartości
         if not self.chbDontCare.isChecked():
             getDontCare = ''
 
-        print("TUTAJ")
+        # utworzenie DataFrame z klasy CreateTable(konstruktor).metoda()
         wynik = CreateTable(getMinterm, getDontCare).get_df()
 
-        print("WYNIK: ", wynik)
+        # utworzenie formanta TableView i przekazanie danych
         self.model = TableModel(wynik)
         self.tableView.setModel(self.model)
-
         self.MergeRow(self.tableView, wynik['Liczba jedynek'].values)
 
 
@@ -130,6 +125,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.lnDontCare.setEnabled(True)
         if s == 0:        # Unchecked
             self.lnDontCare.setEnabled(False)
+
+
+
+#============================================================================================
 
 
 app = QApplication(sys.argv)
