@@ -1,7 +1,7 @@
 import sys
 from typing import List
 import ResultEntrance
-
+from random import *
 
 from PyQt5 import QtCore
 from PyQt5.QtCore import *
@@ -116,7 +116,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             start = x
 
 
-
     def GetData(self):
         # sprawdzenie czy wprowadzono dane
         if self.lnMinterm.displayText() == '':
@@ -146,9 +145,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         copy = tabBinary
         print(copy)
 
-        trial1 = [['A', '-B', 'C', 'D'], ['-A', 'B', 'C']]
+        trial = [[0 for x in range(randint(2, 5))] for y in range(randint(2, 5))]
+        for x in range(0, len(trial)):
+            for y in range(0, len(trial[x])):
+                if randint(1, 10) % 2 == 0:
+                    trial[x][y] = '-' + chr(randint(65, 70))
+                else:
+                    trial[x][y] = chr(randint(65, 70))
+        print(trial)
 
-        self.img = ResultEntrance(trial1).RenderImage()
+        self.img = ResultEntrance(trial).RenderImage()
         self.label_2.setPixmap(QPixmap('formula.png'))
 
 
@@ -164,7 +170,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
 app = QApplication(sys.argv)
-
 
 window = MainWindow()
 

@@ -1,4 +1,6 @@
 from Create_Table import CreateTable
+from random import *
+from typing import List
 
 
 if __name__ == "__main__":
@@ -19,5 +21,23 @@ if __name__ == "__main__":
     print(table.get_df())
 
     print(table.return_df())
+
+
+
+    trial1 = [['A', '-B', 'C', 'D'], ['-A', 'B', 'C'], ['-A', '-B', '-C']]
+
+
+    Matrix = [[0 for x in range(randint(2,5))] for y in range(randint(2,5))]
+    for x in range(0, len(Matrix)):
+        for y in range(0, len(Matrix[x])):
+            if randint(1,10) % 2 == 0:
+                Matrix[x][y] = '-' + chr(randint(65, 70))
+            else:
+                Matrix[x][y] = chr(randint(65,70))
+
+    print(Matrix)
+
+
+
 
 

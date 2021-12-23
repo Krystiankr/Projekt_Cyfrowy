@@ -48,7 +48,7 @@ class Ui_MainWindow(object):
         self.label_4.setAlignment(QtCore.Qt.AlignCenter)
         self.label_4.setObjectName("label_4")
         self.btnFind = QtWidgets.QPushButton(self.centralwidget)
-        self.btnFind.setGeometry(QtCore.QRect(220, 360, 121, 41))
+        self.btnFind.setGeometry(QtCore.QRect(230, 360, 121, 41))
         self.btnFind.setStyleSheet(":active\n"
 "{\n"
 "font: 500 12pt \"Open Sans\";\n"
@@ -152,11 +152,8 @@ class Ui_MainWindow(object):
         self.label.setStyleSheet("border-color: None;\n"
 "background-color: None;")
         self.label.setObjectName("label")
-        self.tableView = QtWidgets.QTableView(self.centralwidget)
-        self.tableView.setGeometry(QtCore.QRect(460, 370, 391, 271))
-        self.tableView.setObjectName("tableView")
         self.tblBinary = QtWidgets.QTableView(self.centralwidget)
-        self.tblBinary.setGeometry(QtCore.QRect(450, 230, 391, 381))
+        self.tblBinary.setGeometry(QtCore.QRect(450, 210, 391, 381))
         self.tblBinary.setStyleSheet("border-top: 3px solid #1C6EA4;\n"
 "border-radius: 12px;\n"
 "border-top-color: rgb(255, 85, 127);\n"
@@ -177,8 +174,25 @@ class Ui_MainWindow(object):
         self.pushButton.setGeometry(QtCore.QRect(760, 10, 75, 24))
         self.pushButton.setObjectName("pushButton")
         self.label_2 = QtWidgets.QLabel(self.frame)
-        self.label_2.setGeometry(QtCore.QRect(20, 330, 801, 121))
+        self.label_2.setGeometry(QtCore.QRect(60, 540, 751, 71))
+        self.label_2.setStyleSheet("border-color: None;")
         self.label_2.setObjectName("label_2")
+        self.tableView = QtWidgets.QTableView(self.frame)
+        self.tableView.setGeometry(QtCore.QRect(20, 260, 391, 221))
+        self.tableView.setStyleSheet("border: None")
+        self.tableView.setObjectName("tableView")
+        self.label_8 = QtWidgets.QLabel(self.frame)
+        self.label_8.setGeometry(QtCore.QRect(20, 510, 311, 51))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setUnderline(False)
+        self.label_8.setFont(font)
+        self.label_8.setStyleSheet("border-color: None;\n"
+"font: 500 18pt \"Open Sans\";\n"
+"")
+        self.label_8.setObjectName("label_8")
         self.frame.raise_()
         self.label_5.raise_()
         self.label_6.raise_()
@@ -191,12 +205,13 @@ class Ui_MainWindow(object):
         self.lnDontCare.raise_()
         self.chbDontCare.raise_()
         self.label.raise_()
-        self.tableView.raise_()
         self.tblBinary.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.label_3.setBuddy(self.lnVariable)
+        self.label.setBuddy(self.lnMinterm)
 
         self.retranslateUi(MainWindow)
         self.pushButton.clicked.connect(MainWindow.close) # type: ignore
@@ -225,3 +240,4 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Mintermy:</p></body></html>"))
         self.pushButton.setText(_translate("MainWindow", "Wyjście"))
         self.label_2.setText(_translate("MainWindow", "TextLabel"))
+        self.label_8.setText(_translate("MainWindow", "Forma zminimalizowana:"))
