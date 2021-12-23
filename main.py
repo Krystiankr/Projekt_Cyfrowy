@@ -83,14 +83,45 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         font = QFont("Open Sans", 12)
         self.tblBinary.setFont(font)
 
-        self.tblBinary.horizontalHeader().setDefaultSectionSize(30)
-        self.tblBinary.verticalHeader().setDefaultSectionSize(30)
+        column = self.tblBinary.horizontalHeader()
+        row = self.tblBinary.verticalHeader()
+
+        row.setDefaultSectionSize(40)
+        column.setDefaultSectionSize(40)
+
+        row.setStyleSheet("border-color: None;\n"
+                            "background-color: None;")
+
+        column.setStyleSheet("border-color: None;\n"
+                            "background-color: None;")
+
+        row.setFixedWidth(35)
+        column.setFixedHeight(50)
+
+
+        # self.tblBinary.horizontalHeader().setFixedHeight(50)
+        # self.tblBinary.verticalHeader().setFixedWidth(35)
+
+        # self.tblBinary.setStyleSheet("QTableWidget::item {padding-left: 5px; border: 3px}")
+
+        # TUTAJ ZACZNIJ!!!!!!!!!!!
+        self.tblBinary.horizontalHeader().setStyleSheet("QHeaderView::section {padding-left: 10px; border: 0px}")
+        self.tblBinary.setStyleSheet("QTableWidget::item {padding-left: 10px; border: 0px}")
+
 
         self.tblBinary.horizontalHeader().setFont(QFont("Open Sans", 12))
+        self.tblBinary.verticalHeader().setFont(QFont("Open Sans", 12))
+
+        self.tblBinary.verticalHeader().setMaximumWidth(100)
+
 
 
         self.tblBinary.horizontalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+        self.tblBinary.verticalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
+
+
+        self.tblBinary.updateGeometries()
 
 
 
