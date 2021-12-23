@@ -155,9 +155,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     trial[x][y] = chr(randint(65, 70))
         print(trial)
 
-        self.img = ResultEntrance(trial).RenderImage()
+        ResultEntrance.RenderImageS(trial)
+        #self.img = ResultEntrance(trial).RenderImage()
         self.label_2.setPixmap(QPixmap('formula.png'))
         self.label_9.setText(ResultEntrance(trial).GenerateAsText())
+
+
 
 
     def ChangingState(self, s):

@@ -29,21 +29,22 @@ class ResultEntrance:
         for dis in self.formula:
             for con in dis:
                 if con[0] == '-':
-                    out += '\\bar{' + con[1] + '}'
+                    out += '\\overline{' + con[1] + '}\,'
                     if len(con) > 2:
                         str1 = ''
-                        out += '_{' + (str1.join(con[2:])) + '}'
+                        out += '_{' + (str1.join(con[2:])) + '}\,'
                 else:
-                    out += con[0]
+                    out += con[0] + '\,'
                     if len(con) > 1:
                         str1 = ''
-                        out += '_{' + (str1.join(con[1:])) + '}'
+                        out += '_{' + (str1.join(con[1:])) + '}\,'
             out += ' + '
         out = out[:-3] + '$'
         return out
 
     # konwertuje wynik na math i zapisuje jako obraz
     # (spowalnie generowanie wyniku)
+
     def RenderImage(self):
         formula = self.GenerateAsMath()
         fig = pylab.figure()
@@ -60,22 +61,23 @@ class ResultEntrance:
         fig.savefig('formula.png', dpi=dpi)
         pylab.close()
 
+    @staticmethod
+    def RenderImageS(lista):
+        obj = ResultEntrance(lista)
+        formula = obj.GenerateAsMath()
+        fig = pylab.figure()
+        text = fig.text(0, 0, formula)
 
-def RenderImageS(lista):
-    #formula = "$Y =a_{N} \\bar{D}\\bar{A}\\bar{A}F + D\\bar{D}FA + B\\bar{F}\\bar{F}\\bar{A}$"
-    fig = pylab.figure()
-    text = fig.text(0, 0, lista)
+        dpi = 200
+        fig.savefig('formula.png', dpi=dpi)
 
-    dpi = 200
-    fig.savefig('formula.png', dpi=dpi)
-
-    bbox = text.get_window_extent()
-    width, height = bbox.size / float(dpi) + 0.12
-    fig.set_size_inches((3, height))
-    dy = (bbox.ymin / float(dpi)) / height
-    text.set_position((0.01, -dy+0.1))
-    fig.savefig('formula.png', dpi=dpi)
-    pylab.close()
+        bbox = text.get_window_extent()
+        width, height = bbox.size / float(dpi) + 0.12
+        fig.set_size_inches((3, height))
+        dy = (bbox.ymin / float(dpi)) / height
+        text.set_position((0.01, -dy+0.1))
+        fig.savefig('formula.png', dpi=dpi)
+        pylab.close()
 
 
 lista = [['x1', '-x2', '-x3', 'x4'], ['x1', '-x2', 'x3', 'x4'], ['x1', '-x2', '-x3', '-x4']]
@@ -104,9 +106,6 @@ for dis in tmp:
     out += ' + '
 out = out[:-3] + '$'
 print(out)
-
-RenderImageS(out)
-
 
 
 
