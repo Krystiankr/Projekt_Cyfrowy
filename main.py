@@ -17,6 +17,7 @@ from PyQt5.QtCore import Qt
 from Create_Table import CreateTable
 from MainWindow import Ui_MainWindow
 from TableModel import TableModel
+from ResultEntrance import ResultEntrance
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -145,6 +146,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         copy = tabBinary
         print(copy)
 
+        trial1 = [['A', '-B', 'C', 'D'], ['-A', 'B', 'C']]
+
+        self.img = ResultEntrance(trial1).RenderImage()
         self.label_2.setPixmap(QPixmap('formula.png'))
 
 

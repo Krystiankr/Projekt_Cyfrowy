@@ -9,9 +9,9 @@ class ResultEntrance:
     def __init__(self, formula):
         self.formula = formula
 
-
-    def printAsText(self):
-        print(self.formula)
+    def GenerateAsText(self):
+        if len(self.formula) == 0:
+            return
         out = 'Y = '
         for dis in self.formula:
             for con in dis:
@@ -20,9 +20,43 @@ class ResultEntrance:
                 else:
                     out += con
             out += ' + '
-
         return out[:-3]
 
+    def GenerateAsMath(self):
+        if len(self.formula) == 0:
+            return
+        out = '$Y = '
+        for dis in self.formula:
+            for con in dis:
+                if con[0] == '-':
+                    out += '\\bar{' + con[1] + '}'
+                else:
+                    out += con
+            out += ' + '
+        out = out[:-3] + '$'
+        return out
+
+    def RenderImage(self):
+        formula = self.GenerateAsMath()
+        fig = pylab.figure()
+        text = fig.text(0, 0, formula)
+
+        dpi = 200
+        fig.savefig('formula.png', dpi=dpi)
+
+        # Now we can work with text's bounding box.
+        bbox = text.get_window_extent()
+
+        width, height = bbox.size / float(dpi) + 0.12
+        # Adjust the figure size so it can hold the entire text.
+        fig.set_size_inches((3, height))
+
+        # Adjust text's vertical position.
+        dy = (bbox.ymin / float(dpi)) / height
+        text.set_position((0, -dy))
+
+        # Save the adjusted text.
+        fig.savefig('formula.png', dpi=dpi)
 
 
     # def saveImage(self):
