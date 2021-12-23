@@ -116,6 +116,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             start = x
 
 
+
     def GetData(self):
         # sprawdzenie czy wprowadzono dane
         if self.lnMinterm.displayText() == '':
