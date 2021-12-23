@@ -33,7 +33,6 @@ class TableModel(QtCore.QAbstractTableModel):
         if role == Qt.ForegroundRole:
             value = self._data.iloc[index.row(), index.column()]
             value = int(value)
-            print(index.column())
             if value > 0 and index.column() == 4:
                 return QtGui.QColor("red")
 
@@ -41,8 +40,6 @@ class TableModel(QtCore.QAbstractTableModel):
             # Note: self._data[index.row()][index.column()] will also work
             value = self._data.iloc[index.row(), index.column()]
             return str(value)
-
-
 
 
     def rowCount(self, index):
@@ -74,6 +71,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # ustawienie czcionek
         font = QFont("Script MT Bold")
         self.label_6.setFont(font)
+
+
         font = QFont("Open Sans")
         self.btnFind.setFont(font)
 
@@ -115,21 +114,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tblBinary.verticalHeader().setMaximumWidth(100)
 
 
-
         self.tblBinary.horizontalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
         self.tblBinary.verticalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
 
-
-        self.tblBinary.updateGeometries()
-
-
-
-
-
-
-
-
+        default_palette = QGuiApplication.palette()
+        default_palette.setColor(QPalette.PlaceholderText, QColor(200, 200, 200))
+        QGuiApplication.setPalette(default_palette)
 
 
 
@@ -206,9 +197,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.model1 = TableModel(tabBinary)
         self.tblBinary.setModel(self.model1)
 
+        copy = tabBinary
+        print(copy)
+
     def ChangingState(self, s):
         s == Qt.Checked
-        print(s)
         if s == 2:  # Checked
             self.lnDontCare.setEnabled(True)
         if s == 0:  # Unchecked

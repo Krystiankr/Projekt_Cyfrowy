@@ -6,34 +6,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>856</width>
-    <height>695</height>
+    <width>873</width>
+    <height>834</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTableView" name="tblBinary">
-    <property name="geometry">
-     <rect>
-      <x>450</x>
-      <y>190</y>
-      <width>391</width>
-      <height>381</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-top: 3px solid #1C6EA4;
-border-radius: 12px;
-border-top-color: rgb(255, 85, 127);
-
-</string>
-    </property>
-    <property name="lineWidth">
-     <number>3</number>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
@@ -82,9 +65,9 @@ font: 700 36pt &quot;Script MT Bold&quot;;</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
+      <y>-20</y>
       <width>851</width>
-      <height>71</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="font">
@@ -95,6 +78,9 @@ font: 700 36pt &quot;Script MT Bold&quot;;</string>
       <kerning>true</kerning>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <property name="text">
      <string>Minimalizacja</string>
     </property>
@@ -102,11 +88,199 @@ font: 700 36pt &quot;Script MT Bold&quot;;</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QPushButton" name="btnFind">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>360</y>
+      <width>121</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">:active
+{
+font: 500 12pt &quot;Open Sans&quot;;
+-webkit-border-radius: 12px;
+-moz-border-radius: 12px;
+border-radius: 12px;
+background-color: rgb(15, 111, 198);
+color: rgb(255, 255, 255);
+border: 2px solid rgb(255, 255, 255)}
+:pressed
+{
+    background-color: rgb(0, 85, 255);
+    border-style: inset
+}
+:hover
+ {
+	border: 2px solid rgb(0, 0, 0)
+}
+:focus
+ {
+	border: 2px solid rgb(0, 0, 255)
+}
+
+
+</string>
+    </property>
+    <property name="text">
+     <string>Generuj</string>
+    </property>
+    <property name="autoDefault">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>180</y>
+      <width>121</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-color: None;
+background-color: None;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Zmienne:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lnMinterm">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>230</y>
+      <width>221</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 3px solid #1C6EA4;
+border-radius: 12px;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="frame">
+     <bool>true</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="dragEnabled">
+     <bool>true</bool>
+    </property>
+    <property name="placeholderText">
+     <string>1, 2, 5, 9, 12</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lnVariable">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>180</y>
+      <width>221</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 3px solid #1C6EA4;
+border-radius: 12px;</string>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="text">
+     <string>A, B, C, D</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="placeholderText">
+     <string>a, b, c, d</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>280</y>
+      <width>131</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-color: None;
+background-color: None;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;wartości &lt;br/&gt;nieokreślone&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lnDontCare">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>300</y>
+      <width>221</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">:active
+{
+border: 3px solid #1C6EA4;
+border-radius: 12px;
+}
+:disabled
+{
+	
+	background-color: rgb(234, 234, 234);
+	border: 2px solid rgb(172, 172, 172);
+	border-radius: 12px;
+
+}</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="placeholderText">
+     <string>0, 6</string>
+    </property>
+   </widget>
    <widget class="QCheckBox" name="chbDontCare">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>260</y>
+      <y>290</y>
       <width>21</width>
       <height>71</height>
      </rect>
@@ -127,136 +301,11 @@ background-color: None;</string>
      <string/>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lnDontCare">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>270</y>
-      <width>221</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>15</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border: 3px solid #1C6EA4;
-border-radius: 12px;</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>150</y>
-      <width>121</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-color: None;
-background-color: None;</string>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Zmienne:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lnVariable">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>150</y>
-      <width>221</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>15</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border: 3px solid #1C6EA4;
-border-radius: 12px;</string>
-    </property>
-    <property name="text">
-     <string>a, b, c, d</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lnMinterm">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>200</y>
-      <width>221</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>15</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border: 3px solid #1C6EA4;
-border-radius: 12px;</string>
-    </property>
-    <property name="text">
-     <string>1, 2, 3, 5, 9,12</string>
-    </property>
-    <property name="frame">
-     <bool>true</bool>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-    <property name="dragEnabled">
-     <bool>true</bool>
-    </property>
-    <property name="placeholderText">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_7">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>250</y>
-      <width>131</width>
-      <height>91</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-color: None;
-background-color: None;</string>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;wartości &lt;br/&gt;nieokreślone&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>200</y>
+      <y>230</y>
       <width>171</width>
       <height>41</height>
      </rect>
@@ -274,42 +323,115 @@ background-color: None;</string>
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Mintermy:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnFind">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>350</y>
-      <width>75</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
    <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>380</y>
+      <y>440</y>
       <width>391</width>
       <height>271</height>
      </rect>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>856</width>
-     <height>22</height>
-    </rect>
-   </property>
+   <widget class="QTableView" name="tblBinary">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>230</y>
+      <width>391</width>
+      <height>381</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-top: 3px solid #1C6EA4;
+border-radius: 12px;
+border-top-color: rgb(255, 85, 127);
+
+</string>
+    </property>
+    <property name="lineWidth">
+     <number>3</number>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>160</y>
+      <width>851</width>
+      <height>631</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+border: 3px solid rgb(220, 220, 220);
+border-radius: 12px;
+</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>760</x>
+       <y>10</y>
+       <width>75</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Wyjście</string>
+     </property>
+    </widget>
+   </widget>
+   <zorder>frame</zorder>
+   <zorder>label_5</zorder>
+   <zorder>label_6</zorder>
+   <zorder>label_4</zorder>
+   <zorder>btnFind</zorder>
+   <zorder>label_3</zorder>
+   <zorder>lnMinterm</zorder>
+   <zorder>lnVariable</zorder>
+   <zorder>label_7</zorder>
+   <zorder>lnDontCare</zorder>
+   <zorder>chbDontCare</zorder>
+   <zorder>label</zorder>
+   <zorder>tableView</zorder>
+   <zorder>tblBinary</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>lnMinterm</tabstop>
+  <tabstop>chbDontCare</tabstop>
+  <tabstop>lnDontCare</tabstop>
+  <tabstop>btnFind</tabstop>
+  <tabstop>tableView</tabstop>
+  <tabstop>tblBinary</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>lnVariable</tabstop>
+ </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>798</x>
+     <y>205</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>861</x>
+     <y>128</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
