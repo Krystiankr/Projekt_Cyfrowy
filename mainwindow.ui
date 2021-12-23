@@ -122,6 +122,7 @@ border: 2px solid rgb(255, 255, 255)}
 }
 
 
+
 </string>
     </property>
     <property name="text">
@@ -396,7 +397,7 @@ border-radius: 12px;
       <string notr="true">border-color: None;</string>
      </property>
      <property name="text">
-      <string>TextLabel</string>
+      <string>Y = WYNIK</string>
      </property>
     </widget>
     <widget class="QTableView" name="tableView">
@@ -438,6 +439,75 @@ font: 500 18pt &quot;Open Sans&quot;;
       <string>Forma zminimalizowana:</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>600</y>
+       <width>75</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">:active
+{
+font: 500 10pt &quot;Open Sans&quot;;
+-webkit-border-radius: 12px;
+-moz-border-radius: 12px;
+border-radius: 12px;
+background-color: None;
+color: rgb(0, 0, 0);
+border: 2px solid rgb(208, 208, 208)}
+:pressed
+{
+    background-color: rgb(0, 85, 255);
+}
+:hover
+ {
+	border: 2px solid rgb(0, 0, 0)
+}
+:!hover
+ {
+	border: 2px solid rgb(208, 208, 208)
+}
+
+:released
+ {
+	border: 2px solid rgb(208, 208, 208)
+}
+
+</string>
+     </property>
+     <property name="text">
+      <string>TEX</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_3">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>600</y>
+       <width>75</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Tekst</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>130</y>
+      <width>241</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
    </widget>
    <zorder>frame</zorder>
    <zorder>label_5</zorder>
@@ -452,6 +522,7 @@ font: 500 18pt &quot;Open Sans&quot;;
    <zorder>chbDontCare</zorder>
    <zorder>label</zorder>
    <zorder>tblBinary</zorder>
+   <zorder>label_9</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

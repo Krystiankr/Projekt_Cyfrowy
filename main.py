@@ -81,8 +81,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tblBinary.verticalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
 
-
-
         # self.renderer = QSvgRenderer('Zeichen.svg')
         # self.label_2.resize(self.renderer.defaultSize())
         # self.painter = QtGui.QPainter(self.label_2)
@@ -90,6 +88,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.renderer.render(self.painter)
         # self.label_2.show()
         # # widget.show()
+
+        self.pushButton_2.clicked.connect(self.tryingCopy)
 
 
 
@@ -157,6 +157,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.img = ResultEntrance(trial).RenderImage()
         self.label_2.setPixmap(QPixmap('formula.png'))
+        self.label_9.setText(ResultEntrance(trial).GenerateAsText())
 
 
     def ChangingState(self, s):
@@ -165,6 +166,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.lnDontCare.setEnabled(True)
         if s == 0:  # Unchecked
             self.lnDontCare.setEnabled(False)
+
+    def tryingCopy(self, s):
+        cb = QApplication.clipboard()
+        cb.clear(mode=cb.Clipboard)
+        cb.setText(self.label_9.text(), mode=cb.Clipboard)
+
 
 
 # ============================================================================================

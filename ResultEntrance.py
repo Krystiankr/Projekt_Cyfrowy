@@ -29,8 +29,6 @@ class ResultEntrance:
         for dis in self.formula:
             for con in dis:
                 if con[0] == '-':
-                    # str1 = ''
-                    # out += '\\bar{' + con[1] + '}' + '_{' + (str1.join(con[2:])) + '}'
                     out += '\\bar{' + con[1] + '}'
                     if len(con) > 2:
                         str1 = ''
@@ -48,7 +46,6 @@ class ResultEntrance:
     # (spowalnie generowanie wyniku)
     def RenderImage(self):
         formula = self.GenerateAsMath()
-        #formula = "$Y =a_{N} \\bar{D}\\bar{A}\\bar{A}F + D\\bar{D}FA + B\\bar{F}\\bar{F}\\bar{A}$"
         fig = pylab.figure()
         text = fig.text(0, 0, formula)
 
@@ -62,6 +59,7 @@ class ResultEntrance:
         text.set_position((0.01, -dy+0.1))
         fig.savefig('formula.png', dpi=dpi)
         pylab.close()
+
 
 def RenderImageS(lista):
     #formula = "$Y =a_{N} \\bar{D}\\bar{A}\\bar{A}F + D\\bar{D}FA + B\\bar{F}\\bar{F}\\bar{A}$"
@@ -82,7 +80,7 @@ def RenderImageS(lista):
 
 lista = [['x1', '-x2', '-x3', 'x4'], ['x1', '-x2', 'x3', 'x4'], ['x1', '-x2', '-x3', '-x4']]
 lista = [['A', 'B', '-C', 'D'], ['A', '-x2', 'x3', 'x4'], ['x1', '-x2', '-x3', '-x4']]
-tmp = [['-A', '-B12', 'C1', 'D2'], ['A', '-B12', '-C125']]
+tmp = [['-x', '-x12', 'x1', 'x2'], ['x', '-x12', '-x']]
 
 obj = ResultEntrance(tmp)
 str1 = obj.GenerateAsMath()

@@ -73,6 +73,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "\n"
+"\n"
 "")
         self.btnFind.setAutoDefault(True)
         self.btnFind.setObjectName("btnFind")
@@ -193,6 +194,43 @@ class Ui_MainWindow(object):
 "font: 500 18pt \"Open Sans\";\n"
 "")
         self.label_8.setObjectName("label_8")
+        self.pushButton_2 = QtWidgets.QPushButton(self.frame)
+        self.pushButton_2.setGeometry(QtCore.QRect(50, 600, 75, 24))
+        self.pushButton_2.setStyleSheet(":active\n"
+"{\n"
+"font: 500 10pt \"Open Sans\";\n"
+"-webkit-border-radius: 12px;\n"
+"-moz-border-radius: 12px;\n"
+"border-radius: 12px;\n"
+"background-color: None;\n"
+"color: rgb(0, 0, 0);\n"
+"border: 2px solid rgb(208, 208, 208)}\n"
+":pressed\n"
+"{\n"
+"    background-color: rgb(0, 85, 255);\n"
+"}\n"
+":hover\n"
+" {\n"
+"    border: 2px solid rgb(0, 0, 0)\n"
+"}\n"
+":!hover\n"
+" {\n"
+"    border: 2px solid rgb(208, 208, 208)\n"
+"}\n"
+"\n"
+":released\n"
+" {\n"
+"    border: 2px solid rgb(208, 208, 208)\n"
+"}\n"
+"\n"
+"")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_3 = QtWidgets.QPushButton(self.frame)
+        self.pushButton_3.setGeometry(QtCore.QRect(130, 600, 75, 24))
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.label_9 = QtWidgets.QLabel(self.centralwidget)
+        self.label_9.setGeometry(QtCore.QRect(20, 130, 241, 31))
+        self.label_9.setObjectName("label_9")
         self.frame.raise_()
         self.label_5.raise_()
         self.label_6.raise_()
@@ -206,6 +244,7 @@ class Ui_MainWindow(object):
         self.chbDontCare.raise_()
         self.label.raise_()
         self.tblBinary.raise_()
+        self.label_9.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -239,5 +278,8 @@ class Ui_MainWindow(object):
         self.lnDontCare.setPlaceholderText(_translate("MainWindow", "0, 6"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Mintermy:</p></body></html>"))
         self.pushButton.setText(_translate("MainWindow", "Wyjście"))
-        self.label_2.setText(_translate("MainWindow", "TextLabel"))
+        self.label_2.setText(_translate("MainWindow", "Y = WYNIK"))
         self.label_8.setText(_translate("MainWindow", "Forma zminimalizowana:"))
+        self.pushButton_2.setText(_translate("MainWindow", "TEX"))
+        self.pushButton_3.setText(_translate("MainWindow", "Tekst"))
+        self.label_9.setText(_translate("MainWindow", "TextLabel"))
