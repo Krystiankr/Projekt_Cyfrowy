@@ -326,8 +326,8 @@ background-color: None;</string>
    <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>440</y>
+      <x>460</x>
+      <y>370</y>
       <width>391</width>
       <height>271</height>
      </rect>
@@ -385,6 +385,19 @@ border-radius: 12px;
      </property>
      <property name="text">
       <string>Wyjście</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>330</y>
+       <width>801</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
      </property>
     </widget>
    </widget>
