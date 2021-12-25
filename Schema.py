@@ -8,30 +8,6 @@ import string
 import numpy as np
 
 
-# Pomocnicza klasa do generowanie dynamicznych nazw zmiennych
-class VariableDynamic:
-    listIn = []
-    listInNot = []
-    listGates = []
-
-class InputNode:
-    node: schemdraw.Drawing
-    name: str
-    label: str
-
-    def __init__(self, name: str, label: str):
-        self.name = name
-        self.label = label
-        self.node = logic.Dot(radius=0).label("$" + label + "$", fontsize=18)
-
-
-class Gate:
-    connect: Dict[schemdraw.Drawing, List[schemdraw.Drawing]]
-
-    def __init__(self):
-        self.dictGates = dict()
-
-
 class Schema:
     listVariable: List[str]
     listResult: List[List[str]]
