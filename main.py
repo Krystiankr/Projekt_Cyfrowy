@@ -154,8 +154,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 else:
                     trial[x][y] = chr(randint(65, 70))
         print(trial)
+        trial3 = [['-x1', '-x2', 'x3'], ['x2', 'x3', '-x4']]
 
-        ResultEntrance.RenderImageS(trial)
+        ResultEntrance.RenderImageS(trial3)
         #self.img = ResultEntrance(trial).RenderImage()
         self.label_2.setPixmap(QPixmap('formula.png'))
         self.label_9.setText(ResultEntrance(trial).GenerateAsText())
