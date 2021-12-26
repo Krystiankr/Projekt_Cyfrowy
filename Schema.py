@@ -2,6 +2,7 @@ from typing import List, Dict, Optional, Union, Any
 import schemdraw
 import schemdraw.elements as elm
 from schemdraw import logic
+import math
 import string
 import numpy as np
 
@@ -72,7 +73,7 @@ class Schema:
             new_gate = logic.And(inputs=nr_in).right().anchor('in1')
             self.dictGates[name] = new_gate
         else:  # utworzenie node
-            new_gate = logic.Dot(radius=0.05)
+            new_gate = logic.Dot(radius=0)
             self.dictGates[name] = new_gate
         return new_gate
 
@@ -98,7 +99,6 @@ class Schema:
             self.MainSchema.add(logic.Line().down().length(0.5))
 
             # dodajemy węzęł
-            # d += logic.Dot(radius=0.05)
             self.MainSchema.add(logic.Dot(radius=0.05))
             self.MainSchema.push()  # Pamiętamy położenie węzła
             self.MainSchema.add(logic.Line().down().length(lenDownLine))
@@ -147,8 +147,7 @@ class Schema:
                 if isinstance(new_gate, schemdraw.elements.lines.Dot):
                     self.MainSchema.add(logic.Line().down().at(self.dictInput[term].end).toy(new_gate.end).linewidth(0))
                     self.MainSchema.add(logic.Dot(radius=0.05))
-                    self.MainSchema.add(logic.Line().to(new_gate.end)).color('red')
-
+                    self.MainSchema.add(logic.Line().to(new_gate.end))
             nrAND += 1
 
 
@@ -165,44 +164,57 @@ class Schema:
             '$Y_{out}$', 'right', fontsize=20).scale(1.5)
         self.MainSchema.add(gate_OR)
 
-        print(self.dictGates.keys())
-        self.MainSchema.add(logic.Line().right().at(self.dictGates['AND0'].out).tox(gate_OR.in1))
-        self.MainSchema.add(logic.Line().to(gate_OR.in1))
+        # łączenie input z wyjściami OR
+        self.ConnectInputswithOr(gate_OR)
 
-        # def....
+    def ConnectInputswithOr(self, gate: schemdraw.Drawing):
+        # utworzenie listy ze współrzędnymi (obiekt Point) wejść bramki OR (ze słownika gate_OR.absanchors)
+        coordInOr = [v for k, v in gate.absanchors.items() if k.startswith('in')]
+        coordInOr.reverse()
 
-        listaBramek = self.dictGates.values()
-        tmp = self.dictGates.items()
-        print(tmp)
-        listaWyjsc = gate_OR.absanchors.keys()
-        print(listaBramek)
-        print(listaWyjsc)
+        # utworzenie listy ze współrzędnymi wyjść wszystkich bramek i node
+        coordOutGates = [v.out if isinstance(v, schemdraw.logic.logic.And) else v.end for k, v in
+                         self.dictGates.items()]
 
-        # gate_OR = logic.Or(inputs=len(self.listResult)).right().at((X.out[0]+2,(X.out[1]+Y.out[1])/2)).label('$Y_{out}$', 'right', fontsize=20).scale(1.5)
-        # d += gate_OR
-        #
-        # nr_in = 1
-        #
-        # for G_Out in self.dictGates.values():
-        #     print(G_Out.__dict__.values())
-        #     print(self.dictGates[G_Out])
-        #     if len(G_Out) > 1:
-        #         point = gate_OR.__dict__['absanchors'][f'in{nr_in}']
-        #         d += logic.Line().right().at(G_Out.out).tox(point).color('red')
-        #         d += logic.Line().to(point)
-        #
-        #
-        # d += logic.Line().right().at(Y.out).toy(O1.in2).color('red')
-        # d += logic.Line().right().length(0.9)
-        # d += logic.Line().to(O1.in2)
-        #
-        # d += logic.Line().right().at(Z.out).toy(O1.in3).color('red')
-        # d += logic.Line().right().length(0.9)
-        # d += logic.Line().to(O1.in3)
-        #
-        # d += logic.Line().right().at(W.out).tox(O1.in5).color('blue')
-        # d += logic.Line().to(O1.in5)
+        if not (len(coordInOr) == len(coordOutGates)):
+            print("Niepoprawna liczba elementów tablic Point")
+            return
 
+        # FOR, przechodzi od pierwszego ostatniego elementu
+        # czyli dla [1, 2, 3, 4, 5, 6] przechodzi przez [1, 6]->[2,5]->[3,4}
+
+        limitFor = math.ceil(len(coordInOr) / 2)
+        distance = coordInOr[0][0] - coordOutGates[0][0]            # dystans X wyjść bramek do wejścia OR
+        decrease = 1
+
+        for step in range(0, limitFor):
+            # jeżeli środkowy element w liscie nieparzystej
+            if not (len(coordInOr) % 2 == 0) and (step == limitFor - 1):
+                self.MainSchema.add(logic.Line().right().at(coordOutGates[step]).length(distance * decrease))
+                if coordOutGates[step][1] < coordInOr[step][1]:     # jeżeli wejście leży poniżej wyjścia OR, linia w góre
+                    self.MainSchema.add(logic.Line().up().length(abs(coordInOr[step][1] - coordOutGates[step][1])))
+                if coordOutGates[step][1] > coordInOr[step][1]:     # linia w dół
+                    self.MainSchema.add(logic.Line().down().length(abs(coordInOr[step][1] - coordOutGates[step][1])))
+                # łączymy linię z wejściem OR
+                self.MainSchema.add(logic.Line().to(coordInOr[step]))
+            else:
+                self.MainSchema.add(logic.Line().right().at(coordOutGates[step]).length(distance * decrease))
+                if coordOutGates[step][1] < coordInOr[step][1]:
+                    self.MainSchema.add(logic.Line().up().length(abs(coordInOr[step][1] - coordOutGates[step][1])))
+                if coordOutGates[step][1] > coordInOr[step][1]:
+                    self.MainSchema.add(logic.Line().down().length(abs(coordInOr[step][1] - coordOutGates[step][1])))
+                self.MainSchema.add(logic.Line().to(coordInOr[step]))
+
+                self.MainSchema.add(logic.Line().right().at(coordOutGates[-step - 1]).length(distance * decrease))
+                if coordOutGates[-step - 1][1] < coordInOr[-step - 1][1]:
+                    self.MainSchema.add(
+                        logic.Line().up().length(abs(coordInOr[-step - 1][1] - coordOutGates[-step - 1][1])))
+                if coordOutGates[-step - 1][1] > coordInOr[-step - 1][1]:
+                    self.MainSchema.add(
+                        logic.Line().down().length(abs(coordInOr[-step - 1][1] - coordOutGates[-step - 1][1])))
+                self.MainSchema.add(logic.Line().to(coordInOr[-step - 1]))
+            # zmniejszamy długość linii od wyjść bramek
+            decrease -= 0.25
 
 
     def DrawSchema(self):
@@ -214,14 +226,12 @@ class Schema:
             self.DrawGatesAndInput()
             self.DrawGateOr()
 
-            # self.MainSchema.draw()
+            self.MainSchema.draw()
         else:
             print("Błędne dane. Sprawdź zmienne i implikanty")
             return
 
 
-
-# zrobić warunke aby sprawdzał zmienne z implikantami
 
 
 values2 = ['x1', 'x2', 'x3', 'x4']
@@ -231,9 +241,9 @@ values1 = ['A', 'B', 'C', 'D', 'E']
 gates1 = [['B'], ['-B', '-D'], ['B','D'], ['C', '-E'], ['A']]
 
 values3 = ['a', 'b', 'c', 'd', 'e']
-gates3 = [['-a', '-b'], ['a','c'], ['-d'], ['-e']]
+gates3 = [['-a', '-b'], ['a','c'], ['-d'], ['-e', '-a']]
 
 
-obj = Schema(values3, gates3)
+obj = Schema(values2, gates2)
 obj.DrawSchema()
 
