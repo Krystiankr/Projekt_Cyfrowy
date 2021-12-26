@@ -20,6 +20,8 @@ from TableModel import TableModel
 from ResultEntrance import ResultEntrance
 
 
+
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
@@ -143,6 +145,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.model1 = TableModel(tabBinary)
         self.tblBinary.setModel(self.model1)
 
+
+
         copy = tabBinary
         print(copy)
 
@@ -156,7 +160,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print(trial)
         trial3 = [['-x1', '-x2', 'x3'], ['x2', 'x3', '-x4']]
 
-        ResultEntrance.RenderImageS(trial3)
+        ResultEntrance.RenderImageS(trial)
         #self.img = ResultEntrance(trial).RenderImage()
         self.label_2.setPixmap(QPixmap('formula.png'))
         self.label_9.setText(ResultEntrance(trial).GenerateAsText())
