@@ -107,7 +107,7 @@ def wypelnij_tab_pokryc(df_wstepna: pd.DataFrame, implikanty_proste: dict):
     return df_wstepna
 
 def get_tab_pokryc(tab: CreateTable) -> pd.DataFrame:
-    df = tab.get_df()
+    df = tab.get_pierwsza_grupa()
     df_grupowane = pd.DataFrame()
     df_grupowane[["Obiekt grupowany", "Elemtny(łączone)", "Element"]] = df[['Liczba jedynek', 'Liczba Dziesiętna', 'Liczba Binarna']]
 
@@ -115,3 +115,9 @@ def get_tab_pokryc(tab: CreateTable) -> pd.DataFrame:
     print(f"Tab -> postac sum {tab.get_postac_sumacyjna()}")
     out_ = przygotuj_tab_pokryc(tab.get_postac_sumacyjna(), dict_out)
     return wypelnij_tab_pokryc(out_, dict_out)
+
+def get_tablica_prawdy(tab: CreateTable) -> pd.DataFrame:
+    return tab.return_df().iloc[:, :-1]
+
+def get_pierwsza_grupa(tab: CreateTable) -> pd.DataFrame:
+    return tab.get_pierwsza_grupa()

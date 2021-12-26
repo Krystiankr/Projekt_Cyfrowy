@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import re
-from collections import defaultdict
 from typing import List
 
 
@@ -14,7 +13,7 @@ class CreateTable:
     def __init__(self, postac_sumacyjna: str = '', dont_care: str = ''):
         self.postac_sumacyjna, self.dont_care, self.wyjscie \
         = self._filtr(postac_sumacyjna, dont_care)
-        self.create_df_with_binary_nums()
+        self._create_df_with_binary_nums()
 
     def get_postac_sumacyjna(self) -> List[int]:
         return sorted(self.postac_sumacyjna)
@@ -24,7 +23,7 @@ class CreateTable:
         binary_len = len(bin(max_element))-2  # bin(4) = '0b100'
         return binary_len
 
-    def create_df_with_binary_nums(self) -> None:
+    def _create_df_with_binary_nums(self) -> None:
         len_ = self._binary_length()
         bin_len = 4 if len_ <= 4 else len_
         self.df = pd.DataFrame(
@@ -49,7 +48,7 @@ class CreateTable:
                                             if x[-1] == 1
                                             else -1, axis=1)
 
-    def get_df(self) -> pd.DataFrame:
+    def get_pierwsza_grupa(self) -> pd.DataFrame:
         if self.df.empty:
             return pd.DataFrame()
         df2 = pd.DataFrame({})
@@ -62,65 +61,12 @@ class CreateTable:
         df2 = df2.reset_index(drop=True)
         return df2
 
-    def first_group(self) -> pd.DataFrame:
-        df_first_group = self.get_df()
-        df_first_group["Checked"] = False
-        return df_first_group
-
-    def grouped_dict(self):
-        group_dict = defaultdict(list)
-        df2 = self.df[self.df["count(1)"] != -1]
-        df2_sorted = df2.sort_values(by=['count(1)'])
-        # print(f"Unique elements {group_len}")
-        flag = 0
-        for row in df2_sorted.values:
-            if row[-1] == flag:
-                # print(f"Group[{row[-1]}]")
-                flag += 1
-            group_dict[row[-1]].append(row[:-2])
-        # print(group_dict)
-        return group_dict
-
-    def print_dict(self, dict_):
-        for key, items in dict_.items():
-            print(f"Group {key}")
-            print(f"Items:")
-            for item in items:
-                print(item)
-
-    @staticmethod
-    def check_pair(bin1: np.ndarray, bin2: np.ndarray) -> bool:
-        return False if np.abs(bin2 - bin1).sum() > 1 else True
-
     @staticmethod
     def return_list_with_x(bin1: np.ndarray, bin2: np.ndarray) -> int:
         new = bin1.copy()
         idx = (bin1 == bin2).argmin()
         new[idx] = '-1'
         return new
-
-    def first_group_list(self):
-        df = self.first_group()
-        print(df["count(1)"].unique())
-
-    def combine_each_group(self, dict_):
-        licznik = 0
-        result_dict = defaultdict(List[List[int]])
-        group_dict = dict_
-        for key, items in group_dict.items():
-            if key + 1 in group_dict.keys():
-                result_dict[(key, key+1)] = []
-                # print(f"Group[{key}]")
-            for item_g in items:
-                #  print(f"Main item {item_g}")
-                if key + 1 in group_dict.keys():
-                    # result_dict[(key, key+1)] = []
-                    for item in group_dict[key + 1]:
-                        if self.check_pair(item_g, item):
-                            # print(f"Found pair! {item_g} {item}")
-                            # print(f"{self.return_list_with_x(item_g, item)}")
-                            result_dict[(key, key+1)].append(self.return_list_with_x(item_g, item))
-        return result_dict
 
     def return_df(self):
         return self.df
