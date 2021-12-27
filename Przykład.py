@@ -1,43 +1,14 @@
-from Create_Table import CreateTable
-from random import *
-from typing import List
-
+from Tablica_pokryc import DostepneMetody
 
 if __name__ == "__main__":
-    # table.return.df() -> pierwsze columny to reprezentacja liczby binarnej, druga od konca to Y, ostatnia to count(1) liczba jedynek, tylko gdy Y == 1, inaczej Y == -1
-    # table.first_group -> zwraca typ defaultdict, klucze to grupy, values: np. [-1, 0, 0, 1] gdzie -1 to 'x'
-    # table.print_first_group() -> wypisuje w ładny sposob poszczególne grupy i ich elementy
-    # wprowadzone jest ograniczenie liczb to max 40
-    # table.get_minterm() -> zwraca wejsciowy minterm w typie List[int]
-    # table.get_dont_care() -> to samo co wyżej
-    # table.get_df() -> wyswietla ladny widok df
-    #
-    table = CreateTable("0, 1, 2 3 6 7 8 11")
-    print(table.return_df())
-    print(table.first_group())
-    table.print_first_group()
-    print(table.minterm)
-    print(table.dont_care)
-    print(table.get_df())
-
-    print(table.return_df())
-
-
-
-    trial1 = [['A', '-B', 'C', 'D'], ['-A', 'B', 'C'], ['-A', '-B', '-C']]
-
-
-    Matrix = [[0 for x in range(randint(2,5))] for y in range(randint(2,5))]
-    for x in range(0, len(Matrix)):
-        for y in range(0, len(Matrix[x])):
-            if randint(1,10) % 2 == 0:
-                Matrix[x][y] = '-' + chr(randint(65, 70))
-            else:
-                Matrix[x][y] = chr(randint(65,70))
-
-    print(Matrix)
-
-
-
+    # tab = CreateTable("0, 1, 2, 8, 11, 15, 20, 23, 24, 27, 28", "3, 22, 29, 31")
+    # zmienne=['D', 'C', 'B', 'A']
+    tab = DostepneMetody(zmienne='x1 x2 x3 x4 x51 x8 x9',postac_sumacyjna="0, 2, 3, 5 6 7 8 9 10 11 12 13 14 15", dont_care='')
+    print()
+    print(tab.get_pierwsza_grupa())  #  ok
+    print(tab.get_tab_pokryc())  # ok
+    print(tab.generuj_funkcje())
+    print(tab.get_tablica_prawdy())  #  ok
+    print(tab.get_lista_implikantow())
 
 
