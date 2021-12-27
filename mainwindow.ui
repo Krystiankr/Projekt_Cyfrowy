@@ -384,7 +384,7 @@ border-radius: 12px;
       <string>Wyjście</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="lblResultMath">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -400,7 +400,7 @@ border-radius: 12px;
       <string>Y = WYNIK</string>
      </property>
     </widget>
-    <widget class="QTableView" name="tableView">
+    <widget class="QTableView" name="tblMinterm">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -531,7 +531,7 @@ border: 2px solid rgb(208, 208, 208)}
   <tabstop>chbDontCare</tabstop>
   <tabstop>lnDontCare</tabstop>
   <tabstop>btnFind</tabstop>
-  <tabstop>tableView</tabstop>
+  <tabstop>tblMinterm</tabstop>
   <tabstop>tblBinary</tabstop>
   <tabstop>pushButton</tabstop>
   <tabstop>lnVariable</tabstop>

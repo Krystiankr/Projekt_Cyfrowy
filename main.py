@@ -1,5 +1,8 @@
 import sys
 from typing import List
+
+import pandas as pd
+
 import ResultEntrance
 from random import *
 
@@ -14,11 +17,13 @@ from PyQt5.QtCore import Qt
 
 from MainWindow import Ui_MainWindow
 from TableModel import TableModel
+from TableModel import PandasModel
 from ResultEntrance import ResultEntrance
-
 
 from Tablica_pokryc import *
 from Reprezentacja_sumacyjna import *
+from InputData import InputData
+from Tablica_pokryc import DostepneMetody
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -36,12 +41,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         font = QFont("Script MT Bold")
         self.label_6.setFont(font)
 
-
         font = QFont("Open Sans")
         self.btnFind.setFont(font)
 
         # formatowanie tablic
-
 
         font = QFont("Open Sans", 12)
         self.tblBinary.setFont(font)
@@ -53,14 +56,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         column.setDefaultSectionSize(40)
 
         row.setStyleSheet("border-color: None;\n"
-                            "background-color: None;")
+                          "background-color: None;")
 
         column.setStyleSheet("border-color: None;\n"
-                            "background-color: None;")
+                             "background-color: None;")
 
         row.setFixedWidth(35)
         column.setFixedHeight(50)
-
 
         # self.tblBinary.horizontalHeader().setFixedHeight(50)
         # self.tblBinary.verticalHeader().setFixedWidth(35)
@@ -71,28 +73,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tblBinary.horizontalHeader().setStyleSheet("QHeaderView::section {padding-left: 10px; border: 0px}")
         self.tblBinary.setStyleSheet("QTableWidget::item {padding-left: 10px; border: 0px}")
 
-
         self.tblBinary.horizontalHeader().setFont(QFont("Open Sans", 12))
         self.tblBinary.verticalHeader().setFont(QFont("Open Sans", 12))
 
         self.tblBinary.verticalHeader().setMaximumWidth(100)
 
-
         self.tblBinary.horizontalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
         self.tblBinary.verticalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
-
         # self.renderer = QSvgRenderer('Zeichen.svg')
-        # self.label_2.resize(self.renderer.defaultSize())
-        # self.painter = QtGui.QPainter(self.label_2)
+        # self.lblResultMath.resize(self.renderer.defaultSize())
+        # self.painter = QtGui.QPainter(self.lblResultMath)
         # self.painter.restore()
         # self.renderer.render(self.painter)
-        # self.label_2.show()
+        # self.lblResultMath.show()
         # # widget.show()
 
         self.pushButton_2.clicked.connect(self.tryingCopy)
-
-
 
     # Metoda scala komórki w kolumnie Liczba jedynek
     # Przyjmuje formant TableView, w którym sprawdzamy wiersze oraz tablice z danymi
@@ -113,9 +110,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     break
             if count > 1:
                 Table.setSpan(start, 0, count, 1)
-                print(f"{start}, 0, {count}, 1")
             start = x
-
 
 
     def GetData(self):
@@ -125,110 +120,36 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
 
         # przekazanie danych z formantów do metod
-        getMinterm = self.lnMinterm.displayText()
-        getDontCare = self.lnDontCare.displayText()
-        getVariable = self.lnVariable.displayText()
-
-        print(type(getMinterm))
-        print(type(getDontCare))
+        getMinterm = self.lnMinterm.text()
+        getDontCare = self.lnDontCare.text()
+        getVariable = self.lnVariable.text()
 
         # jeżeli nie zaznaczono wartości nieokreślonych zignoruj wartości
         if not self.chbDontCare.isChecked():
             getDontCare = ''
 
-        obj_wyn = CreateTable(zmienne=getVariable, postac_sumacyjna=getMinterm, dont_care=getDontCare)
-
-        print(get_tablica_prawdy(obj_wyn))
-
-        DataFrame = pd.DataFrame({'A': ['1','2', '3']})
-        print(DataFrame)
-
-        # df = pd.DataFrame(np.random.randn(10, 4), columns=["A", "B", "C", "D"])
-        # df2 = pd.DataFrame(np.random.randn(7, 3), columns=["A", "B", "C"])
-        # df3 = df + df2
-        #
-        # print(df3)
-
-
-
-        # zm = get_tablica_prawdy(obj_wyn)
-        #
-        #
-        # print(zm)
-        #
-        # self.label_9.setText(str(zm))
-
-        zm = get_tablica_prawdy(obj_wyn)
-        self.model = TableModel(zm)
-        self.tblBinary.setModel(self.model)
-
-        zm1 = get_pierwsza_grupa(obj_wyn)
-        self.model = TableModel(zm1)
-        self.tableView.setModel(self.model)
-        self.MergeRow(self.tableView, zm1['Liczba jedynek'].values)
-
-        # self.model = TableModel(get_tablica_prawdy(obj_wyn))
-        # print(type(self.model))
-        # self.tblBinary.setModel(self.model)
-
-
-            #
-            # self.model = TableModel(zm)
-            # self.tblBinary.setModel(self.model)
-
-        # self.MergeRow(self.tableView, zm['Liczba jedynek'].values)
-
-        # tablicaPrawdy = get_tablica_prawdy(obj_wyn)
-        # self.model = TableModel(tablicaPrawdy)
-        # self.tblBinary.setModel(self.model)
-
-
-
-
-        #
-        # utworzenie DataFrame z klasy CreateTable(konstruktor).metoda()
-        # obj_wyn = CreateTable(postac_sumacyjna=getMinterm, dont_care=getDontCare)
-        # wynik = get_tab_pokryc(obj_wyn)
-        # print(wynik)
-        #
-        # self.model = TableModel(wynik)
-        # self.tableView.setModel(self.model)
-
-        #
-        #
-        # wynik = CreateTable(getMinterm, getDontCare).get_df()
-
-        # utworzenie formanta TableView i przekazanie danych
-        # self.model = TableModel(wynik)
-        # self.tableView.setModel(self.model)
-        # self.MergeRow(self.tableView, wynik['Liczba jedynek'].values)
-        #
-        # tabBinary = CreateTable(getMinterm, getDontCare).return_df()
-        # self.model1 = TableModel(tabBinary)
-        # self.tblBinary.setModel(self.model1)
+        self.ImportDataFrameToTruthTable(self.tblBinary, getVariable, getMinterm, getDontCare)
+        self.ImportDataFrameToTableMinterm(self.tblMinterm, getVariable, getMinterm, getDontCare)
 
 
         # copy = tabBinary
         # print(copy)
 
-        # trial = [[0 for x in range(randint(2, 5))] for y in range(randint(2, 5))]
-        # for x in range(0, len(trial)):
-        #     for y in range(0, len(trial[x])):
-        #         if randint(1, 10) % 2 == 0:
-        #             trial[x][y] = '-' + chr(randint(65, 70))
-        #         else:
-        #             trial[x][y] = chr(randint(65, 70))
-        # print(trial)
-        # trial3 = [['-x1', '-x2', 'x3'], ['x2', 'x3', '-x4']]
-        #
-        #
-        #
-        # ResultEntrance.RenderImageS(trial)
-        # #self.img = ResultEntrance(trial).RenderImage()
-        # self.label_2.setPixmap(QPixmap('formula.png'))
-        # self.label_9.setText(ResultEntrance(trial).GenerateAsText())
+    def ImportDataFrameToTruthTable(self, table: QTableView, getVar: str, getMin: str, getDont: str):
+        obj = InputData(getVar, getMin, getDont)
+        source = obj.getTruthTable()
 
+        self.model = TableModel(source)
+        table.setModel(self.model)
 
+    def ImportDataFrameToTableMinterm(self, table: QTableView, getVar: str, getMin: str, getDont: str):
+        obj = DostepneMetody(getVar, getMin, getDont)
+        source = obj.get_pierwsza_grupa()
+
+        self.model = TableModel(source)
+        table.setModel(self.model)
+
+        self.MergeRow(table, source['Liczba jedynek'].values)
 
     def ChangingState(self, s):
         s == Qt.Checked
@@ -254,3 +175,13 @@ app.exec_()
 
 # ===========================================
 
+#
+# variable = 'a, b, c, d'
+# sop = '1, 2, 3, 4, 5, 9, 12'
+# dontcare = '0, 6'
+#
+# dane = InputData(variable, sop, dontcare)
+# print(dane.truthTable)
+# print(dane.listImplicant)
+# print(dane.firstGroup)
+#

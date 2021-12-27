@@ -5,8 +5,9 @@ from schemdraw import logic
 import math
 import string
 import numpy as np
-
-
+import pandas as pd
+import re
+from Tablica_pokryc import DostepneMetody
 
 class Schema:
     MainSchema = schemdraw.Drawing
@@ -18,7 +19,6 @@ class Schema:
     listAnd: List[List[str]]
     countAnd: int
 
-
     dictGates: Dict[str, schemdraw.Drawing]
     dictInput: Dict[str, schemdraw.Drawing]
     gateOR: schemdraw.Drawing
@@ -27,8 +27,10 @@ class Schema:
 
     def __init__(self, list_variable, list_implicant, line_width: int = 1):
         self.MainSchema = schemdraw.Drawing(unit=0.5, lw=line_width)
-        self.listVariable = list_variable
-        self.listResult = list_implicant
+        #self.listVariable = list_variable
+        self.listVariable = self.StrToList(list_variable)
+        #self.listResult = list_implicant
+        self.listResult = self.SetListImplicant(list_implicant)
         self.countIn = len(list_variable)
         self.listAnd = []
         self.listNodes = []
@@ -52,6 +54,43 @@ class Schema:
         out += f"\nBramki AND: " + (' '.join([str(x) for x in self.listAnd]))
         return out
 
+    def StrToList(self, source: Any):
+        if isinstance(source, list):
+            return source
+        else:
+            # z uprzejmości Pana Krystiana
+            # Wyciągam wszystkie liczby z wejścia
+            formated_tekst = re.findall(r'\d+', source)  # e.g. ['1', '3', '1', '1', ...]
+            set_ = set(formated_tekst)
+            list_ = list(set_)
+            list_ = [int(x) for x in list_]
+            return list_
+
+    def SetListImplicant(self, listImp: Any):
+
+        # sprawdzenie czy podano w formie: ['0-0-0', '000-0', '-00--', '0-00-']
+                                #         czy [['-x2', 'x3'], ['x1','x4'], ['-x2']]
+
+        all_term = [item.replace("-", "") for sublist in listImp for item in sublist]
+        check_if_exist = all(item in self.listVariable for item in all_term)
+
+        if check_if_exist:
+            return listImp
+
+        list_impl = [[char for char in listImp[i]] for i in range(0, len(listImp))]
+
+        for implicant in list_impl:
+            for term in range(0, len(implicant)):
+                if implicant[term] == '1':
+                    implicant[term] = self.listVariable[term]
+                elif implicant[term] == '0':
+                    implicant[term] = '-' + self.listVariable[term]
+                else:
+                    implicant[term] = ''
+
+        tab_end = [[x for x in sub if x != ''] for sub in list_impl]
+        print(type(tab_end))
+        return tab_end
 
     def CheckVariableAndImplicants(self) -> bool:
 
@@ -236,6 +275,24 @@ class Schema:
             decrease -= 0.35
 
 
+    def GetTruthTableMark(self, source: pd.DataFrame):
+        return source.to_markdown(index=False)
+
+    def DrawTruthTable(self, df: pd.DataFrame):
+        table = self.GetTruthTableMark(df)
+        print(table)
+
+
+
+
+
+    # def DrawKmap(self):
+    #     if self.listVariable > 4:
+    #         print("Obsługa tylko do 4 zmiennych")
+    #         return
+
+
+
     def DrawSchema(self):
 
         checkYourData = self.CheckVariableAndImplicants()
@@ -262,15 +319,19 @@ class Schema:
                    '.1.1': {'color': 'blue', 'fill': '#0000ff33'},
                    '.000': {'color': 'green', 'fill': '#00ff0033'}}))
 
-            table = '''
-             A | B | C
-            ---|---|---
-             0 | 1 | 1
-             0 | X | 0
-             1 | 0 | 0
-             1 | 1 | 1
-            '''
-            self.MainSchema.add(logic.Table(table, colfmt='cc||c'))
+            # table = '''
+            #  A | B | C
+            # ---|---|---
+            #  0 | 1 | 1
+            #  0 | X | 0
+            #  1 | 0 | 0
+            #  1 | 1 | 1
+            # '''
+            # self.MainSchema.add(logic.Table(table, colfmt='cc||c'))
+
+
+
+
 
 
             #
@@ -288,12 +349,32 @@ class Schema:
             # self.MainSchema.add(logic.Line().down().at(self.dictInput['-x2'].end).toy(self.gateOR.in3).linewidth(1))
             # self.MainSchema.add(logic.Dot(radius=0.05))
             # self.MainSchema.add(logic.Line().to(self.gateOR.in3))
+            #
+            df2 = pd.DataFrame(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]),
+                               columns=['a', 'b', 'c'])
+            #
+            #
+            # mark = df2.to_markdown(index=False)
+
+
+
+            table = '''
+            |  h |  a   |   b |   c |
+            |----|----:|-----|-----|
+            |  0 |   1 |   2 |   3 |
+            |  1 |   4 |   5 |   6 |
+            |  2 |   7 |   8 |   9 |
+            '''
+
+            self.MainSchema.add(logic.Table(mark, colfmt='cc||c'))
+
+
 
 
 
 
             self.MainSchema.draw()
-            self.MainSchema.save("schema.png", False)
+            # self.MainSchema.save("schema.png", False)
 
 
 
@@ -311,9 +392,12 @@ values1 = ['A', 'B', 'C', 'D', 'E']
 gates1 = [['B'], ['-B', '-D'], ['B','D'], ['C', '-E'], ['A']]
 
 values3 = ['a', 'b', 'c', 'd', 'e']
-gates3 = [['-a', '-b'], ['a','c'], ['-d'], ['-e', '-a']]
+gates3 = [['-a']]
 
 
-obj = Schema(values2, gates2)
-obj.DrawSchema()
+impl = ['0-0-0', '101-1', '-00--', '1-11-']
+obj = Schema(values3, impl)
+print(obj.listResult)
+
+
 

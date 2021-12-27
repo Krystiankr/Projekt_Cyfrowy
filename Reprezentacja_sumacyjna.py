@@ -107,4 +107,6 @@ class CreateTable:
         min_term_ = _str_to_list(min_term)
         dont_care_ = _str_to_list(dont_care)
         wejscie = _merge_list(min_term_, dont_care_)
+
+
         return min_term_, dont_care_, wejscie
