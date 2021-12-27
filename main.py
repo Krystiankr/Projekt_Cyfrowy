@@ -12,14 +12,10 @@ from PyQt5.QtSvg import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 
-
-
 from Create_Table import CreateTable
 from MainWindow import Ui_MainWindow
 from TableModel import TableModel
 from ResultEntrance import ResultEntrance
-
-
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -146,7 +142,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tblBinary.setModel(self.model1)
 
 
-
         copy = tabBinary
         print(copy)
 
@@ -167,7 +162,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
 
-
     def ChangingState(self, s):
         s == Qt.Checked
         if s == 2:  # Checked
@@ -181,9 +175,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         cb.setText(self.label_9.text(), mode=cb.Clipboard)
 
 
-
 # ============================================================================================
-
 
 app = QApplication(sys.argv)
 
