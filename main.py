@@ -26,16 +26,28 @@ from InputData import InputData
 from Tablica_pokryc import DostepneMetody
 
 
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
+        self.ListImplicants = [[]]
+
         self.lnDontCare.setEnabled(False)
         self.chbDontCare.setCheckState(Qt.Unchecked)
         self.chbDontCare.stateChanged.connect(self.ChangingState)
 
+        if self.lnMinterm.displayText() == '':
+            self.btnDrawSchema.setEnabled(False)
+        else:
+            self.btnDrawSchema.setEnabled(True)
+
+
         self.btnFind.clicked.connect(self.GetData)
+        self.btnDrawSchema.clicked.connect(self.DrawSchema)
+
+
 
         # ustawienie czcionek
         font = QFont("Script MT Bold")
@@ -91,6 +103,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.pushButton_2.clicked.connect(self.tryingCopy)
 
+
+    def UpdateListImplicants(self, list):
+        print(list)
+
+
+
+
     # Metoda scala komórki w kolumnie Liczba jedynek
     # Przyjmuje formant TableView, w którym sprawdzamy wiersze oraz tablice z danymi
     def MergeRow(self, Table: QTableView, tab: [List]):
@@ -113,6 +132,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             start = x
 
 
+
+
     def GetData(self):
         # sprawdzenie czy wprowadzono dane
         if self.lnMinterm.displayText() == '':
@@ -128,23 +149,43 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not self.chbDontCare.isChecked():
             getDontCare = ''
 
-        self.ImportDataFrameToTruthTable(self.tblBinary, getVariable, getMinterm, getDontCare)
-        self.ImportDataFrameToTableMinterm(self.tblMinterm, getVariable, getMinterm, getDontCare)
+        obj = InputData(getVariable, getMinterm, getDontCare)
+
+        self.ImportDataFrameToTruthTable(self.tblBinary, obj)
+        self.ImportDataFrameToTableMinterm(self.tblMinterm, obj)
+
+        #self.ImportDataFrameToTableMinterm(self.tblMinterm, getVariable, getMinterm, getDontCare)
+
+
+        self.btnDrawSchema.setEnabled(True)
 
 
         # copy = tabBinary
         # print(copy)
 
-    def ImportDataFrameToTruthTable(self, table: QTableView, getVar: str, getMin: str, getDont: str):
-        obj = InputData(getVar, getMin, getDont)
+    def ImportDataFrameToTruthTable(self, table: QTableView, obj: InputData):
         source = obj.getTruthTable()
-
         self.model = TableModel(source)
         table.setModel(self.model)
 
-    def ImportDataFrameToTableMinterm(self, table: QTableView, getVar: str, getMin: str, getDont: str):
-        obj = DostepneMetody(getVar, getMin, getDont)
-        source = obj.get_pierwsza_grupa()
+    # def ImportDataFrameToTruthTable(self, table: QTableView, getVar: str, getMin: str, getDont: str):
+    #     obj = InputData(getVar, getMin, getDont)
+    #     source = obj.getTruthTable()
+    #
+    #     self.model = TableModel(source)
+    #     table.setModel(self.model)
+
+    # def ImportDataFrameToTableMinterm(self, table: QTableView, getVar: str, getMin: str, getDont: str):
+    #     obj = InputData(getVar, getMin, getDont)
+    #     source = obj.getGroupImplicants()
+    #
+    #     self.model = TableModel(source)
+    #     table.setModel(self.model)
+    #
+    #     self.MergeRow(table, source['Liczba jedynek'].values)
+
+    def ImportDataFrameToTableMinterm(self, table: QTableView, obj: InputData):
+        source = obj.getGroupImplicants()
 
         self.model = TableModel(source)
         table.setModel(self.model)
@@ -162,6 +203,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         cb = QApplication.clipboard()
         cb.clear(mode=cb.Clipboard)
         cb.setText(self.label_9.text(), mode=cb.Clipboard)
+    #
+    # def clickedButton(self):
+    #
+    #
+    # def DrawSchema(self, variable, minterm, dontcare):
+    #
+    #     obj = InputData(variable, minterm, dontcare)
+    #     listImplicants = obj.getImplicants()
+    #     return listImplicants
+
+
+
 
 
 # ============================================================================================

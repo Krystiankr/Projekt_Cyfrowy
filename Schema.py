@@ -38,13 +38,14 @@ class Schema:
         self.dictInput = {}
         self.gateOR = schemdraw.Drawing
 
-        for implicant in range(0, len(list_implicant)):
-            if len(list_implicant[implicant]) == 1:
-                self.listNodes.append(list_implicant[implicant][0])
-            else:
-                self.listAnd.append(list_implicant[implicant])
-        self.countNode = len(self.listNodes)
-        self.countAnd = len(self.listAnd)
+
+        # for implicant in range(0, len(list_implicant)):
+        #     if len(list_implicant[implicant]) == 1:
+        #         self.listNodes.append(list_implicant[implicant][0])
+        #     else:
+        #         self.listAnd.append(list_implicant[implicant])
+        # self.countNode = len(self.listNodes)
+        # self.countAnd = len(self.listAnd)
 
 
     def __repr__(self):
@@ -132,7 +133,7 @@ class Schema:
         # rysowanie wejść
         for x in range(0, self.countIn):
             variable = self.listVariable[x]
-            lenDownLine = len(self.listResult) * 1.5
+            lenDownLine = len(self.listResult) * 2
 
             # zaczynamy od 1, 0
             self.MainSchema.here = (x + 1, 0)
@@ -366,7 +367,7 @@ class Schema:
             |  2 |   7 |   8 |   9 |
             '''
 
-            self.MainSchema.add(logic.Table(mark, colfmt='cc||c'))
+            # self.MainSchema.add(logic.Table(mark, colfmt='cc||c'))
 
 
 
@@ -397,6 +398,7 @@ gates3 = [['-a']]
 
 impl = ['0-0-0', '101-1', '-00--', '1-11-']
 obj = Schema(values3, impl)
+obj.DrawSchema()
 print(obj.listResult)
 
 

@@ -228,6 +228,39 @@ class Ui_MainWindow(object):
         self.pushButton_3 = QtWidgets.QPushButton(self.frame)
         self.pushButton_3.setGeometry(QtCore.QRect(130, 600, 75, 24))
         self.pushButton_3.setObjectName("pushButton_3")
+        self.btnDrawSchema = QtWidgets.QPushButton(self.frame)
+        self.btnDrawSchema.setGeometry(QtCore.QRect(570, 460, 131, 41))
+        font = QtGui.QFont()
+        font.setFamily("Open Sans")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setItalic(False)
+        self.btnDrawSchema.setFont(font)
+        self.btnDrawSchema.setStyleSheet(":active\n"
+"{\n"
+"font: 500 12pt \"Open Sans\";\n"
+"-webkit-border-radius: 12px;\n"
+"-moz-border-radius: 12px;\n"
+"border-radius: 12px;\n"
+"background-color: rgb(15, 111, 198);\n"
+"color: rgb(255, 255, 255);\n"
+"border: 2px solid rgb(255, 255, 255)}\n"
+":pressed\n"
+"{\n"
+"    background-color: rgb(0, 85, 255);\n"
+"    border-style: inset\n"
+"}\n"
+":hover\n"
+" {\n"
+"    border: 2px solid rgb(0, 0, 0)\n"
+"}\n"
+":focus\n"
+" {\n"
+"    border: 2px solid rgb(0, 0, 255)\n"
+"}\n"
+"\n"
+"")
+        self.btnDrawSchema.setObjectName("btnDrawSchema")
         self.label_9 = QtWidgets.QLabel(self.centralwidget)
         self.label_9.setGeometry(QtCore.QRect(20, 130, 241, 31))
         self.label_9.setObjectName("label_9")
@@ -282,4 +315,5 @@ class Ui_MainWindow(object):
         self.label_8.setText(_translate("MainWindow", "Forma zminimalizowana:"))
         self.pushButton_2.setText(_translate("MainWindow", "TEX"))
         self.pushButton_3.setText(_translate("MainWindow", "Tekst"))
+        self.btnDrawSchema.setText(_translate("MainWindow", "Rysuj"))
         self.label_9.setText(_translate("MainWindow", "TextLabel"))

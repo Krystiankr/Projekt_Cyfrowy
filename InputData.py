@@ -2,9 +2,12 @@ from typing import List, Dict, Optional, Union, Any
 import pandas as pd
 import re
 from Tablica_pokryc import DostepneMetody
+from Schema import Schema
 
 class InputData:
     InputObject: DostepneMetody
+    CreateSchema: Schema
+
     listVariables: str
 
     # firstGroup: pd.DataFrame
@@ -56,12 +59,8 @@ class InputData:
         tab_end = [[x for x in sub if x != ''] for sub in list_impl]
         return tab_end
 
-    # def getGroupImplicants(self) -> pd.DataFrame:
-    #     return self.InputObject.get_pierwsza_grupa()
-    #
-    #
-    # def getTruthTableMark(self):
-    #     return self.truthTable.to_markdown(index=False)
+    def getGroupImplicants(self):
+        return self.InputObject.get_pierwsza_grupa()
 
 
 
