@@ -16,13 +16,13 @@ class ReprezentacjaFormyKanonicznejSumacyjnej:
 
     def df_binary_all_combinations(self):
         len_ = self.binary_length()
-        len2 = 4 if len_ <= 4 else len_
+        bin_len = 4 if len_ <= 4 else len_
         df = pd.DataFrame(
             [[int(num)
-              for num in f"{int(bin(x)[2:]):0{len2}d}"]  # 'repr bin' =  0000
+              for num in f"{int(bin(x)[2:]):0{bin_len}d}"]  # 'repr bin' =  0000
              for x in range(0, 2 ** len_)],  # e.g. 3, from 000-111, e.g. 4, 0000-1111
             index=np.arange(0, 2 ** len_, 1),
-            columns=[chr(x) for x in range(ord('A'), ord('A')+len2)]  # [A, B, C, ..., A + bin_len]
+            columns=[chr(x) for x in range(ord('A'), ord('A')+bin_len)]  # [A, B, C, ..., A + bin_len]
         )
         return df
 

@@ -4,7 +4,7 @@ import pandas as pd
 from Selekcja_Implikantow import SelekcjaImplikantow
 
 
-class CreateTable:
+class DfOperations:
 
     table: Union[SelekcjaImplikantow, int] = 0
 
@@ -63,3 +63,14 @@ class CreateTable:
         list_ = list(set_)
         list_ = [int(x) for x in list_]
         return list_
+
+
+def CreateTable(minterm: str='', dont_care: str='') -> pd.DataFrame:
+    # Zwraca df w formie `Liczba jedynek` `Lizcba Binarna` `Liczba dziesiętna`
+    df = DfOperations(minterm, dont_care)
+    return df.get_df()
+
+
+def CreateFirstGroup(minterm: str='', dont_care: str=''):
+    df = DfOperations(minterm, dont_care)
+    df.table.print_final_first_group()
