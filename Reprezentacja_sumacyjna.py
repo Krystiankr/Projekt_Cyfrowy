@@ -10,8 +10,8 @@ class CreateTable:
     wyjscie: List[int]
     df: pd.DataFrame = pd.DataFrame()
 
-    def __init__(self, postac_sumacyjna: str = '', dont_care: str = ''):
-
+    def __init__(self, zmienne: str, postac_sumacyjna: str = '', dont_care: str = ''):
+        self.zmienne = [el[:2] if len(el) > 2 else el for el in re.findall("\w+", zmienne)]
         self.postac_sumacyjna, self.dont_care, self.wyjscie \
         = self._filtr(postac_sumacyjna, dont_care)
         self._create_df_with_binary_nums()
@@ -28,14 +28,17 @@ class CreateTable:
         return binary_len
 
     def _create_df_with_binary_nums(self) -> None:
-        len_ = self._binary_length()
-        bin_len = 4 if len_ <= 4 else len_
+        # len_ = self._binary_length()
+        len_ = len(self.zmienne)
+        bin_len = len(self.zmienne)
+        print(f"len zmienne {len_}")
         self.df = pd.DataFrame(
             [[int(num)
               for num in f"{int(bin(x)[2:]):0{bin_len}d}"]  # 'repr bin' =  0000
              for x in range(0, 2 ** len_)],  # e.g. 3, from 000-111, e.g. 4, 0000-1111
             index=np.arange(0, 2 ** len_, 1),
-            columns=[chr(x) for x in range(ord('A'), ord('A')+bin_len)]  # [A, B, C, ..., A + bin_len]
+            #columns=[chr(x) for x in range(ord('A'), ord('A')+bin_len)]  # [A, B, C, ..., A + bin_len]
+            columns=self.zmienne
         )
         self._set_Y_column()
 
