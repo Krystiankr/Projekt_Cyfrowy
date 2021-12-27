@@ -1,5 +1,6 @@
 import pandas as pd
 from typing import List, Tuple, Dict
+from collections import Counter
 from Reprezentacja_sumacyjna import CreateTable
 
 def matched(num1: str, num2: str) -> bool:
@@ -80,8 +81,13 @@ def create_group(df_input: pd.DataFrame, dict_lacz: dict={}) -> pd.DataFrame:
 def all_groups(df_input: pd.DataFrame):
     df_all: List[pd.DataFrame] = []
     df_out, dict_out = create_group(df_input, {})
+    # print(f"Pierwsza grupa- -----")
+    # print(f"df_out {df_out}")
+    # print(f"dict_out {dict_out}")
     while not df_out.empty:
         df_out, dict_out = create_group(df_out, dict_out)
+        # print(f"next->df_out {df_out}")
+        # print(f"next->dict_out {dict_out}")
     # print(f"List out: {dict_out}")
     return dict_out
 
@@ -89,12 +95,14 @@ def przygotuj_tab_pokryc(postac_sumacyjna: List[int], implikanty_proste: dict):
     # print(f"Postac sumacyjna: {postac_sumacyjna}")
     # print("Słownik")
     # for key, item in implikanty_proste.items():
-    #     print(f"key[{key}] = {item}")
+        # print(f"key[{key}] = {item}")
+
     df_tab_pokryc = pd.DataFrame(
         columns=list(implikanty_proste.keys()),
         index=postac_sumacyjna,
         data=[['-'] * len(list(implikanty_proste.keys()))]
     )
+    # print(df_tab_pokryc.columns)
     return df_tab_pokryc
 
 def wypelnij_tab_pokryc(df_wstepna: pd.DataFrame, implikanty_proste: dict):
@@ -104,6 +112,9 @@ def wypelnij_tab_pokryc(df_wstepna: pd.DataFrame, implikanty_proste: dict):
             # print(f"element = {element}")
             if element in df_wstepna.index:
                 df_wstepna.at[element, column] = '+'  # index, col
+    for col in df_wstepna.columns:
+        if not '+' in Counter(df_wstepna[col]):
+            del df_wstepna[col]
     return df_wstepna
 
 def get_tab_pokryc(tab: CreateTable) -> pd.DataFrame:
@@ -112,7 +123,7 @@ def get_tab_pokryc(tab: CreateTable) -> pd.DataFrame:
     df_grupowane[["Obiekt grupowany", "Elemtny(łączone)", "Element"]] = df[['Liczba jedynek', 'Liczba Dziesiętna', 'Liczba Binarna']]
 
     dict_out = all_groups(df_grupowane)
-    print(f"Tab -> postac sum {tab.get_postac_sumacyjna()}")
+    # print(f"Tab -> postac sum {tab.get_postac_sumacyjna()}")
     out_ = przygotuj_tab_pokryc(tab.get_postac_sumacyjna(), dict_out)
     return wypelnij_tab_pokryc(out_, dict_out)
 
@@ -121,3 +132,24 @@ def get_tablica_prawdy(tab: CreateTable) -> pd.DataFrame:
 
 def get_pierwsza_grupa(tab: CreateTable) -> pd.DataFrame:
     return tab.get_pierwsza_grupa()
+
+def generuj_funkcje(tab: CreateTable) -> str:
+    df = get_tab_pokryc(tab)
+    f_out = 'Y = '
+    # print("Y = ", end='')
+    nazwy = list(get_tablica_prawdy(tab).iloc[:, :-1].columns)
+    # nazwy = ['A', 'B', 'C', 'D']
+    for i, el in enumerate(df.columns):
+        for idx, char in enumerate(el):
+            if char == '-': continue
+            if char == '0':
+                # print(f"({nazwy[idx]})'", end='')
+                f_out += f"({nazwy[idx]})'"
+            if char == '1':
+                f_out += nazwy[idx]
+                # print(f"{nazwy[idx]}", end='')
+        if i != len(df.columns) - 1:
+            # print(f"el {el}, len(el)")
+            f_out += ' + '
+            # print(f" + ", end=' ')
+    return f_out

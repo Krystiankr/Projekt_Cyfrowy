@@ -11,12 +11,16 @@ class CreateTable:
     df: pd.DataFrame = pd.DataFrame()
 
     def __init__(self, postac_sumacyjna: str = '', dont_care: str = ''):
+
         self.postac_sumacyjna, self.dont_care, self.wyjscie \
         = self._filtr(postac_sumacyjna, dont_care)
         self._create_df_with_binary_nums()
 
     def get_postac_sumacyjna(self) -> List[int]:
         return sorted(self.postac_sumacyjna)
+
+    def get_dont_care(self) -> List[int]:
+        return sorted(self.dont_care)
 
     def _binary_length(self):
         max_element = max(self.wyjscie)
@@ -41,11 +45,12 @@ class CreateTable:
                    if binary_num in self.wyjscie
                    else 0
                    for binary_num in range(len_col)]
+        self.df.Y = list(map(lambda x: 'X' if x in self.get_dont_care() else self.df.at[x, 'Y'], self.df.Y.index))
         self._set_count_1()
 
     def _set_count_1(self) -> None:
         self.df["count(1)"] = self.df.apply(lambda x: sum(x[:-1])
-                                            if x[-1] == 1
+                                            if (x[-1] == 1 or x[-1] == 'X')
                                             else -1, axis=1)
 
     def get_pierwsza_grupa(self) -> pd.DataFrame:
@@ -55,7 +60,7 @@ class CreateTable:
         df_mix = self.df.apply(lambda x: [x[-1], ''.join(x[:-2].astype(str)), x[-2]], axis=1).reset_index()
         df2[['Liczba jedynek', 'Liczba Binarna', 'Y']] = df_mix[0].tolist()#, df_mix['index']
         df2["Liczba Dziesiętna"] = df_mix['index']
-        df2 = df2[df2.Y == 1]
+        df2 = df2[(df2.Y == 1) | (df2.Y == 'X')]
         df2.drop(columns='Y', inplace=True)
         df2 = df2.sort_values(by='Liczba jedynek')
         df2 = df2.reset_index(drop=True)
@@ -73,7 +78,7 @@ class CreateTable:
 
     @staticmethod
     def _filtr(min_term: str = '', dont_care: str = '') -> List[int]:
-        print(min_term, dont_care)
+        # print(min_term, dont_care)
 
         def _str_to_list(tekst: str) -> List[int]:
             formated_tekst = re.findall(r'\d+', tekst)  # e.g. ['1', '3', '1', '1', ...]
