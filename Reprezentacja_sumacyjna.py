@@ -11,9 +11,14 @@ class CreateTable:
     df: pd.DataFrame = pd.DataFrame()
 
     def __init__(self, zmienne: str, postac_sumacyjna: str = '', dont_care: str = ''):
+        # self.zmienne => 'x123 x23 x4 x5' -> ['x1', 'x2', 'x4', 'x5']
         self.zmienne = [el[:2] if len(el) > 2 else el for el in re.findall("\w+", zmienne)]
         self.postac_sumacyjna, self.dont_care, self.wyjscie \
         = self._filtr(postac_sumacyjna, dont_care)
+        # self.wyjście => połączenie postac_sumacyjna i dont_care
+        # e.g. self.postac_sumacyjna = [1, 2, 3]
+        #      self.dont_care = [4, 5]
+        #      self.wyjscie = [1, 2, 3, 4, 5]
         self._create_df_with_binary_nums()
 
     def get_postac_sumacyjna(self) -> List[int]:
@@ -28,13 +33,14 @@ class CreateTable:
         return binary_len
 
     def _create_df_with_binary_nums(self) -> None:
-        # len_ = self._binary_length()
+        # Tworzę df,
+        # columny to podane zmienne
+        # Pętla iteruje 2 ^ (ilosc zmiennych)
+        # Kazdy wiersz to odpowiednio liczba binarna
         len_ = len(self.zmienne)
-        bin_len = len(self.zmienne)
-        print(f"len zmienne {len_}")
         self.df = pd.DataFrame(
             [[int(num)
-              for num in f"{int(bin(x)[2:]):0{bin_len}d}"]  # 'repr bin' =  0000
+              for num in f"{int(bin(x)[2:]):0{len_}d}"]  # 'repr bin' =  0000
              for x in range(0, 2 ** len_)],  # e.g. 3, from 000-111, e.g. 4, 0000-1111
             index=np.arange(0, 2 ** len_, 1),
             #columns=[chr(x) for x in range(ord('A'), ord('A')+bin_len)]  # [A, B, C, ..., A + bin_len]
@@ -43,6 +49,9 @@ class CreateTable:
         self._set_Y_column()
 
     def _set_Y_column(self) -> None:
+        # Tworzę kolumne Y
+        # Iteruje po każdym wierszu jeśli w self.wyjscie jest liczba to 1
+        # W przeciwnym wypadku wstaw 0, Dodatkowo w miejsce dont_care wstawiam 'X'
         len_col = self.df.shape[0]
         self.df["Y"] = [1
                    if binary_num in self.wyjscie
@@ -52,6 +61,8 @@ class CreateTable:
         self._set_count_1()
 
     def _set_count_1(self) -> None:
+        # Tworzę nową kolumne ilość jedynek, która będzie potrzebna do grupowania.
+        # Jedynki są obliczane na podstawie jedynek w danym wierszu.
         self.df["count(1)"] = self.df.apply(lambda x: sum(x[:-1])
                                             if (x[-1] == 1 or x[-1] == 'X')
                                             else -1, axis=1)
@@ -69,13 +80,6 @@ class CreateTable:
         df2 = df2.reset_index(drop=True)
         return df2
 
-    @staticmethod
-    def return_list_with_x(bin1: np.ndarray, bin2: np.ndarray) -> int:
-        new = bin1.copy()
-        idx = (bin1 == bin2).argmin()
-        new[idx] = '-1'
-        return new
-
     def return_df(self):
         return self.df
 
@@ -84,6 +88,7 @@ class CreateTable:
         # print(min_term, dont_care)
 
         def _str_to_list(tekst: str) -> List[int]:
+            # Wyciągam wszystkie liczby z wejścia
             formated_tekst = re.findall(r'\d+', tekst)  # e.g. ['1', '3', '1', '1', ...]
             set_ = set(formated_tekst)
             list_ = list(set_)
@@ -91,6 +96,8 @@ class CreateTable:
             return list_
 
         def _merge_list(l1: List[int] = [], l2: List[int] = []) -> List[int]:
+            # Łącze już dwie gotowe listy, które mają elementy typu int
+            # w jedną listę
             list_ = l1 + l2
             sorted_list = sorted(list_)
             # only values < 15
