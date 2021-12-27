@@ -20,6 +20,9 @@ class Schema:
 
     dictGates: Dict[str, schemdraw.Drawing]
     dictInput: Dict[str, schemdraw.Drawing]
+    gateOR: schemdraw.Drawing
+
+
 
     def __init__(self, list_variable, list_implicant, line_width: int = 1):
         self.MainSchema = schemdraw.Drawing(unit=0.5, lw=line_width)
@@ -30,6 +33,7 @@ class Schema:
         self.listNodes = []
         self.dictGates = {}
         self.dictInput = {}
+        self.gateOR = schemdraw.Drawing
 
         for implicant in range(0, len(list_implicant)):
             if len(list_implicant[implicant]) == 1:
@@ -73,16 +77,22 @@ class Schema:
             new_gate = logic.And(inputs=nr_in).right().anchor('in1')
             self.dictGates[name] = new_gate
         else:  # utworzenie node
-            new_gate = logic.Dot(radius=0)
+            new_gate = logic.Dot(radius=0.05).color('red')
             self.dictGates[name] = new_gate
         return new_gate
+
+    def CreateNode(self, name: str) -> logic.Dot:
+        new_node = logic.Dot(radius=0.05).color('red')
+        self.dictGates[name] = new_node
+
+        return new_node
 
 
     def DrawInputs(self) -> None:
         # rysowanie wejść
         for x in range(0, self.countIn):
             variable = self.listVariable[x]
-            lenDownLine = len(self.listResult) * 1.8
+            lenDownLine = len(self.listResult) * 1.5
 
             # zaczynamy od 1, 0
             self.MainSchema.here = (x + 1, 0)
@@ -124,7 +134,7 @@ class Schema:
             if (count == 1):           # Jeżeli node
                 self.MainSchema.here = (start + 1.85, step)
                 step -= 0.8
-                new_gate = self.CreateGate(f'AND{nrAND}', type=2)
+                new_gate = self.CreateNode(f'AND{nrAND}')
                 self.MainSchema.add(new_gate)
             else:
                 self.MainSchema.here = (start, step)
@@ -164,12 +174,18 @@ class Schema:
             '$Y_{out}$', 'right', fontsize=20).scale(1.5)
         self.MainSchema.add(gate_OR)
 
+        # przypisanie adresu bramki do atrybutu klasy
+        self.gateOR = gate_OR
+
         # łączenie input z wyjściami OR
         self.ConnectInputswithOr(gate_OR)
 
     def ConnectInputswithOr(self, gate: schemdraw.Drawing):
+
         # utworzenie listy ze współrzędnymi (obiekt Point) wejść bramki OR (ze słownika gate_OR.absanchors)
+
         coordInOr = [v for k, v in gate.absanchors.items() if k.startswith('in')]
+        print(coordInOr)
         coordInOr.reverse()
 
         # utworzenie listy ze współrzędnymi wyjść wszystkich bramek i node
@@ -181,7 +197,9 @@ class Schema:
             return
 
         # FOR, przechodzi od pierwszego ostatniego elementu
-        # czyli dla [1, 2, 3, 4, 5, 6] przechodzi przez [1, 6]->[2,5]->[3,4}
+        # czyli dla [1, 2, 3, 4, 5, 6] przechodzi przez [1, 6]->[2,5]->[3,4]
+
+
 
         limitFor = math.ceil(len(coordInOr) / 2)
         distance = coordInOr[0][0] - coordOutGates[0][0]            # dystans X wyjść bramek do wejścia OR
@@ -214,7 +232,7 @@ class Schema:
                         logic.Line().down().length(abs(coordInOr[-step - 1][1] - coordOutGates[-step - 1][1])))
                 self.MainSchema.add(logic.Line().to(coordInOr[-step - 1]))
             # zmniejszamy długość linii od wyjść bramek
-            decrease -= 0.25
+            decrease -= 0.35
 
 
     def DrawSchema(self):
@@ -226,7 +244,58 @@ class Schema:
             self.DrawGatesAndInput()
             self.DrawGateOr()
 
+            self.MainSchema.move(7, 0)
+
+            self.MainSchema.add(logic.Kmap(names='ABCD',
+           truthtable=[('1100', '1'),
+                       ('1101', '1'),
+                       ('1111', '1'),
+                       ('1110', '1'),
+                       ('0101', '1'),
+                       ('0111', 'X'),
+                       ('1101', '1'),
+                       ('1111', '1'),
+                       ('0000', '1'),
+                       ('1000', '1')],
+           groups={'11..': {'color': 'red', 'fill': '#ff000033'},
+                   '.1.1': {'color': 'blue', 'fill': '#0000ff33'},
+                   '.000': {'color': 'green', 'fill': '#00ff0033'}}))
+
+            table = '''
+             A | B | C
+            ---|---|---
+             0 | 1 | 1
+             0 | X | 0
+             1 | 0 | 0
+             1 | 1 | 1
+            '''
+            self.MainSchema.add(logic.Table(table, colfmt='cc||c'))
+
+
+            #
+            #
+            #
+            # find = self.dictGates['AND2']
+            # print(find)
+            #
+            # print(self.MainSchema.elements.index(find))
+            # print(self.MainSchema.elements[43])
+            #
+            # self.MainSchema.elements.pop(45)
+            # self.MainSchema.elements.pop(46)
+            #
+            # self.MainSchema.add(logic.Line().down().at(self.dictInput['-x2'].end).toy(self.gateOR.in3).linewidth(1))
+            # self.MainSchema.add(logic.Dot(radius=0.05))
+            # self.MainSchema.add(logic.Line().to(self.gateOR.in3))
+
+
+
+
             self.MainSchema.draw()
+            self.MainSchema.save("schema.png", False)
+
+
+
         else:
             print("Błędne dane. Sprawdź zmienne i implikanty")
             return
@@ -234,7 +303,7 @@ class Schema:
 
 
 
-values2 = ['x1', 'x2', 'x3', 'x4']
+values2 = ['x1', 'x2', 'x3', 'x4', 'x5']
 gates2 = [['-x2', 'x3'], ['x1','x4'], ['-x2'], ['-x4'], ['x1', 'x2', 'x3']]
 
 values1 = ['A', 'B', 'C', 'D', 'E']
