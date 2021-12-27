@@ -117,6 +117,9 @@ def wypelnij_tab_pokryc(df_wstepna: pd.DataFrame, implikanty_proste: dict):
             del df_wstepna[col]
     return df_wstepna
 
+def get_lista_implikantow(tab: CreateTable):
+    return list(get_tab_pokryc(tab).columns)
+
 def get_tab_pokryc(tab: CreateTable) -> pd.DataFrame:
     df = tab.get_pierwsza_grupa()
     df_grupowane = pd.DataFrame()
