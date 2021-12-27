@@ -12,10 +12,13 @@ from PyQt5.QtSvg import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 
-from Create_Table import CreateTable
 from MainWindow import Ui_MainWindow
 from TableModel import TableModel
 from ResultEntrance import ResultEntrance
+
+
+from Tablica_pokryc import *
+from Reprezentacja_sumacyjna import *
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -124,41 +127,106 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # przekazanie danych z formantów do metod
         getMinterm = self.lnMinterm.displayText()
         getDontCare = self.lnDontCare.displayText()
+        getVariable = self.lnVariable.displayText()
+
+        print(type(getMinterm))
+        print(type(getDontCare))
 
         # jeżeli nie zaznaczono wartości nieokreślonych zignoruj wartości
         if not self.chbDontCare.isChecked():
             getDontCare = ''
 
+        obj_wyn = CreateTable(zmienne=getVariable, postac_sumacyjna=getMinterm, dont_care=getDontCare)
+
+        print(get_tablica_prawdy(obj_wyn))
+
+        DataFrame = pd.DataFrame({'A': ['1','2', '3']})
+        print(DataFrame)
+
+        # df = pd.DataFrame(np.random.randn(10, 4), columns=["A", "B", "C", "D"])
+        # df2 = pd.DataFrame(np.random.randn(7, 3), columns=["A", "B", "C"])
+        # df3 = df + df2
+        #
+        # print(df3)
+
+
+
+        # zm = get_tablica_prawdy(obj_wyn)
+        #
+        #
+        # print(zm)
+        #
+        # self.label_9.setText(str(zm))
+
+        zm = get_tablica_prawdy(obj_wyn)
+        self.model = TableModel(zm)
+        self.tblBinary.setModel(self.model)
+
+        zm1 = get_pierwsza_grupa(obj_wyn)
+        self.model = TableModel(zm1)
+        self.tableView.setModel(self.model)
+        self.MergeRow(self.tableView, zm1['Liczba jedynek'].values)
+
+        # self.model = TableModel(get_tablica_prawdy(obj_wyn))
+        # print(type(self.model))
+        # self.tblBinary.setModel(self.model)
+
+
+            #
+            # self.model = TableModel(zm)
+            # self.tblBinary.setModel(self.model)
+
+        # self.MergeRow(self.tableView, zm['Liczba jedynek'].values)
+
+        # tablicaPrawdy = get_tablica_prawdy(obj_wyn)
+        # self.model = TableModel(tablicaPrawdy)
+        # self.tblBinary.setModel(self.model)
+
+
+
+
+        #
         # utworzenie DataFrame z klasy CreateTable(konstruktor).metoda()
-        wynik = CreateTable(getMinterm, getDontCare).get_df()
+        # obj_wyn = CreateTable(postac_sumacyjna=getMinterm, dont_care=getDontCare)
+        # wynik = get_tab_pokryc(obj_wyn)
+        # print(wynik)
+        #
+        # self.model = TableModel(wynik)
+        # self.tableView.setModel(self.model)
+
+        #
+        #
+        # wynik = CreateTable(getMinterm, getDontCare).get_df()
 
         # utworzenie formanta TableView i przekazanie danych
-        self.model = TableModel(wynik)
-        self.tableView.setModel(self.model)
-        self.MergeRow(self.tableView, wynik['Liczba jedynek'].values)
+        # self.model = TableModel(wynik)
+        # self.tableView.setModel(self.model)
+        # self.MergeRow(self.tableView, wynik['Liczba jedynek'].values)
+        #
+        # tabBinary = CreateTable(getMinterm, getDontCare).return_df()
+        # self.model1 = TableModel(tabBinary)
+        # self.tblBinary.setModel(self.model1)
 
-        tabBinary = CreateTable(getMinterm, getDontCare).return_df()
-        self.model1 = TableModel(tabBinary)
-        self.tblBinary.setModel(self.model1)
 
+        # copy = tabBinary
+        # print(copy)
 
-        copy = tabBinary
-        print(copy)
-
-        trial = [[0 for x in range(randint(2, 5))] for y in range(randint(2, 5))]
-        for x in range(0, len(trial)):
-            for y in range(0, len(trial[x])):
-                if randint(1, 10) % 2 == 0:
-                    trial[x][y] = '-' + chr(randint(65, 70))
-                else:
-                    trial[x][y] = chr(randint(65, 70))
-        print(trial)
-        trial3 = [['-x1', '-x2', 'x3'], ['x2', 'x3', '-x4']]
-
-        ResultEntrance.RenderImageS(trial)
-        #self.img = ResultEntrance(trial).RenderImage()
-        self.label_2.setPixmap(QPixmap('formula.png'))
-        self.label_9.setText(ResultEntrance(trial).GenerateAsText())
+        # trial = [[0 for x in range(randint(2, 5))] for y in range(randint(2, 5))]
+        # for x in range(0, len(trial)):
+        #     for y in range(0, len(trial[x])):
+        #         if randint(1, 10) % 2 == 0:
+        #             trial[x][y] = '-' + chr(randint(65, 70))
+        #         else:
+        #             trial[x][y] = chr(randint(65, 70))
+        # print(trial)
+        # trial3 = [['-x1', '-x2', 'x3'], ['x2', 'x3', '-x4']]
+        #
+        #
+        #
+        # ResultEntrance.RenderImageS(trial)
+        # #self.img = ResultEntrance(trial).RenderImage()
+        # self.label_2.setPixmap(QPixmap('formula.png'))
+        # self.label_9.setText(ResultEntrance(trial).GenerateAsText())
 
 
 

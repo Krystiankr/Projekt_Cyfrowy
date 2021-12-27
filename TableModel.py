@@ -7,24 +7,7 @@ class TableModel(QtCore.QAbstractTableModel):
         self._data = data
 
     def data(self, index, role):
-
-        if role == Qt.TextAlignmentRole:
-            value = self._data.iloc[index.row(), index.column()]
-
-            if isinstance(value, str) or isinstance(value, int):
-                return Qt.AlignCenter | Qt.AlignVCenter
-
-        if role == Qt.TextAlignmentRole:
-            return Qt.AlignCenter
-
-        if role == Qt.ForegroundRole:
-            value = self._data.iloc[index.row(), index.column()]
-            value = int(value)
-            if value > 0 and index.column() == 4:
-                return QtGui.QColor("red")
-
         if role == Qt.DisplayRole:
-            # Note: self._data[index.row()][index.column()] will also work
             value = self._data.iloc[index.row(), index.column()]
             return str(value)
 
