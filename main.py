@@ -1,55 +1,25 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-import pandas as pd
-import numpy as np
-from typing import Any, List, Callable, Union
-from fractions import Fraction
-from PyQt5 import QtWidgets, uic
-from PyQt5 import QtCore, QtGui, QtWidgets
-
-from PyQt5.QtWidgets import QTextEdit
-
-from MainWindow import Ui_MainWindow
-from Create_Table import CreateTable
-from Selekcja_Implikantow import SelekcjaImplikantow
-
-
 import sys
+from typing import List
+import ResultEntrance
+from random import *
 
-# wejscie = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
-#                              [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
-#                              [3, '0111', 7], [3, '1101', 11]]),
-#                    columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
+from PyQt5 import QtCore
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtSvg import *
 
-class TableModel(QtCore.QAbstractTableModel):
-    def __init__(self, data):
-        super().__init__()
-        self._data = data
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 
-    def data(self, index, role):
-        if role == Qt.DisplayRole:
-        # Note: self._data[index.row()][index.column()] will also work
-            value = self._data.iloc[index.row(), index.column()]
-            return str(value)
-
-    def rowCount(self, index):
-        return self._data.shape[0]
-
-    def columnCount(self, index):
-        return self._data.shape[1]
-
-    def headerData(self, section, orientation, role):
-        if role == Qt.DisplayRole:
-            if orientation == Qt.Horizontal:
-                return str(self._data.columns[section])
-
-            if orientation == Qt.Vertical:
-                return str(self._data.index[section])
+from Create_Table import CreateTable
+from MainWindow import Ui_MainWindow
+from TableModel import TableModel
+from ResultEntrance import ResultEntrance
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    def __init__(self, *args, obj=None, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
@@ -59,41 +29,93 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.btnFind.clicked.connect(self.GetData)
 
-        # self.btnFind.setStyleSheet("background-color: blue")
-        # self.tableView.setStyleSheet("border: 1px solid black")
-
-        wejscie = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
-                                     [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
-                                     [3, '0111', 7], [3, '1101', 11]]),
-                           columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
-
-        self.tableView.setFrameShape(QFrame.HLine)
-
-        self.model = TableModel(wejscie)
-        self.tableView.setModel(self.model)
-
-        print(wejscie['Liczba jedynek'].values)
-        self.tableView.setSpan(0, 0, 2, 1)
+        # ustawienie czcionek
+        font = QFont("Script MT Bold")
+        self.label_6.setFont(font)
 
 
+        font = QFont("Open Sans")
+        self.btnFind.setFont(font)
 
-        #self.tableView.setSpan(0,0,2,1)
-
-
-
-
+        # formatowanie tablic
 
 
+        font = QFont("Open Sans", 12)
+        self.tblBinary.setFont(font)
 
-        # header = QTableView.horizontalHeader(self.tableView)
-        # header.setFrameStyle(QFrame.Box | QFrame.Plain)
-        # header.setLineWidth(1)
-        # self.tableView.setHorizontalHeader(header)
+        column = self.tblBinary.horizontalHeader()
+        row = self.tblBinary.verticalHeader()
+
+        row.setDefaultSectionSize(40)
+        column.setDefaultSectionSize(40)
+
+        row.setStyleSheet("border-color: None;\n"
+                            "background-color: None;")
+
+        column.setStyleSheet("border-color: None;\n"
+                            "background-color: None;")
+
+        row.setFixedWidth(35)
+        column.setFixedHeight(50)
+
+
+        # self.tblBinary.horizontalHeader().setFixedHeight(50)
+        # self.tblBinary.verticalHeader().setFixedWidth(35)
+
+        # self.tblBinary.setStyleSheet("QTableWidget::item {padding-left: 5px; border: 3px}")
+
+        # TUTAJ ZACZNIJ!!!!!!!!!!!
+        self.tblBinary.horizontalHeader().setStyleSheet("QHeaderView::section {padding-left: 10px; border: 0px}")
+        self.tblBinary.setStyleSheet("QTableWidget::item {padding-left: 10px; border: 0px}")
+
+
+        self.tblBinary.horizontalHeader().setFont(QFont("Open Sans", 12))
+        self.tblBinary.verticalHeader().setFont(QFont("Open Sans", 12))
+
+        self.tblBinary.verticalHeader().setMaximumWidth(100)
+
+
+        self.tblBinary.horizontalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+        self.tblBinary.verticalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+
+        # self.renderer = QSvgRenderer('Zeichen.svg')
+        # self.label_2.resize(self.renderer.defaultSize())
+        # self.painter = QtGui.QPainter(self.label_2)
+        # self.painter.restore()
+        # self.renderer.render(self.painter)
+        # self.label_2.show()
+        # # widget.show()
+
+        self.pushButton_2.clicked.connect(self.tryingCopy)
 
 
 
-    def GetData(self, s):
+    # Metoda scala komórki w kolumnie Liczba jedynek
+    # Przyjmuje formant TableView, w którym sprawdzamy wiersze oraz tablice z danymi
+    def MergeRow(self, Table: QTableView, tab: [List]):
+        # usunięcie aktualnych scalan
+        Table.clearSpans()
 
+        start = 0
+        stop = len(tab)
+
+        while start < stop - 1:
+            num = tab[start]
+            count = 1
+            for x in range(start + 1, stop):
+                if (tab[x] == num):
+                    count += 1
+                else:
+                    break
+            if count > 1:
+                Table.setSpan(start, 0, count, 1)
+                print(f"{start}, 0, {count}, 1")
+            start = x
+
+
+
+    def GetData(self):
         # sprawdzenie czy wprowadzono dane
         if self.lnMinterm.displayText() == '':
             button = QMessageBox.information(self, "Brak danych", "Podaj mintermy")
@@ -103,70 +125,64 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         getMinterm = self.lnMinterm.displayText()
         getDontCare = self.lnDontCare.displayText()
 
+        # jeżeli nie zaznaczono wartości nieokreślonych zignoruj wartości
         if not self.chbDontCare.isChecked():
             getDontCare = ''
 
-        print("TUTAJ")
+        # utworzenie DataFrame z klasy CreateTable(konstruktor).metoda()
         wynik = CreateTable(getMinterm, getDontCare).get_df()
 
-        print("WYNIK: ", wynik)
+        # utworzenie formanta TableView i przekazanie danych
         self.model = TableModel(wynik)
         self.tableView.setModel(self.model)
+        self.MergeRow(self.tableView, wynik['Liczba jedynek'].values)
+
+        tabBinary = CreateTable(getMinterm, getDontCare).return_df()
+        self.model1 = TableModel(tabBinary)
+        self.tblBinary.setModel(self.model1)
+
+
+        copy = tabBinary
+        print(copy)
+
+        trial = [[0 for x in range(randint(2, 5))] for y in range(randint(2, 5))]
+        for x in range(0, len(trial)):
+            for y in range(0, len(trial[x])):
+                if randint(1, 10) % 2 == 0:
+                    trial[x][y] = '-' + chr(randint(65, 70))
+                else:
+                    trial[x][y] = chr(randint(65, 70))
+        print(trial)
+        trial3 = [['-x1', '-x2', 'x3'], ['x2', 'x3', '-x4']]
+
+        ResultEntrance.RenderImageS(trial)
+        #self.img = ResultEntrance(trial).RenderImage()
+        self.label_2.setPixmap(QPixmap('formula.png'))
+        self.label_9.setText(ResultEntrance(trial).GenerateAsText())
 
 
 
     def ChangingState(self, s):
         s == Qt.Checked
-        print(s)
-        if s == 2:        # Checked
+        if s == 2:  # Checked
             self.lnDontCare.setEnabled(True)
-        if s == 0:        # Unchecked
+        if s == 0:  # Unchecked
             self.lnDontCare.setEnabled(False)
 
+    def tryingCopy(self, s):
+        cb = QApplication.clipboard()
+        cb.clear(mode=cb.Clipboard)
+        cb.setText(self.label_9.text(), mode=cb.Clipboard)
+
+
+# ============================================================================================
 
 app = QApplication(sys.argv)
-#app.setStyle('Fusion')
 
 window = MainWindow()
-# palette = QPalette()
-# palette.setColor(QPalette.Window, QColor(0, 128, 255))
-# palette.setColor(QPalette.WindowText, Qt.white)
 
 window.show()
 app.exec_()
 
-#===========================================
-
-
-
-
-
-
-
-
-
-
-
-
-#
-
-
-
-data = pd.DataFrame(np.array([[0, '0000', 0], [1, '0001', 1], [1, '0010', 2],
-                              [1, '1000', 8], [2, '0011', 3], [2, '0110', 6],
-                              [3, '0111', 7], [3, '1101', 11]]),
-                    columns=['Liczba jedynek', 'Liczba Binarna', 'Liczba Dziesiętna'])
-
-
-
-
-
-
-
-
-
-
-
-
-
+# ===========================================
 

@@ -1,0 +1,30 @@
+<RCC>
+    <qresource prefix="/fonts">
+        <file>fonts/NunitoSans-Black.ttf</file>
+        <file>fonts/NunitoSans-BlackItalic.ttf</file>
+        <file>fonts/NunitoSans-Bold.ttf</file>
+        <file>fonts/NunitoSans-BoldItalic.ttf</file>
+        <file>fonts/NunitoSans-ExtraBold.ttf</file>
+        <file>fonts/NunitoSans-ExtraBoldItalic.ttf</file>
+        <file>fonts/NunitoSans-ExtraLight.ttf</file>
+        <file>fonts/NunitoSans-ExtraLightItalic.ttf</file>
+        <file>fonts/NunitoSans-Italic.ttf</file>
+        <file>fonts/NunitoSans-Light.ttf</file>
+        <file>fonts/NunitoSans-LightItalic.ttf</file>
+        <file>fonts/NunitoSans-Regular.ttf</file>
+        <file>fonts/NunitoSans-SemiBold.ttf</file>
+        <file>fonts/NunitoSans-SemiBoldItalic.ttf</file>
+        <file>fonts/OpenSans-Bold.ttf</file>
+        <file>fonts/OpenSans-BoldItalic.ttf</file>
+        <file>fonts/OpenSans-ExtraBold.ttf</file>
+        <file>fonts/OpenSans-ExtraBoldItalic.ttf</file>
+        <file>fonts/OpenSans-Italic.ttf</file>
+        <file>fonts/OpenSans-Light.ttf</file>
+        <file>fonts/OpenSans-LightItalic.ttf</file>
+        <file>fonts/OpenSans-Medium.ttf</file>
+        <file>fonts/OpenSans-MediumItalic.ttf</file>
+        <file>fonts/OpenSans-Regular.ttf</file>
+        <file>fonts/OpenSans-SemiBold.ttf</file>
+        <file>fonts/OpenSans-SemiBoldItalic.ttf</file>
+    </qresource>
+</RCC>
