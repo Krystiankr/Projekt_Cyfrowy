@@ -1,5 +1,5 @@
 from unittest import TestCase
-import pandas as pd
+
 
 from Create_Table import CreateTable
 
@@ -136,4 +136,15 @@ class TestCreateTable(TestCase):
         actual = True if df.empty else False
 
         expect = True
+        self.assertEqual(expect, actual)
+
+    def test_mix_value1(self):
+        var1 = '1,2,3,'
+        var2 = '1x, x2, k.5'
+
+        df = CreateTable(var1, var2).get_df()
+        actual = df['Liczba Dziesiętna'].tolist()
+        actual.sort()
+
+        expect = [1, 2, 3, 5]
         self.assertEqual(expect, actual)
