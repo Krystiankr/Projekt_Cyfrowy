@@ -127,10 +127,15 @@ class DostepneMetody:
         # Wstawiam + w odpowiednie miejsca w tablicy pokryc.
         for column, elements in implikanty_proste.items():
             # print(f"column = {column}")
-            for element in elements:
-                # print(f"element = {element}")
-                if element in df_wstepna.index:
-                    df_wstepna.at[element, column] = '+'  # index, col
+            if isinstance(elements, int):
+                if elements in df_wstepna.index:
+                    df_wstepna.at[elements, column] = '+'  # index, col
+            else:
+                # print(f"elements: {elements}, {len(elements)=}")
+                for element in elements:
+                    # print(f"element = {element}")
+                    if element in df_wstepna.index:
+                        df_wstepna.at[element, column] = '+'  # index, col
         for col in df_wstepna.columns:
             if not '+' in Counter(df_wstepna[col]):
                 del df_wstepna[col]
@@ -140,11 +145,11 @@ class DostepneMetody:
         return list(self.get_tab_pokryc().columns)
 
     def get_tab_pokryc(self) -> pd.DataFrame:
-        df = self._tab.get_pierwsza_grupa()
+        df = self._tab.get_pierwsza_grupa().copy()
         df_grupowane = pd.DataFrame()
         df_grupowane[["Obiekt grupowany", "Elemtny(łączone)", "Element"]] = df[['Liczba jedynek', 'Liczba Dziesiętna', 'Liczba Binarna']]
 
-        dict_out = self._all_groups(df_grupowane)
+        dict_out = self._all_groups(df_grupowane).copy()
         # print(f"Tab -> postac sum {tab.get_postac_sumacyjna()}")
         out_ = self._przygotuj_tab_pokryc(self._tab.get_postac_sumacyjna(), dict_out)
         return self._wypelnij_tab_pokryc(out_, dict_out)
