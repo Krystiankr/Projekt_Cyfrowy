@@ -163,21 +163,22 @@ class DostepneMetody:
     def generuj_funkcje(self) -> str:
         # Generuje funkcje na podstawie poprzednich wyników.
         # Nazwy zmiennych są brane z nazw zmiennych podanych na początku.
-        df = self.get_tab_pokryc()
+        prime_implicants = self.get_prime_implicants()
         f_out = 'Y = '
         nazwy = list(self.get_tablica_prawdy().iloc[:, :-1].columns)
-        for i, el in enumerate(df.columns):
+
+        for i, el in enumerate(prime_implicants):
             for idx, char in enumerate(el):
                 if char == '-': continue
                 if char == '0':
                     f_out += f"({nazwy[idx]})'"
                 if char == '1':
                     f_out += nazwy[idx]
-            if i != len(df.columns) - 1:
+            if i != len(prime_implicants) - 1:
                 f_out += ' + '
         return f_out
 
-    def get_prime_implicants(self):
+    def get_prime_implicants(self) -> List[str]:
         df = self.get_tab_pokryc()
         primes = []
         for col in df.columns:
