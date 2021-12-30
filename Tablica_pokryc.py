@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from typing import List, Tuple, Dict
 from collections import Counter
 from Reprezentacja_sumacyjna import CreateTable
@@ -175,3 +176,17 @@ class DostepneMetody:
             if i != len(df.columns) - 1:
                 f_out += ' + '
         return f_out
+
+    def get_prime_implicants(self):
+        df = self.get_tab_pokryc()
+        primes = []
+        for col in df.columns:
+            # print(col)
+            arr1 = np.array(list(df[col]))
+            indeks = list(np.where(arr1=='+')[0])
+            # print(indeks)
+            prime = [len(np.where(df.iloc[idx, :]=='+')[0]) for idx in indeks].count(1) != 0
+            if prime:
+                primes.append(col)
+                # print(f"PRIME! {col}")
+        return primes
