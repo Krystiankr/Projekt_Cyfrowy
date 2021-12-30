@@ -12,9 +12,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(873, 834)
+        MainWindow.resize(1890, 834)
         MainWindow.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -231,7 +232,6 @@ class Ui_MainWindow(object):
         self.btnDrawSchema = QtWidgets.QPushButton(self.frame)
         self.btnDrawSchema.setGeometry(QtCore.QRect(570, 460, 131, 41))
         font = QtGui.QFont()
-        font.setFamily("Open Sans")
         font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
@@ -264,6 +264,18 @@ class Ui_MainWindow(object):
         self.label_9 = QtWidgets.QLabel(self.centralwidget)
         self.label_9.setGeometry(QtCore.QRect(20, 130, 241, 31))
         self.label_9.setObjectName("label_9")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(380, 400, 231, 161))
+        self.label_2.setObjectName("label_2")
+        self.stackedWidget = QtWidgets.QStackedWidget(self.centralwidget)
+        self.stackedWidget.setGeometry(QtCore.QRect(870, 160, 991, 621))
+        self.stackedWidget.setObjectName("stackedWidget")
+        self.page = QtWidgets.QWidget()
+        self.page.setObjectName("page")
+        self.stackedWidget.addWidget(self.page)
+        self.page_2 = QtWidgets.QWidget()
+        self.page_2.setObjectName("page_2")
+        self.stackedWidget.addWidget(self.page_2)
         self.frame.raise_()
         self.label_5.raise_()
         self.label_6.raise_()
@@ -278,6 +290,8 @@ class Ui_MainWindow(object):
         self.label.raise_()
         self.tblBinary.raise_()
         self.label_9.raise_()
+        self.label_2.raise_()
+        self.stackedWidget.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -317,3 +331,4 @@ class Ui_MainWindow(object):
         self.pushButton_3.setText(_translate("MainWindow", "Tekst"))
         self.btnDrawSchema.setText(_translate("MainWindow", "Rysuj"))
         self.label_9.setText(_translate("MainWindow", "TextLabel"))
+        self.label_2.setText(_translate("MainWindow", "TextLabel"))

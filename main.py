@@ -1,38 +1,26 @@
 import sys
-from typing import List
 
-import pandas as pd
-
-import ResultEntrance
-from random import *
-
-from PyQt5 import QtCore
-from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtSvg import *
 
-from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
-
 from MainWindow import Ui_MainWindow
-from TableModel import TableModel
-from TableModel import PandasModel
-from ResultEntrance import ResultEntrance
-
-from Tablica_pokryc import *
-from Reprezentacja_sumacyjna import *
-from InputData import InputData
-from Tablica_pokryc import DostepneMetody
-
-
+from class_file.TableModel import TableModel
+from class_file.Tablica_pokryc import DostepneMetody
+from class_file.Reprezentacja_sumacyjna import *
+from class_file.InputData import InputData
+from class_file.ViewSchema import ViewSchema
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
+        self.obj = None
+        self.schema = None
+        self.ListVariable = None
+        self.ListImplicants = None
         self.setupUi(self)
+        self.secondWindow = None
 
-        self.ListImplicants = [[]]
 
         self.lnDontCare.setEnabled(False)
         self.chbDontCare.setCheckState(Qt.Unchecked)
@@ -43,11 +31,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.btnDrawSchema.setEnabled(True)
 
+        self.btnFind.clicked.connect(lambda: self.GetData(self.btnFind))
 
-        self.btnFind.clicked.connect(self.GetData)
+        # self.btnFind.clicked.connect(self.GetData)
+
         self.btnDrawSchema.clicked.connect(self.DrawSchema)
-
-
 
         # ustawienie czcionek
         font = QFont("Script MT Bold")
@@ -76,6 +64,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         row.setFixedWidth(35)
         column.setFixedHeight(50)
 
+        # init graph
+        #
+        # self.schema = None
+        #
+        # self.init_schema()
+
+
+
+
         # self.tblBinary.horizontalHeader().setFixedHeight(50)
         # self.tblBinary.verticalHeader().setFixedWidth(35)
 
@@ -93,22 +90,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tblBinary.horizontalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
         self.tblBinary.verticalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
-        # self.renderer = QSvgRenderer('Zeichen.svg')
-        # self.lblResultMath.resize(self.renderer.defaultSize())
-        # self.painter = QtGui.QPainter(self.lblResultMath)
-        # self.painter.restore()
-        # self.renderer.render(self.painter)
-        # self.lblResultMath.show()
-        # # widget.show()
 
         self.pushButton_2.clicked.connect(self.tryingCopy)
-
-
-    def UpdateListImplicants(self, list):
-        print(list)
-
-
-
 
     # Metoda scala komórki w kolumnie Liczba jedynek
     # Przyjmuje formant TableView, w którym sprawdzamy wiersze oraz tablice z danymi
@@ -131,37 +114,69 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 Table.setSpan(start, 0, count, 1)
             start = x
 
+    def init_schema(self, source):
+        # print("init schema")
+        try:
+            self.schema = ViewSchema(source)
+            self.stackedWidget.addWidget(self.schema.return_canvas())
+            self.stackedWidget.setCurrentWidget(self.schema.return_canvas())
+        except Exception:
+            print("init graph")
 
-
-
-    def GetData(self):
+    def GetData(self, buttn):
         # sprawdzenie czy wprowadzono dane
         if self.lnMinterm.displayText() == '':
             button = QMessageBox.information(self, "Brak danych", "Podaj mintermy")
             return
 
         # przekazanie danych z formantów do metod
-        getMinterm = self.lnMinterm.text()
-        getDontCare = self.lnDontCare.text()
-        getVariable = self.lnVariable.text()
+        getMinterm = str(self.lnMinterm.text())
+        getDontCare = str(self.lnDontCare.text())
+        getVariable = str(self.lnVariable.text())
 
         # jeżeli nie zaznaczono wartości nieokreślonych zignoruj wartości
         if not self.chbDontCare.isChecked():
             getDontCare = ''
 
-        obj = InputData(getVariable, getMinterm, getDontCare)
+        try:
+            print(getMinterm)
+            print(getDontCare)
+            print(getVariable)
+            self.obj = InputData(getVariable, getMinterm, getDontCare)
+            self.ListVariable = self.obj.getVariables()
+            self.ListImplicants = self.obj.getTestImplicant()
+            # self.ListImplicants = obj.getGroupImplicants()
+            print(self.ListVariable)
+            print(self.ListImplicants)
+        except Exception:
+            print("ZMIENNE")
 
-        self.ImportDataFrameToTruthTable(self.tblBinary, obj)
-        self.ImportDataFrameToTableMinterm(self.tblMinterm, obj)
+        try:
+            self.ImportDataFrameToTruthTable(self.tblBinary, self.obj)
+            self.ImportDataFrameToTableMinterm(self.tblMinterm, self.obj)
+        except Exception:
+            print("Import")
 
         #self.ImportDataFrameToTableMinterm(self.tblMinterm, getVariable, getMinterm, getDontCare)
 
 
         self.btnDrawSchema.setEnabled(True)
+        self.init_schema(self.obj)
+        # self.passingInfo(self.obj)
 
 
         # copy = tabBinary
         # print(copy)
+    def passingInfo(self, object1):
+
+        try:
+            self.init_schema(object1)
+        except Exception:
+            print("passing Info")
+
+        # self.secondWindow = str(self.lnVariable.text())
+
+
 
     def ImportDataFrameToTruthTable(self, table: QTableView, obj: InputData):
         source = obj.getTruthTable()
@@ -203,18 +218,94 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         cb = QApplication.clipboard()
         cb.clear(mode=cb.Clipboard)
         cb.setText(self.label_9.text(), mode=cb.Clipboard)
-    #
-    # def clickedButton(self):
-    #
-    #
-    # def DrawSchema(self, variable, minterm, dontcare):
-    #
-    #     obj = InputData(variable, minterm, dontcare)
-    #     listImplicants = obj.getImplicants()
-    #     return listImplicants
+
+
+    def DrawSchema(self):
+        # self.label_2.setPixmap(QPixmap("schema.png"))
+
+        try:
+            self.obj = InputData(self.lnVariable.text(), str(self.lnMinterm.text()), str(self.lnDontCare.text()))
+        except Exception:
+            print("Object")
+
+
+        # variable = str(self.lnVariable.text())
+        # implicants = ['000-', '-010', '011-']
+        #
+        # lista = [[]]
+        # lista = self.obj.getImplicants()
+        # print(lista)
+
+
+        # try:
+        #     implicants2 = )
+        # except Exception:
+        #     print("Implikanty")
+
+
+        # getMinterm = str(self.lnMinterm.text())
+        # getDontCare = str(self.lnDontCare.text())
+        # getVariable = str(self.lnVariable.text())
+        #
+        # # jeżeli nie zaznaczono wartości nieokreślonych zignoruj wartości
+        # if not self.chbDontCare.isChecked():
+        #     getDontCare = ''
+        # try:
+        #     obj1 = InputData(getVariable, getMinterm, getDontCare)
+        #     imp = obj1.getImplicants()
+        # except Exception:
+        #     print("Krystian")
+        #
+        #
+        # try:
+        #     variable = str(self.lnVariable)
+        # except Exception:
+        #     print("variable")
+
+        # variable = 'a b c d'
+        # implicants = [['B'], ['-B', '-D'], ['B', 'D'], ['C', '-E'], ['A']]
+
+        try:
+            values3a = 'a b c d e'
+            self.secondWindow.tab = [1, 2, 3]
+            # new_schema = Schema(variable, implicants)
+            # new_schema.GenerateSchema()
+        except Exception:
+            print("schema crashed")
 
 
 
+        # try:
+        #     print(new_schema.listImplicants())
+        # except Exception:
+        #     print("Schemat")
+
+        # graph = ViewSchema()
+        #
+        # print("SCHEMA: POCZĄTEK")
+
+        # implicants = self.obj.getImplicants()
+        # variable = self.obj.getVariables()
+        #
+        # # self.CreateSchema(implicants, variable)
+        # self.new_schema = Schema(implicants, variable)
+        # self.new_schema.save("schema2.png", False)
+        #
+        # # print(new_schema.elements)
+        #
+        # print("SCHEMA: KONIEC")
+
+        # print(implicants)
+        # print(variable)
+
+    # def CreateSchema(self, implicants1, variables):
+    #     self.new_schema = Schema(implicants1, variables)
+
+        # def __init__(self, list_variable, list_implicant, line_width: int = 1):
+        #
+        # new_schema = Schema(
+
+        # self.label_9.setText()
 
 
 # ============================================================================================
