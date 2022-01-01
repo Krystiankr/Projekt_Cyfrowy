@@ -34,11 +34,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.btnShow.setEnabled(False)
 
-        # if self.lnMinterm.displayText() == '':
-        #     self.btnDrawSchema.setEnabled(False)
-        # else:
-        #     self.btnDrawSchema.setEnabled(True)
-
         # ustawienie shadow
         self.SetShadowEffect(self.lblQuine, blur=10)
         self.SetShadowEffect(self.lnMinterm)
@@ -57,20 +52,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.btnFind.clicked.connect(lambda: self.GetData(self.btnFind))
 
         self.btnShow.clicked.connect(lambda: self.ShowNewWindow(self.btnShow))
-
-
-        # init graph
-        #
-        # self.schema = None
-        #
-        # self.init_schema()
-        # self.tblBinary.horizontalHeader().setFixedHeight(50)
-        # self.tblBinary.verticalHeader().setFixedWidth(35)
-
-        # self.tblBinary.setStyleSheet("QTableWidget::item {padding-left: 5px; border: 3px}")
-
-        # self.tblBinary.horizontalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
-
 
     # Naciśnięcie ENTER spowoduje wywołanie akcji dla btnFind
     def keyPressEvent(self, e: QKeyEvent):
@@ -241,7 +222,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         cb.setText(self.label_9.text(), mode=cb.Clipboard)
 
     def DrawSchema(self):
-        # self.label_2.setPixmap(QPixmap("schema.png"))
 
         try:
             self.obj = InputData(self.lnVariable.text(), str(self.lnMinterm.text()), str(self.lnDontCare.text()))

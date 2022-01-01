@@ -11,7 +11,6 @@ from class_file.Tablica_pokryc import DostepneMetody
 from class_file.ResultEntrance import ResultEntrance
 from class_file.InputData import InputData
 
-
 import matplotlib
 from matplotlib import rcParams
 matplotlib.use('Qt5Agg')
