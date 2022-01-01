@@ -52,7 +52,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         effectShadow = QGraphicsOpacityEffect(self.frame)
         effectShadow.setOpacity(0.8)
         self.frame.setGraphicsEffect(effectShadow)
-        # self.SetShadowEffect(self.frame, blur=40)
 
         # Naciśnięcie button "GENERUJ"
         self.btnFind.clicked.connect(lambda: self.GetData(self.btnFind))
@@ -121,7 +120,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def GetData(self, buttn):
         # sprawdzenie czy wprowadzono dane
         if self.lnMinterm.displayText() == '':
-            button = QMessageBox.information(self, "Brak danych", "Podaj mintermy")
+            button = QMessageBox.information(self, "Brak danych", "<font size = 8> Podaj Mintermy </font>")
             self.lnMinterm.setFocus()
             return
 
@@ -135,10 +134,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # jeżeli nie zaznaczono wartości nieokreślonych zignoruj wartości
         if not self.chbDontCare.isChecked():
             getDontCare = ''
+
         try:
             self.obj = InputData(getVariable, getMinterm, getDontCare)
             self.ListVariable = self.obj.getVariablesAsString()
             self.ListImplicants = self.obj.getTestImplicant()
+
+            countVariables = len(self.obj.getVariablesAsList())
+            maxAcceptMinterm = pow(2, countVariables) - 1
+
+            tab = [0,6,12,15]
+            maxGiveNumber = max(tab)
+
+            if maxGiveNumber > maxAcceptMinterm:
+                print("Za duze liczby")
+                button = QMessageBox.information(self, f"Niepoprawne dane", "Podano zbyt duże liczby. Dodaj zmienną lub "
+                                                 f" wprowadź liczby w zakresie 0 - {maxAcceptMinterm}")
         except Exception:
             print("Problem z generowaniem obiektu InputData")
 
@@ -156,7 +167,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             print("Problem z wygenerowaniem obiektu Schema")
 
         pix = QPixmap('schema.png')
-        pix = pix.scaled(self.lblSchemat.size(), Qt.KeepAspectRatio)
+        pix = pix.scaled(self.lblSchemat.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.lblSchemat.setPixmap(pix)
         # self.lblSchemat.setScaledContents(True)
 
@@ -169,6 +180,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def ShowNewWindow(self, buttn):
         self.schema.ShowWithTruthTable()
+
+    def CheckNumbersAndVariables(self):
+        print()
 
 
     def ImportDataFrameToTruthTable(self, table: QTableView, obj: InputData):
@@ -184,15 +198,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         horiHead = table.horizontalHeader()
         horiHead.setDefaultSectionSize(40)
         horiHead.setFixedHeight(36)
+        table.setColumnWidth(obj.getTruthTable().shape[1] - 1, 52)
+        table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-        table.setColumnWidth(obj.getTruthTable().shape[1]-1, 60)
+        if obj.getTruthTable().shape[0] > 16:
+            table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+            table.setFixedWidth(310)
+        else:
+            table.setFixedWidth(250)
+            table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
     def ImportDataFrameToTableMinterm(self, table: QTableView, obj: InputData):
         source = obj.getGroupImplicants()
         df = source.rename({"Liczba jedynek": "Grupa", "Liczba Binarna": "Binarnie", "Liczba Dziesiętna": "Dziesiętnie"}, axis=1)
-        self.model = TableModelMinterm(df)
+        model = TableModelMinterm(df)
 
-        table.setModel(self.model)
+        table.setModel(model)
         column = table.horizontalHeader()
         row = table.verticalHeader()
         row.setDefaultSectionSize(40)

@@ -367,7 +367,7 @@ border: 2px solid rgb(208, 208, 208)}
      <string notr="true">border-color: None;</string>
     </property>
     <property name="text">
-     <string>Y = WYNIK</string>
+     <string/>
     </property>
    </widget>
    <widget class="QTableView" name="tblMinterm">
@@ -445,8 +445,8 @@ background-color: None;</string>
      <rect>
       <x>480</x>
       <y>170</y>
-      <width>281</width>
-      <height>601</height>
+      <width>250</width>
+      <height>602</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -537,7 +537,7 @@ background-color: None;</string>
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string/>
     </property>
    </widget>
    <widget class="QFrame" name="frame">
@@ -758,7 +758,11 @@ border: 2px solid rgb(255, 255, 255)
   <tabstop>chbDontCare</tabstop>
   <tabstop>lnDontCare</tabstop>
   <tabstop>btnFind</tabstop>
+  <tabstop>tblMinterm</tabstop>
   <tabstop>tblBinary</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>pushButton_3</tabstop>
+  <tabstop>btnShow</tabstop>
   <tabstop>lnVariable</tabstop>
  </tabstops>
  <resources/>

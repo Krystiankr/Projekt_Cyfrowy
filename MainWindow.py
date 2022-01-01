@@ -186,6 +186,7 @@ class Ui_MainWindow(object):
         self.lblResultMath = QtWidgets.QLabel(self.centralwidget)
         self.lblResultMath.setGeometry(QtCore.QRect(1060, 720, 721, 71))
         self.lblResultMath.setStyleSheet("border-color: None;")
+        self.lblResultMath.setText("")
         self.lblResultMath.setObjectName("lblResultMath")
         self.tblMinterm = QtWidgets.QTableView(self.centralwidget)
         self.tblMinterm.setGeometry(QtCore.QRect(20, 390, 402, 421))
@@ -232,7 +233,7 @@ class Ui_MainWindow(object):
 "background-color: None;")
         self.label_4.setObjectName("label_4")
         self.tblBinary = QtWidgets.QTableView(self.centralwidget)
-        self.tblBinary.setGeometry(QtCore.QRect(480, 170, 281, 601))
+        self.tblBinary.setGeometry(QtCore.QRect(480, 170, 250, 602))
         self.tblBinary.setStyleSheet("QHeaderView::section\n"
 "{\n"
 "            border-top:0px solid #D8D8D8;\n"
@@ -291,7 +292,8 @@ class Ui_MainWindow(object):
 "background-color: None;")
         self.label_5.setObjectName("label_5")
         self.lblSchemat = QtWidgets.QLabel(self.centralwidget)
-        self.lblSchemat.setGeometry(QtCore.QRect(810, 160, 1071, 541))
+        self.lblSchemat.setGeometry(QtCore.QRect(820, 160, 1061, 541))
+        self.lblSchemat.setText("")
         self.lblSchemat.setObjectName("lblSchemat")
         self.frame = QtWidgets.QFrame(self.centralwidget)
         self.frame.setGeometry(QtCore.QRect(10, 0, 1901, 121))
@@ -429,8 +431,12 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.lnMinterm, self.chbDontCare)
         MainWindow.setTabOrder(self.chbDontCare, self.lnDontCare)
         MainWindow.setTabOrder(self.lnDontCare, self.btnFind)
-        MainWindow.setTabOrder(self.btnFind, self.tblBinary)
-        MainWindow.setTabOrder(self.tblBinary, self.lnVariable)
+        MainWindow.setTabOrder(self.btnFind, self.tblMinterm)
+        MainWindow.setTabOrder(self.tblMinterm, self.tblBinary)
+        MainWindow.setTabOrder(self.tblBinary, self.pushButton_2)
+        MainWindow.setTabOrder(self.pushButton_2, self.pushButton_3)
+        MainWindow.setTabOrder(self.pushButton_3, self.btnShow)
+        MainWindow.setTabOrder(self.btnShow, self.lnVariable)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -446,10 +452,8 @@ class Ui_MainWindow(object):
         self.label_8.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">Forma zminimalizowana:</span></p></body></html>"))
         self.pushButton_2.setText(_translate("MainWindow", "TEX"))
         self.pushButton_3.setText(_translate("MainWindow", "Tekst"))
-        self.lblResultMath.setText(_translate("MainWindow", "Y = WYNIK"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Wektory:</p></body></html>"))
         self.label_5.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Tablica prawdy:</p></body></html>"))
-        self.lblSchemat.setText(_translate("MainWindow", "TextLabel"))
         self.lblMinimalizacja.setText(_translate("MainWindow", "Minimalizacja"))
         self.lblMetoda.setText(_translate("MainWindow", "metodą"))
         self.lblQuine.setText(_translate("MainWindow", "Quine’a-McCluskeya"))

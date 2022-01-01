@@ -91,7 +91,6 @@ class ResultEntrance:
 
         dpi = 200
         fig.savefig('formula.png', dpi=dpi)
-
         bbox = text.get_window_extent()
         width, height = bbox.size / float(dpi) + 0.12
         fig.set_size_inches((3, height))
