@@ -1,104 +1,86 @@
 import sys
-
+from PyQt5 import QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import *
 from MainWindow import Ui_MainWindow
-from class_file.TableModel import TableModel
-from class_file.Tablica_pokryc import DostepneMetody
+from class_file.TableModel import TableModelMinterm, TableModelBinary
 from class_file.Reprezentacja_sumacyjna import *
 from class_file.InputData import InputData
-from class_file.ViewSchema import ViewSchema
+from class_file.Schema import Schema
+
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.obj = None
-        self.schema = None
+        # self.schema = None
         self.ListVariable = None
         self.ListImplicants = None
         self.setupUi(self)
         self.secondWindow = None
 
+        # ustawienie czcionek
+        font = QFont("Script MT Bold")
+        self.lblQuine.setFont(font)
+        font = QFont("Open Sans")
+        self.btnFind.setFont(font)
 
+        # ustawienia początkowe
         self.lnDontCare.setEnabled(False)
         self.chbDontCare.setCheckState(Qt.Unchecked)
         self.chbDontCare.stateChanged.connect(self.ChangingState)
 
-        if self.lnMinterm.displayText() == '':
-            self.btnDrawSchema.setEnabled(False)
-        else:
-            self.btnDrawSchema.setEnabled(True)
+        # if self.lnMinterm.displayText() == '':
+        #     self.btnDrawSchema.setEnabled(False)
+        # else:
+        #     self.btnDrawSchema.setEnabled(True)
 
+        # ustawienie shadow
+        self.SetShadowEffect(self.lblQuine, blur=10)
+        self.SetShadowEffect(self.lnMinterm)
+        self.SetShadowEffect(self.lnVariable)
+        self.SetShadowEffect(self.lnDontCare)
+        self.SetShadowEffect(self.btnFind, blur=30)
+        self.SetShadowEffect(self.tblMinterm, blur=30)
+        self.SetShadowEffect(self.tblBinary, blur=40)
+        # self.SetShadowEffect(self.frame, blur=40)
+
+        # Naciśnięcie button "GENERUJ"
         self.btnFind.clicked.connect(lambda: self.GetData(self.btnFind))
 
-        # self.btnFind.clicked.connect(self.GetData)
-
-        self.btnDrawSchema.clicked.connect(self.DrawSchema)
-
-        # ustawienie czcionek
-        font = QFont("Script MT Bold")
-        self.label_6.setFont(font)
-
-        font = QFont("Open Sans")
-        self.btnFind.setFont(font)
-
-        # formatowanie tablic
-
-        font = QFont("Open Sans", 12)
-        self.tblBinary.setFont(font)
-
-        column = self.tblBinary.horizontalHeader()
-        row = self.tblBinary.verticalHeader()
-
-        row.setDefaultSectionSize(40)
-        column.setDefaultSectionSize(40)
-
-        row.setStyleSheet("border-color: None;\n"
-                          "background-color: None;")
-
-        column.setStyleSheet("border-color: None;\n"
-                             "background-color: None;")
-
-        row.setFixedWidth(35)
-        column.setFixedHeight(50)
 
         # init graph
         #
         # self.schema = None
         #
         # self.init_schema()
-
-
-
-
         # self.tblBinary.horizontalHeader().setFixedHeight(50)
         # self.tblBinary.verticalHeader().setFixedWidth(35)
 
         # self.tblBinary.setStyleSheet("QTableWidget::item {padding-left: 5px; border: 3px}")
 
-        # TUTAJ ZACZNIJ!!!!!!!!!!!
-        self.tblBinary.horizontalHeader().setStyleSheet("QHeaderView::section {padding-left: 10px; border: 0px}")
-        self.tblBinary.setStyleSheet("QTableWidget::item {padding-left: 10px; border: 0px}")
-
-        self.tblBinary.horizontalHeader().setFont(QFont("Open Sans", 12))
-        self.tblBinary.verticalHeader().setFont(QFont("Open Sans", 12))
-
-        self.tblBinary.verticalHeader().setMaximumWidth(100)
-
-        self.tblBinary.horizontalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
-        self.tblBinary.verticalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+        # self.tblBinary.horizontalHeader().setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
 
-        self.pushButton_2.clicked.connect(self.tryingCopy)
+    # Naciśnięcie ENTER spowoduje wywołanie akcji dla btnFind
+    def keyPressEvent(self, e: QKeyEvent):
+        if e.key() == Qt.Key_Return or e.key() == Qt.Key_Enter:
+            self.GetData(self.btnFind)
+            self.lnMinterm.setFocus()
+
+    @staticmethod
+    def SetShadowEffect(label: Qt.Widget, blur: float = 15, offst: float = 2):
+        effectShadow = QGraphicsDropShadowEffect(label)
+        effectShadow.setBlurRadius(blur)
+        effectShadow.setOffset(offst)
+        label.setGraphicsEffect(effectShadow)
 
     # Metoda scala komórki w kolumnie Liczba jedynek
     # Przyjmuje formant TableView, w którym sprawdzamy wiersze oraz tablice z danymi
     def MergeRow(self, Table: QTableView, tab: [List]):
         # usunięcie aktualnych scalan
         Table.clearSpans()
-
         start = 0
         stop = len(tab)
 
@@ -114,20 +96,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 Table.setSpan(start, 0, count, 1)
             start = x
 
-    def init_schema(self, source):
-        # print("init schema")
-        try:
-            self.schema = ViewSchema(source)
-            self.stackedWidget.addWidget(self.schema.return_canvas())
-            self.stackedWidget.setCurrentWidget(self.schema.return_canvas())
-        except Exception:
-            print("init graph")
+    # ODKOMENTOWAĆ
+    # def init_schema(self, source):
+    #     # print("init schema")
+    #     try:
+    #         self.schema = ViewSchema(source)
+    #     except Exception:
+    #         print("init graph")
+    #
+    #     self.stackedWidget.addWidget(self.schema.return_canvas())
+    #     self.stackedWidget.setCurrentWidget(self.schema.return_canvas())
+
 
     def GetData(self, buttn):
         # sprawdzenie czy wprowadzono dane
         if self.lnMinterm.displayText() == '':
             button = QMessageBox.information(self, "Brak danych", "Podaj mintermy")
+            self.lnMinterm.setFocus()
             return
+
+        self.lnMinterm.setFocus()
 
         # przekazanie danych z formantów do metod
         getMinterm = str(self.lnMinterm.text())
@@ -137,75 +125,67 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # jeżeli nie zaznaczono wartości nieokreślonych zignoruj wartości
         if not self.chbDontCare.isChecked():
             getDontCare = ''
-
         try:
-            print(getMinterm)
-            print(getDontCare)
-            print(getVariable)
             self.obj = InputData(getVariable, getMinterm, getDontCare)
-            self.ListVariable = self.obj.getVariables()
+            self.ListVariable = self.obj.getVariablesAsString()
             self.ListImplicants = self.obj.getTestImplicant()
-            # self.ListImplicants = obj.getGroupImplicants()
-            print(self.ListVariable)
-            print(self.ListImplicants)
         except Exception:
-            print("ZMIENNE")
+            print("Problem z generowaniem obiektu InputData")
 
         try:
             self.ImportDataFrameToTruthTable(self.tblBinary, self.obj)
             self.ImportDataFrameToTableMinterm(self.tblMinterm, self.obj)
         except Exception:
-            print("Import")
+            print("Problem z przekazaniem obiektu InputData do metody ImportDataFrame")
 
-        #self.ImportDataFrameToTableMinterm(self.tblMinterm, getVariable, getMinterm, getDontCare)
-
-
-        self.btnDrawSchema.setEnabled(True)
-        self.init_schema(self.obj)
-        # self.passingInfo(self.obj)
-
-
-        # copy = tabBinary
-        # print(copy)
-    def passingInfo(self, object1):
-
+        # utworzenie Schema
         try:
-            self.init_schema(object1)
+            schema = Schema(self.ListVariable, self.obj.getImplicantsAsBinary(), self.obj.getTruthTable())
+            schema.GenerateSchema()
         except Exception:
-            print("passing Info")
+            print("Problem z wygenerowaniem obiektu Schema")
 
-        # self.secondWindow = str(self.lnVariable.text())
-
+        pix = QPixmap('schema.png')
+        pix = pix.scaled(self.lblSchemat.size(), Qt.KeepAspectRatio)
+        self.lblSchemat.setPixmap(pix)
+        self.lblSchemat.setScaledContents(True)
 
 
     def ImportDataFrameToTruthTable(self, table: QTableView, obj: InputData):
-        source = obj.getTruthTable()
-        self.model = TableModel(source)
-        table.setModel(self.model)
+        source = obj.getTruthTable().astype(str)
+        model = TableModelBinary(source)
+        table.setModel(model)
 
-    # def ImportDataFrameToTruthTable(self, table: QTableView, getVar: str, getMin: str, getDont: str):
-    #     obj = InputData(getVar, getMin, getDont)
-    #     source = obj.getTruthTable()
-    #
-    #     self.model = TableModel(source)
-    #     table.setModel(self.model)
+        vertHead = table.verticalHeader()
+        vertHead.setDefaultSectionSize(35)
+        vertHead.setMaximumWidth(50)
+        vertHead.setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
-    # def ImportDataFrameToTableMinterm(self, table: QTableView, getVar: str, getMin: str, getDont: str):
-    #     obj = InputData(getVar, getMin, getDont)
-    #     source = obj.getGroupImplicants()
-    #
-    #     self.model = TableModel(source)
-    #     table.setModel(self.model)
-    #
-    #     self.MergeRow(table, source['Liczba jedynek'].values)
+        horiHead = table.horizontalHeader()
+        horiHead.setDefaultSectionSize(40)
+        horiHead.setFixedHeight(36)
+
+        table.setColumnWidth(obj.getTruthTable().shape[1]-1, 60)
 
     def ImportDataFrameToTableMinterm(self, table: QTableView, obj: InputData):
         source = obj.getGroupImplicants()
+        df = source.rename({"Liczba jedynek": "Grupa", "Liczba Binarna": "Binarnie", "Liczba Dziesiętna": "Dziesiętnie"}, axis=1)
+        self.model = TableModelMinterm(df)
 
-        self.model = TableModel(source)
         table.setModel(self.model)
+        column = table.horizontalHeader()
+        row = table.verticalHeader()
+        row.setDefaultSectionSize(40)
+        column.setDefaultSectionSize(100)
+        table.setColumnWidth(0, 150)
+        table.setColumnWidth(1, 130)
+        table.setColumnWidth(2, 100)
+        table.setFixedWidth(402)
+        table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        table.verticalHeader().hide()
 
-        self.MergeRow(table, source['Liczba jedynek'].values)
+        self.MergeRow(table, df['Grupa'].values)
 
     def ChangingState(self, s):
         s == Qt.Checked
@@ -219,51 +199,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         cb.clear(mode=cb.Clipboard)
         cb.setText(self.label_9.text(), mode=cb.Clipboard)
 
-
     def DrawSchema(self):
         # self.label_2.setPixmap(QPixmap("schema.png"))
 
         try:
             self.obj = InputData(self.lnVariable.text(), str(self.lnMinterm.text()), str(self.lnDontCare.text()))
+            print(self.obj.getTruthTable())
         except Exception:
             print("Object")
-
-
-        # variable = str(self.lnVariable.text())
-        # implicants = ['000-', '-010', '011-']
-        #
-        # lista = [[]]
-        # lista = self.obj.getImplicants()
-        # print(lista)
-
-
-        # try:
-        #     implicants2 = )
-        # except Exception:
-        #     print("Implikanty")
-
-
-        # getMinterm = str(self.lnMinterm.text())
-        # getDontCare = str(self.lnDontCare.text())
-        # getVariable = str(self.lnVariable.text())
-        #
-        # # jeżeli nie zaznaczono wartości nieokreślonych zignoruj wartości
-        # if not self.chbDontCare.isChecked():
-        #     getDontCare = ''
-        # try:
-        #     obj1 = InputData(getVariable, getMinterm, getDontCare)
-        #     imp = obj1.getImplicants()
-        # except Exception:
-        #     print("Krystian")
-        #
-        #
-        # try:
-        #     variable = str(self.lnVariable)
-        # except Exception:
-        #     print("variable")
-
-        # variable = 'a b c d'
-        # implicants = [['B'], ['-B', '-D'], ['B', 'D'], ['C', '-E'], ['A']]
 
         try:
             values3a = 'a b c d e'
@@ -273,48 +216,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except Exception:
             print("schema crashed")
 
-
-
-        # try:
-        #     print(new_schema.listImplicants())
-        # except Exception:
-        #     print("Schemat")
-
-        # graph = ViewSchema()
-        #
-        # print("SCHEMA: POCZĄTEK")
-
-        # implicants = self.obj.getImplicants()
-        # variable = self.obj.getVariables()
-        #
-        # # self.CreateSchema(implicants, variable)
-        # self.new_schema = Schema(implicants, variable)
-        # self.new_schema.save("schema2.png", False)
-        #
-        # # print(new_schema.elements)
-        #
-        # print("SCHEMA: KONIEC")
-
-        # print(implicants)
-        # print(variable)
-
-    # def CreateSchema(self, implicants1, variables):
-    #     self.new_schema = Schema(implicants1, variables)
-
-        # def __init__(self, list_variable, list_implicant, line_width: int = 1):
-        #
-        # new_schema = Schema(
-
-        # self.label_9.setText()
-
-
 # ============================================================================================
 
 app = QApplication(sys.argv)
 
 window = MainWindow()
-
 window.show()
+
+
 app.exec_()
 
 # ===========================================

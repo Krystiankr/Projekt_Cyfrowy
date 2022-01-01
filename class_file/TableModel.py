@@ -1,7 +1,9 @@
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import QAbstractTableModel, Qt
+from PyQt5.QtCore import QAbstractTableModel
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 
-class TableModel(QtCore.QAbstractTableModel):
+
+class TableModelMinterm(QtCore.QAbstractTableModel):
     def __init__(self, data):
         super().__init__()
         self._data = data
@@ -9,7 +11,13 @@ class TableModel(QtCore.QAbstractTableModel):
     def data(self, index, role):
         if role == Qt.DisplayRole:
             value = self._data.iloc[index.row(), index.column()]
+            if index.column() == 0:
+                return f'Grupa {value}'
             return str(value)
+
+        if role == Qt.TextAlignmentRole:
+            value = self._data.iloc[index.row(), index.column()]
+            return Qt.AlignVCenter | Qt.AlignCenter
 
 
     def rowCount(self, index):
@@ -26,26 +34,88 @@ class TableModel(QtCore.QAbstractTableModel):
             if orientation == Qt.Vertical:
                 return str(self._data.index[section])
 
-
-class PandasModel(QAbstractTableModel):
-
+class TableModelBinary(QtCore.QAbstractTableModel):
     def __init__(self, data):
-        QAbstractTableModel.__init__(self)
+        super().__init__()
         self._data = data
 
-    def rowCount(self, parent=None):
+    def data(self, index, role):
+        lenCol = self._data.shape[1]
+
+        if role == Qt.DisplayRole:
+            value = self._data.iloc[index.row(), index.column()]
+            return str(value)
+
+        if role == Qt.FontRole:
+            if index.column() == lenCol-1:
+                return QtGui.QFont("Open Sans", 12, 75)
+
+        if role == Qt.TextAlignmentRole:
+            value = self._data.iloc[index.row(), index.column()]
+            return Qt.AlignVCenter | Qt.AlignCenter
+
+    def rowCount(self, index):
         return self._data.shape[0]
 
-    def columnCount(self, parnet=None):
+    def columnCount(self, index):
         return self._data.shape[1]
 
-    def data(self, index, role=Qt.DisplayRole):
-        if index.isValid():
-            if role == Qt.DisplayRole:
-                return str(self._data.iloc[index.row(), index.column()])
-        return None
+    def headerData(self, section, orientation, role):
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
+                return str(self._data.columns[section])
 
-    def headerData(self, col, orientation, role):
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
-            return self._data.columns[col]
-        return None
+            if orientation == Qt.Vertical:
+                return str(self._data.index[section])
+
+
+class TableModel3(QtCore.QAbstractTableModel):
+    def __init__(self, data):
+        super().__init__()
+        self._data = data
+
+    def data(self, index, role):
+        if role == Qt.DisplayRole:
+            value = self._data.iloc[index.row(), index.column()]
+            return str(value)
+
+        if role == Qt.TextAlignmentRole:
+            value = self._data.iloc[index.row(), index.column()]
+            return Qt.AlignVCenter | Qt.AlignCenter
+
+    def rowCount(self, index):
+        return self._data.shape[0]
+
+    def columnCount(self, index):
+        return self._data.shape[1]
+
+    def headerData(self, section, orientation, role):
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
+                return str(self._data.columns[section])
+
+            if orientation == Qt.Vertical:
+                return str(self._data.index[section])
+
+class NormalTable(QtCore.QAbstractTableModel):
+    def __init__(self, data):
+        super().__init__()
+        self._data = data
+
+    def data(self, index, role):
+        if role == Qt.DisplayRole:
+            # See below for the nested-list data structure.
+            # .row() indexes into the outer list,
+            # .column() indexes into the sub-list
+            return self._data[index.row()][index.column()]
+
+    def rowCount(self, index):
+        # The length of the outer list.
+        return len(self._data)
+
+    def columnCount(self, index):
+        # The following takes the first sub-list, and returns
+        # the length (only works if all rows are an equal length)
+        return len(self._data[0])
+
+

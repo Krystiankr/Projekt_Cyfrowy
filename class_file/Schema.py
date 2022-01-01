@@ -11,9 +11,10 @@ from class_file.Tablica_pokryc import DostepneMetody
 from class_file.ResultEntrance import ResultEntrance
 from class_file.InputData import InputData
 
+
 import matplotlib
 from matplotlib import rcParams
-# matplotlib.use('Qt5Agg')
+matplotlib.use('Qt5Agg')
 rcParams['mathtext.default'] = 'it'
 rcParams['mathtext.fontset'] = 'stix'
 
@@ -38,6 +39,7 @@ class Schema:
 
     def GetCountIn(self) -> int:
         return len(self.listVariable)
+
 
     @staticmethod
     def StrToList(source: Any) -> Union[List, str]:
@@ -345,7 +347,7 @@ class Schema:
                 self.DrawTruthTable()
                 self.DrawFormula()
                 self.DrawSOP()
-                self.MainSchema.draw()
+                # self.MainSchema.draw()
                 self.SaveSchema()
             else:
                 print("Błędne dane. Sprawdź zmienne i implikanty!")
@@ -354,16 +356,16 @@ class Schema:
             print("[Wyjątek] Nie wygenerowano schematu")
 
 
-variable = 'A, B, C, D'
-sop = '0,1,2,3,4,10,11,12,13,14,15'
-dontcare = ''
-
-tmp2 = InputData(variable, sop, dontcare)
-tmp = DostepneMetody(variable, sop, dontcare)
-print(tmp.get_prime_implicants())
-
-schema = Schema(variable, tmp2.getImplicantsAsBinary(), tmp2.getTruthTable())
-schema.GenerateSchema()
-
+# variable = 'A, B, C, D'
+# sop = '0,1,2,7,9,11,12,13,14'
+# dontcare = ''
+#
+# tmp2 = InputData(variable, sop, dontcare)
+# tmp = DostepneMetody(variable, sop, dontcare)
+# print(tmp.get_prime_implicants())
+#
+# schema = Schema(variable, tmp2.getImplicantsAsBinary(), tmp2.getTruthTable())
+# schema.GenerateSchema()
+#
 # print(schema.listImplicants)
 
