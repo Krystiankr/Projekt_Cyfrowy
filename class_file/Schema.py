@@ -336,6 +336,28 @@ class Schema:
         else:
             print("Nie zapisano schematu. Brak elementów.")
 
+    def ShowWithTruthTable(self):
+        try:
+            checkYourData = self.CheckVariableAndImplicants()
+            if checkYourData:
+                self.MainSchema.elements.clear()
+                self.DrawInputs()
+                self.DrawGatesAndInput()
+                self.DrawGateOr()
+                self.DrawKmap()
+                self.DrawTruthTable()
+                # self.DrawFormula()
+                self.DrawSOP()
+                self.MainSchema.draw()
+
+                #self.SaveSchema()
+            else:
+                print("Błędne dane. Sprawdź zmienne i implikanty!")
+        except Exception:
+            print(self.listResult)
+            print("[Wyjątek] Nie wygenerowano schematu")
+
+
     def GenerateSchema(self):
         try:
             checkYourData = self.CheckVariableAndImplicants()
@@ -344,11 +366,12 @@ class Schema:
                 self.DrawGatesAndInput()
                 self.DrawGateOr()
                 self.DrawKmap()
-                self.DrawTruthTable()
-                self.DrawFormula()
+                # self.DrawTruthTable()
+                # self.DrawFormula()
                 self.DrawSOP()
                 # self.MainSchema.draw()
                 self.SaveSchema()
+                self.MainSchema.elements.clear()
             else:
                 print("Błędne dane. Sprawdź zmienne i implikanty!")
         except Exception:

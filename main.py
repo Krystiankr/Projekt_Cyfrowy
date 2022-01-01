@@ -8,13 +8,14 @@ from class_file.TableModel import TableModelMinterm, TableModelBinary
 from class_file.Reprezentacja_sumacyjna import *
 from class_file.InputData import InputData
 from class_file.Schema import Schema
+from class_file.ResultEntrance import ResultEntrance
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.obj = None
-        # self.schema = None
+        self.schema = None
         self.ListVariable = None
         self.ListImplicants = None
         self.setupUi(self)
@@ -31,6 +32,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.chbDontCare.setCheckState(Qt.Unchecked)
         self.chbDontCare.stateChanged.connect(self.ChangingState)
 
+        self.btnShow.setEnabled(False)
+
         # if self.lnMinterm.displayText() == '':
         #     self.btnDrawSchema.setEnabled(False)
         # else:
@@ -44,10 +47,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SetShadowEffect(self.btnFind, blur=30)
         self.SetShadowEffect(self.tblMinterm, blur=30)
         self.SetShadowEffect(self.tblBinary, blur=40)
+        self.SetShadowEffect(self.frame, blur=40)
+
+        effectShadow = QGraphicsOpacityEffect(self.frame)
+        effectShadow.setOpacity(0.8)
+        self.frame.setGraphicsEffect(effectShadow)
         # self.SetShadowEffect(self.frame, blur=40)
 
         # Naciśnięcie button "GENERUJ"
         self.btnFind.clicked.connect(lambda: self.GetData(self.btnFind))
+
+        self.btnShow.clicked.connect(lambda: self.ShowNewWindow(self.btnShow))
 
 
         # init graph
@@ -140,15 +150,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # utworzenie Schema
         try:
-            schema = Schema(self.ListVariable, self.obj.getImplicantsAsBinary(), self.obj.getTruthTable())
-            schema.GenerateSchema()
+            self.schema = Schema(self.ListVariable, self.obj.getImplicantsAsBinary(), self.obj.getTruthTable())
+            self.schema.GenerateSchema()
         except Exception:
             print("Problem z wygenerowaniem obiektu Schema")
 
         pix = QPixmap('schema.png')
         pix = pix.scaled(self.lblSchemat.size(), Qt.KeepAspectRatio)
         self.lblSchemat.setPixmap(pix)
-        self.lblSchemat.setScaledContents(True)
+        # self.lblSchemat.setScaledContents(True)
+
+        obj_formula = ResultEntrance(self.obj.getImplicantsAsInput())
+        str1 = obj_formula.GenerateAsMath()
+        obj_formula.RenderImage()
+        pix1 = QPixmap('formula.png')
+        self.lblResultMath.setPixmap(pix1)
+        self.btnShow.setEnabled(True)
+
+    def ShowNewWindow(self, buttn):
+        self.schema.ShowWithTruthTable()
 
 
     def ImportDataFrameToTruthTable(self, table: QTableView, obj: InputData):
