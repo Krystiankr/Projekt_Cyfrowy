@@ -42,11 +42,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SetShadowEffect(self.btnFind, blur=30)
         self.SetShadowEffect(self.tblMinterm, blur=30)
         self.SetShadowEffect(self.tblBinary, blur=40)
-        self.SetShadowEffect(self.frame, blur=40)
+        self.SetShadowEffect(self.frame, blur=40, offst=2)
 
-        effectShadow = QGraphicsOpacityEffect(self.frame)
-        effectShadow.setOpacity(0.8)
-        self.frame.setGraphicsEffect(effectShadow)
+        #
+        #
+        # effectShadow1 = QGraphicsOpacityEffect(self.frame)
+        # effectShadow1.setOpacity(0.8)
+        # self.frame.setGraphicsEffect(effectShadow1)
 
         # Naciśnięcie button "GENERUJ"
         self.btnFind.clicked.connect(lambda: self.GetData(self.btnFind))
