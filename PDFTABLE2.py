@@ -64,10 +64,7 @@ class PDF(FPDF):
                         self.cell(szer, 7, heading, "B", 0, "C")
             else:
                 for heading in headings:
-                    if grupa:
-                        self.cell(szer, 10, heading, 55, 0, "C", True)
-                    else:
-                        self.cell(szer, 7, heading, 55, 0, "C", True)
+                    self.cell(szer, 10, heading, 55, 0, "C", True)
 
 
         # self.set_line_width(line_width)
