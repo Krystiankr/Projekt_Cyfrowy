@@ -45,10 +45,10 @@ class PDF(FPDF):
             x = [x[0] for x in splited_x]
             y = [y[1] for y in splited_x]
             for x_ in x:
-                self.cell(szer, 7, x_, "TLR", 0, "C", True)
+                self.cell(szer, 10, x_, "TLR", 0, "B", True)
             self.ln()
             for y_ in y:
-                self.cell(szer, 7, y_, "BLR", 0, "C", True)
+                self.cell(szer, 10, y_, "BLR", 0, "T", True)
         else:
             if prawda:
                 self.set_fill_color(255, 255, 255)
@@ -64,8 +64,11 @@ class PDF(FPDF):
                         self.cell(szer, 7, heading, "B", 0, "C")
             else:
                 for heading in headings:
-                    print(f'>{heading}')
-                    self.cell(szer, 7, heading, 55, 0, "C", True)
+                    if grupa:
+                        self.cell(szer, 10, heading, 55, 0, "C", True)
+                    else:
+                        self.cell(szer, 7, heading, 55, 0, "C", True)
+
 
         # self.set_line_width(line_width)
         self.ln()
@@ -146,7 +149,10 @@ class PDF(FPDF):
 
     def grupowanie(self):
         df = self.tab.get_pierwsza_grupa()
-        df.rename(columns={"Liczba Dziesiętna": "Liczba Dziesietna"}, inplace=True)
+        # df.rename(columns={"Liczba Dziesiętna": "Liczba Dziesietna"}, inplace=True)
+        df.rename(columns={"Liczba Dziesiętna": "Dziesietna",
+                           "Liczba Binarna": "Binarna",
+                           "Liczba jedynek": "Grupa"}, inplace=True)
         df = df.astype(str)
         headings = list(df.columns)
         rows = df.values.tolist()
