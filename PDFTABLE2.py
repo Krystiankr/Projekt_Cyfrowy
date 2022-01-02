@@ -62,7 +62,7 @@ class PDF(FPDF):
         fill = False
         for row in rows:
             for row_ in row:
-                self.cell(szer, 6, row_, "LR", 0, "L", fill)
+                self.cell(szer, 6, row_, "LR", 0, "C", fill)
 
             self.ln()
             fill = not fill
@@ -121,10 +121,10 @@ class PDF(FPDF):
         return self.colored_table(headings, rows, nazwa='Tablica pokryc:', szer=15, x=100, y=100)
 
 
-getVariable = 'O K A Y'
-getMinterm = '0, 1, 3, 7, 8, 9, 11, 15'
-getDontCare = '13 14'
-implikanty = ['0-0-', '-0-1', '1-0-']
+getVariable = 'A B C D'
+getMinterm = '1, 2, 3, 4'
+getDontCare = '5, 6'
+implikanty = ['0-0-', '-0-1']
 
 pdf = PDF(getVariable, getMinterm, getDontCare)
 pdf.set_font("helvetica", size=14)
@@ -142,9 +142,9 @@ schema.DrawKmap()
 fig2 = Figure(figsize=(7, 5), dpi=200)
 canvas2 = FigureCanvas(fig2)
 axes2 = fig2.gca()
-axes2.axis("equal")
-schema.MainSchema.draw(ax=axes2, show=False)
 axes2.axis("off")
+schema.MainSchema.draw(ax=axes2, show=False)
+axes2.axis("equal")
 canvas2.draw()
 img2 = Image.fromarray(numpy.asarray(canvas2.buffer_rgba()))
 # 3 --
