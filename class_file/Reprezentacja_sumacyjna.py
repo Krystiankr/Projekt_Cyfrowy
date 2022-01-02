@@ -4,6 +4,7 @@ import re
 from typing import List
 
 
+
 class CreateTable:
     postac_sumacyjna: List[int]
     dont_care: List[int]
@@ -20,6 +21,9 @@ class CreateTable:
         #      self.dont_care = [4, 5]
         #      self.wyjscie = [1, 2, 3, 4, 5]
         self._create_df_with_binary_nums()
+
+    def get_postacsum_dontcare(self):
+        return self.wyjscie
 
     def get_postac_sumacyjna(self) -> List[int]:
         return sorted(self.postac_sumacyjna)
