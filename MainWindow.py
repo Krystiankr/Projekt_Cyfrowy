@@ -26,15 +26,22 @@ class Ui_MainWindow(object):
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea.setMaximumSize(QtCore.QSize(16777214, 16777215))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
+        self.scrollArea.setSizePolicy(sizePolicy)
+        self.scrollArea.setMinimumSize(QtCore.QSize(200, 200))
+        self.scrollArea.setMaximumSize(QtCore.QSize(1540, 800))
+        self.scrollArea.setBaseSize(QtCore.QSize(0, 0))
         self.scrollArea.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
-        self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
-        self.scrollArea.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
-        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scrollArea.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
+        self.scrollArea.setWidgetResizable(False)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1525, 773))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1521, 786))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setObjectName("gridLayout")
@@ -128,200 +135,16 @@ class Ui_MainWindow(object):
         self.verticalLayout_4 = QtWidgets.QVBoxLayout()
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.gridLayout_4 = QtWidgets.QGridLayout()
+        self.gridLayout_4.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
         self.gridLayout_4.setObjectName("gridLayout_4")
-        self.frame_5 = QtWidgets.QFrame(self.scrollAreaWidgetContents)
-        self.frame_5.setMaximumSize(QtCore.QSize(800, 16777215))
-        self.frame_5.setStyleSheet("background-color: None;")
-        self.frame_5.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_5.setObjectName("frame_5")
-        self.lblSchemat = QtWidgets.QLabel(self.frame_5)
-        self.lblSchemat.setGeometry(QtCore.QRect(0, 10, 691, 521))
-        self.lblSchemat.setMaximumSize(QtCore.QSize(900, 16777215))
-        self.lblSchemat.setStyleSheet("background-color: None;")
-        self.lblSchemat.setText("")
-        self.lblSchemat.setObjectName("lblSchemat")
-        self.btnShow = QtWidgets.QPushButton(self.frame_5)
-        self.btnShow.setGeometry(QtCore.QRect(680, 570, 101, 41))
-        self.btnShow.setStyleSheet(":active\n"
-"{\n"
-"font: 500 12pt \"Open Sans\";\n"
-"-webkit-border-radius: 12px;\n"
-"-moz-border-radius: 12px;\n"
-"border-radius: 12px;\n"
-"background-color: rgb(15, 111, 198);\n"
-"color: rgb(255, 255, 255);\n"
-"border: 2px solid rgb(255, 255, 255)\n"
-"}\n"
-":!active\n"
-"{\n"
-"font: 500 12pt \"Open Sans\";\n"
-"-webkit-border-radius: 12px;\n"
-"-moz-border-radius: 12px;\n"
-"border-radius: 12px;\n"
-"background-color: rgb(15, 111, 198);\n"
-"color: rgb(255, 255, 255);\n"
-"border: 2px solid rgb(255, 255, 255)\n"
-"}\n"
-"\n"
-":disabled\n"
-"{\n"
-"font: 500 12pt \"Open Sans\";\n"
-"-webkit-border-radius: 12px;\n"
-"-moz-border-radius: 12px;\n"
-"border-radius: 12px;\n"
-"background-color: rgb(208, 208, 208);\n"
-"color: rgb(255, 255, 255);\n"
-"border: 2px solid rgb(255, 255, 255)\n"
-"}\n"
-"\n"
-"\n"
-":pressed\n"
-"{\n"
-"    background-color: rgb(0, 85, 255);\n"
-"    border-style: inset\n"
-"}\n"
-":hover\n"
-" {\n"
-"    border: 2px solid rgb(0, 0, 0)\n"
-"}\n"
-":focus\n"
-" {\n"
-"    border: 2px solid rgb(0, 0, 255)\n"
-"}\n"
-"\n"
-"\n"
-"\n"
-"")
-        self.btnShow.setAutoDefault(True)
-        self.btnShow.setObjectName("btnShow")
-        self.lblResultMath = QtWidgets.QLabel(self.frame_5)
-        self.lblResultMath.setGeometry(QtCore.QRect(260, 580, 341, 41))
-        self.lblResultMath.setStyleSheet("border-color: None;")
-        self.lblResultMath.setText("")
-        self.lblResultMath.setObjectName("lblResultMath")
-        self.label_8 = QtWidgets.QLabel(self.frame_5)
-        self.label_8.setGeometry(QtCore.QRect(20, 580, 227, 26))
-        font = QtGui.QFont()
-        font.setPointSize(18)
-        font.setBold(False)
-        font.setItalic(False)
-        font.setUnderline(False)
-        self.label_8.setFont(font)
-        self.label_8.setStyleSheet("border-color: None;\n"
-"font: 500 18pt \"Open Sans\";\n"
-"")
-        self.label_8.setObjectName("label_8")
-        self.pushButton_2 = QtWidgets.QPushButton(self.frame_5)
-        self.pushButton_2.setGeometry(QtCore.QRect(10, 620, 81, 22))
-        self.pushButton_2.setStyleSheet(":active\n"
-"{\n"
-"font: 500 10pt \"Open Sans\";\n"
-"-webkit-border-radius: 12px;\n"
-"-moz-border-radius: 12px;\n"
-"border-radius: 12px;\n"
-"background-color: None;\n"
-"color: rgb(0, 0, 0);\n"
-"border: 2px solid rgb(208, 208, 208)}\n"
-":pressed\n"
-"{\n"
-"    background-color: rgb(0, 85, 255);\n"
-"}\n"
-":hover\n"
-" {\n"
-"    border: 2px solid rgb(0, 0, 0)\n"
-"}\n"
-":!hover\n"
-" {\n"
-"    border: 2px solid rgb(208, 208, 208)\n"
-"}\n"
-"\n"
-":released\n"
-" {\n"
-"    border: 2px solid rgb(208, 208, 208)\n"
-"}\n"
-"\n"
-"")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_3 = QtWidgets.QPushButton(self.frame_5)
-        self.pushButton_3.setGeometry(QtCore.QRect(110, 620, 75, 24))
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.gridLayout_4.addWidget(self.frame_5, 0, 2, 1, 1)
-        self.frame_4 = QtWidgets.QFrame(self.scrollAreaWidgetContents)
-        self.frame_4.setMaximumSize(QtCore.QSize(300, 16777215))
-        self.frame_4.setStyleSheet("background-color: None;")
-        self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_4.setObjectName("frame_4")
-        self.gridLayout_6 = QtWidgets.QGridLayout(self.frame_4)
-        self.gridLayout_6.setObjectName("gridLayout_6")
-        self.label_5 = QtWidgets.QLabel(self.frame_4)
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        self.label_5.setFont(font)
-        self.label_5.setStyleSheet("border-color: None;\n"
-"background-color: None;")
-        self.label_5.setObjectName("label_5")
-        self.gridLayout_6.addWidget(self.label_5, 0, 0, 1, 1)
-        self.tblBinary = QtWidgets.QTableView(self.frame_4)
-        self.tblBinary.setStyleSheet("QHeaderView::section\n"
-"{\n"
-"            border-top:0px solid #D8D8D8;\n"
-"            border-left:0px solid #D8D8D8;\n"
-"            border-right:1px solid black;\n"
-"            border-bottom: 1px solid #D8D8D8;\n"
-"            background-color:white;\n"
-"            padding:4px;\n"
-"            font: 12pt;\n"
-"\n"
-"}\n"
-"\n"
-"QTableView {\n"
-"        border-collapse: collapse;\n"
-"        gridline-color: black;\n"
-"        selection-background-color: blue;\n"
-"        text-align: center;\n"
-"        font: 12pt;\n"
-"            border: 3px ridge  rgb(136, 136, 136) ;\n"
-"    border-radius: 6px;\n"
-"}\n"
-"\n"
-"QHeaderView::section:horizontal\n"
-"{\n"
-"font: 12pt;\n"
-"    border-top: None;\n"
-"    border-bottom: 2px solid rgb(0, 0, 0);\n"
-"    border-collapse: collapse;\n"
-"}\n"
-"\n"
-"QTableCornerButton::section\n"
-"{\n"
-"            border-top: 0px solid black;\n"
-"           border-left: 0px solid black;\n"
-"            border-right: 2px solid black;\n"
-"            border-bottom: 2px solid black;\n"
-"           background-color: white;\n"
-"}\n"
-"\n"
-"QHeaderView::section:vertical\n"
-"{\n"
-"    font: 10pt;\n"
-"    border-top: None;\n"
-"    border-bottom: 1px solid ;\n"
-"    border-right: 2px solid black;\n"
-"    border-collapse: collapse;\n"
-"}")
-        self.tblBinary.setLineWidth(3)
-        self.tblBinary.setObjectName("tblBinary")
-        self.gridLayout_6.addWidget(self.tblBinary, 1, 0, 1, 1)
-        self.gridLayout_4.addWidget(self.frame_4, 0, 1, 1, 1)
         self.frame_2 = QtWidgets.QFrame(self.scrollAreaWidgetContents)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
         self.frame_2.setSizePolicy(sizePolicy)
-        self.frame_2.setMaximumSize(QtCore.QSize(400, 16777215))
+        self.frame_2.setMinimumSize(QtCore.QSize(400, 600))
+        self.frame_2.setMaximumSize(QtCore.QSize(400, 700))
         self.frame_2.setStyleSheet("background-color: None;")
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -329,6 +152,13 @@ class Ui_MainWindow(object):
         self.gridLayout_5 = QtWidgets.QGridLayout(self.frame_2)
         self.gridLayout_5.setObjectName("gridLayout_5")
         self.lnMinterm = QtWidgets.QLineEdit(self.frame_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lnMinterm.sizePolicy().hasHeightForWidth())
+        self.lnMinterm.setSizePolicy(sizePolicy)
+        self.lnMinterm.setMinimumSize(QtCore.QSize(240, 40))
+        self.lnMinterm.setMaximumSize(QtCore.QSize(240, 40))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.lnMinterm.setFont(font)
@@ -341,6 +171,13 @@ class Ui_MainWindow(object):
         self.lnMinterm.setObjectName("lnMinterm")
         self.gridLayout_5.addWidget(self.lnMinterm, 2, 2, 1, 3)
         self.lnVariable = QtWidgets.QLineEdit(self.frame_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lnVariable.sizePolicy().hasHeightForWidth())
+        self.lnVariable.setSizePolicy(sizePolicy)
+        self.lnVariable.setMinimumSize(QtCore.QSize(240, 40))
+        self.lnVariable.setMaximumSize(QtCore.QSize(240, 40))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.lnVariable.setFont(font)
@@ -374,43 +211,6 @@ class Ui_MainWindow(object):
 "background-color: None;")
         self.label.setObjectName("label")
         self.gridLayout_5.addWidget(self.label, 1, 1, 2, 1)
-        self.tblMinterm = QtWidgets.QTableView(self.frame_2)
-        self.tblMinterm.setMaximumSize(QtCore.QSize(300, 16777215))
-        self.tblMinterm.setStyleSheet("QTableView {\n"
-"        gridline-color: black;\n"
-"        selection-background-color: blue;\n"
-"        text-align: center;\n"
-"        font: 14pt;\n"
-"    border: 3px solid #1C6EA4;\n"
-"    border-radius: 6px;\n"
-"}\n"
-"\n"
-"QHeaderView\n"
-"{\n"
-"    font: 600 11pt \"Open Sans\";\n"
-"}\n"
-"\n"
-"QHeaderView::section {\n"
-"    background-color: rgb(15, 111, 198);\n"
-"    color: rgb(255, 255, 255);\n"
-"    padding: 4px;\n"
-"    border-style: solid;\n"
-"    border-bottom: 1px solid #fffff8;\n"
-"    border-right: 1px solid #fffff8;\n"
-"}\n"
-"\n"
-"QHeaderView::section:horizontal\n"
-"{\n"
-"    border-top: None;\n"
-"\n"
-"}\n"
-"\n"
-"QHeaderView::section:vertical\n"
-"{\n"
-"    border-left: 1px solid #fffff8;\n"
-"}")
-        self.tblMinterm.setObjectName("tblMinterm")
-        self.gridLayout_5.addWidget(self.tblMinterm, 9, 1, 1, 4)
         self.chbDontCare = QtWidgets.QCheckBox(self.frame_2)
         self.chbDontCare.setMaximumSize(QtCore.QSize(20, 16777215))
         font = QtGui.QFont()
@@ -423,6 +223,8 @@ class Ui_MainWindow(object):
         self.chbDontCare.setObjectName("chbDontCare")
         self.gridLayout_5.addWidget(self.chbDontCare, 5, 0, 1, 1)
         self.lnDontCare = QtWidgets.QLineEdit(self.frame_2)
+        self.lnDontCare.setMinimumSize(QtCore.QSize(240, 40))
+        self.lnDontCare.setMaximumSize(QtCore.QSize(240, 40))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.lnDontCare.setFont(font)
@@ -497,17 +299,263 @@ class Ui_MainWindow(object):
         self.btnFind.setAutoDefault(True)
         self.btnFind.setObjectName("btnFind")
         self.gridLayout_5.addWidget(self.btnFind, 6, 3, 1, 1)
+        self.tblMinterm = QtWidgets.QTableView(self.frame_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tblMinterm.sizePolicy().hasHeightForWidth())
+        self.tblMinterm.setSizePolicy(sizePolicy)
+        self.tblMinterm.setMinimumSize(QtCore.QSize(343, 400))
+        self.tblMinterm.setMaximumSize(QtCore.QSize(343, 400))
+        self.tblMinterm.setSizeIncrement(QtCore.QSize(0, 0))
+        self.tblMinterm.setBaseSize(QtCore.QSize(0, 0))
+        self.tblMinterm.setStyleSheet("QTableView {\n"
+"        gridline-color: black;\n"
+"        selection-background-color: blue;\n"
+"        text-align: center;\n"
+"        font: 14pt;\n"
+"    border: 3px solid #1C6EA4;\n"
+"    border-radius: 6px;\n"
+"}\n"
+"\n"
+"QHeaderView\n"
+"{\n"
+"    font: 600 11pt \"Open Sans\";\n"
+"}\n"
+"\n"
+"QHeaderView::section {\n"
+"    background-color: rgb(15, 111, 198);\n"
+"    color: rgb(255, 255, 255);\n"
+"    padding: 4px;\n"
+"    border-style: solid;\n"
+"    border-bottom: 1px solid #fffff8;\n"
+"    border-right: 1px solid #fffff8;\n"
+"}\n"
+"\n"
+"QHeaderView::section:horizontal\n"
+"{\n"
+"    border-top: None;\n"
+"\n"
+"}\n"
+"\n"
+"QHeaderView::section:vertical\n"
+"{\n"
+"    border-left: 1px solid #fffff8;\n"
+"}")
+        self.tblMinterm.setObjectName("tblMinterm")
+        self.gridLayout_5.addWidget(self.tblMinterm, 9, 1, 1, 4)
         self.gridLayout_4.addWidget(self.frame_2, 0, 0, 1, 1)
+        self.frame_4 = QtWidgets.QFrame(self.scrollAreaWidgetContents)
+        self.frame_4.setMinimumSize(QtCore.QSize(340, 0))
+        self.frame_4.setMaximumSize(QtCore.QSize(340, 800))
+        self.frame_4.setStyleSheet("background-color: None;")
+        self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_4.setObjectName("frame_4")
+        self.gridLayout_6 = QtWidgets.QGridLayout(self.frame_4)
+        self.gridLayout_6.setObjectName("gridLayout_6")
+        self.label_5 = QtWidgets.QLabel(self.frame_4)
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        self.label_5.setFont(font)
+        self.label_5.setStyleSheet("border-color: None;\n"
+"background-color: None;")
+        self.label_5.setObjectName("label_5")
+        self.gridLayout_6.addWidget(self.label_5, 0, 0, 1, 1)
+        self.tblBinary = QtWidgets.QTableView(self.frame_4)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tblBinary.sizePolicy().hasHeightForWidth())
+        self.tblBinary.setSizePolicy(sizePolicy)
+        self.tblBinary.setMinimumSize(QtCore.QSize(240, 588))
+        self.tblBinary.setMaximumSize(QtCore.QSize(248, 588))
+        self.tblBinary.setStyleSheet("QHeaderView::section\n"
+"{\n"
+"            border-top:0px solid #D8D8D8;\n"
+"            border-left:0px solid #D8D8D8;\n"
+"            border-right:1px solid black;\n"
+"            border-bottom: 1px solid #D8D8D8;\n"
+"            background-color:white;\n"
+"            padding:4px;\n"
+"            font: 12pt;\n"
+"\n"
+"}\n"
+"\n"
+"QTableView {\n"
+"        border-collapse: collapse;\n"
+"        gridline-color: black;\n"
+"        selection-background-color: blue;\n"
+"        text-align: center;\n"
+"        font: 12pt;\n"
+"            border: 3px ridge  rgb(136, 136, 136) ;\n"
+"    border-radius: 6px;\n"
+"}\n"
+"\n"
+"QHeaderView::section:horizontal\n"
+"{\n"
+"font: 12pt;\n"
+"    border-top: None;\n"
+"    border-bottom: 2px solid rgb(0, 0, 0);\n"
+"    border-collapse: collapse;\n"
+"}\n"
+"\n"
+"QTableCornerButton::section\n"
+"{\n"
+"            border-top: 0px solid black;\n"
+"           border-left: 0px solid black;\n"
+"            border-right: 2px solid black;\n"
+"            border-bottom: 2px solid black;\n"
+"           background-color: white;\n"
+"}\n"
+"\n"
+"QHeaderView::section:vertical\n"
+"{\n"
+"    font: 10pt;\n"
+"    border-top: None;\n"
+"    border-bottom: 1px solid ;\n"
+"    border-right: 2px solid black;\n"
+"    border-collapse: collapse;\n"
+"}")
+        self.tblBinary.setLineWidth(3)
+        self.tblBinary.setObjectName("tblBinary")
+        self.gridLayout_6.addWidget(self.tblBinary, 1, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.frame_4, 0, 1, 1, 1)
+        self.frame_5 = QtWidgets.QFrame(self.scrollAreaWidgetContents)
+        self.frame_5.setMinimumSize(QtCore.QSize(0, 500))
+        self.frame_5.setMaximumSize(QtCore.QSize(800, 650))
+        self.frame_5.setStyleSheet("background-color: None;")
+        self.frame_5.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_5.setObjectName("frame_5")
+        self.lblSchemat = QtWidgets.QLabel(self.frame_5)
+        self.lblSchemat.setGeometry(QtCore.QRect(10, 20, 731, 520))
+        self.lblSchemat.setMinimumSize(QtCore.QSize(0, 520))
+        self.lblSchemat.setMaximumSize(QtCore.QSize(900, 520))
+        self.lblSchemat.setStyleSheet("background-color: None;")
+        self.lblSchemat.setText("")
+        self.lblSchemat.setObjectName("lblSchemat")
+        self.btnShow = QtWidgets.QPushButton(self.frame_5)
+        self.btnShow.setGeometry(QtCore.QRect(420, 600, 201, 41))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(False)
+        font.setItalic(False)
+        self.btnShow.setFont(font)
+        self.btnShow.setStyleSheet(":active\n"
+"{\n"
+"font: 500 11pt \"Open Sans\";\n"
+"-webkit-border-radius: 12px;\n"
+"-moz-border-radius: 12px;\n"
+"border-radius: 12px;\n"
+"background-color: rgb(15, 111, 198);\n"
+"color: rgb(255, 255, 255);\n"
+"border: 2px solid rgb(255, 255, 255)\n"
+"}\n"
+":!active\n"
+"{\n"
+"font: 500 11pt \"Open Sans\";\n"
+"-webkit-border-radius: 12px;\n"
+"-moz-border-radius: 12px;\n"
+"border-radius: 12px;\n"
+"background-color: rgb(15, 111, 198);\n"
+"color: rgb(255, 255, 255);\n"
+"border: 2px solid rgb(255, 255, 255)\n"
+"}\n"
+"\n"
+":disabled\n"
+"{\n"
+"font: 500 11pt \"Open Sans\";\n"
+"-webkit-border-radius: 12px;\n"
+"-moz-border-radius: 12px;\n"
+"border-radius: 12px;\n"
+"background-color: rgb(208, 208, 208);\n"
+"color: rgb(255, 255, 255);\n"
+"border: 2px solid rgb(255, 255, 255)\n"
+"}\n"
+"\n"
+"\n"
+":pressed\n"
+"{\n"
+"    background-color: rgb(0, 85, 255);\n"
+"    border-style: inset\n"
+"}\n"
+":hover\n"
+" {\n"
+"    border: 2px solid rgb(0, 0, 0)\n"
+"}\n"
+":focus\n"
+" {\n"
+"    border: 2px solid rgb(0, 0, 255)\n"
+"}\n"
+"\n"
+"\n"
+"\n"
+"")
+        self.btnShow.setAutoDefault(True)
+        self.btnShow.setObjectName("btnShow")
+        self.lblResultMath = QtWidgets.QLabel(self.frame_5)
+        self.lblResultMath.setGeometry(QtCore.QRect(260, 530, 501, 41))
+        self.lblResultMath.setStyleSheet("border-color: None;")
+        self.lblResultMath.setText("")
+        self.lblResultMath.setObjectName("lblResultMath")
+        self.label_8 = QtWidgets.QLabel(self.frame_5)
+        self.label_8.setGeometry(QtCore.QRect(20, 540, 227, 26))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setUnderline(False)
+        self.label_8.setFont(font)
+        self.label_8.setStyleSheet("border-color: None;\n"
+"font: 500 18pt \"Open Sans\";\n"
+"")
+        self.label_8.setObjectName("label_8")
+        self.pushButton_2 = QtWidgets.QPushButton(self.frame_5)
+        self.pushButton_2.setGeometry(QtCore.QRect(110, 600, 81, 22))
+        self.pushButton_2.setStyleSheet(":active\n"
+"{\n"
+"font: 500 10pt \"Open Sans\";\n"
+"-webkit-border-radius: 12px;\n"
+"-moz-border-radius: 12px;\n"
+"border-radius: 12px;\n"
+"background-color: None;\n"
+"color: rgb(0, 0, 0);\n"
+"border: 2px solid rgb(208, 208, 208)}\n"
+":pressed\n"
+"{\n"
+"    background-color: rgb(0, 85, 255);\n"
+"}\n"
+":hover\n"
+" {\n"
+"    border: 2px solid rgb(0, 0, 0)\n"
+"}\n"
+":!hover\n"
+" {\n"
+"    border: 2px solid rgb(208, 208, 208)\n"
+"}\n"
+"\n"
+":released\n"
+" {\n"
+"    border: 2px solid rgb(208, 208, 208)\n"
+"}\n"
+"\n"
+"")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_3 = QtWidgets.QPushButton(self.frame_5)
+        self.pushButton_3.setGeometry(QtCore.QRect(20, 600, 75, 24))
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.gridLayout_4.addWidget(self.frame_5, 0, 2, 1, 1)
         self.verticalLayout_4.addLayout(self.gridLayout_4)
         self.verticalLayout_3.addLayout(self.verticalLayout_4)
         self.gridLayout.addLayout(self.verticalLayout_3, 0, 0, 1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout_2.addWidget(self.scrollArea, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
-        self.label_5.setBuddy(self.lnVariable)
         self.label_3.setBuddy(self.lnVariable)
         self.label.setBuddy(self.lnMinterm)
         self.label_4.setBuddy(self.lnVariable)
+        self.label_5.setBuddy(self.lnVariable)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -528,11 +576,6 @@ class Ui_MainWindow(object):
         self.lblMinimalizacja.setText(_translate("MainWindow", "Minimalizacja"))
         self.lblMetoda.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">metodą</p></body></html>"))
         self.lblQuine.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Quine’a-McCluskeya</p></body></html>"))
-        self.btnShow.setText(_translate("MainWindow", "Guzik"))
-        self.label_8.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">Forma zminimalizowana:</span></p></body></html>"))
-        self.pushButton_2.setText(_translate("MainWindow", "TEX"))
-        self.pushButton_3.setText(_translate("MainWindow", "Tekst"))
-        self.label_5.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Tablica prawdy:</p></body></html>"))
         self.lnMinterm.setPlaceholderText(_translate("MainWindow", "1, 2, 5, 9, 12"))
         self.lnVariable.setText(_translate("MainWindow", "A, B, C, D"))
         self.lnVariable.setPlaceholderText(_translate("MainWindow", "a, b, c, d"))
@@ -542,3 +585,8 @@ class Ui_MainWindow(object):
         self.lnDontCare.setPlaceholderText(_translate("MainWindow", "0, 6"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Wektory:</p></body></html>"))
         self.btnFind.setText(_translate("MainWindow", "Generuj"))
+        self.label_5.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Tablica prawdy:</p></body></html>"))
+        self.btnShow.setText(_translate("MainWindow", "Otwórz w nowym oknie"))
+        self.label_8.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">Forma zminimalizowana:</span></p></body></html>"))
+        self.pushButton_2.setText(_translate("MainWindow", "TEX"))
+        self.pushButton_3.setText(_translate("MainWindow", "Tekst"))

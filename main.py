@@ -1,4 +1,6 @@
 import sys
+
+import matplotlib.pyplot as plt
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -44,25 +46,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SetShadowEffect(self.tblBinary, blur=40)
         self.SetShadowEffect(self.frame, blur=40, offst=2)
 
-        #
-        #
-        # effectShadow1 = QGraphicsOpacityEffect(self.frame)
-        # effectShadow1.setOpacity(0.8)
-        # self.frame.setGraphicsEffect(effectShadow1)
-
-        # Naciśnięcie button "GENERUJ"
-        self.btnFind.clicked.connect(lambda: self.GetData(self.btnFind))
-
-        self.btnShow.clicked.connect(lambda: self.ShowNewWindow(self.btnShow))
+        # Akcję dla przycisków"
+        self.btnFind.clicked.connect(lambda: self.GenerateData(self.btnFind))
+        self.btnShow.clicked.connect(lambda: self.ShowWindowSchema(self.btnShow))
 
     # Naciśnięcie ENTER spowoduje wywołanie akcji dla btnFind
     def keyPressEvent(self, e: QKeyEvent):
         if e.key() == Qt.Key_Return or e.key() == Qt.Key_Enter:
-            self.GetData(self.btnFind)
+            self.GenerateData(self.btnFind)
             self.lnMinterm.setFocus()
 
     @staticmethod
     def SetShadowEffect(label: Qt.Widget, blur: float = 15, offst: float = 2):
+        ''' Dodanie efektu cienia dla przekazanego widgetu
+            Args:
+                label: widget, na którym dodajemy cień
+                blur: wielkość rozmycia
+                offst: odległość
+        '''
         effectShadow = QGraphicsDropShadowEffect(label)
         effectShadow.setBlurRadius(blur)
         effectShadow.setOffset(offst)
@@ -71,8 +72,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # Metoda scala komórki w kolumnie Liczba jedynek
     # Przyjmuje formant TableView, w którym sprawdzamy wiersze oraz tablice z danymi
     def MergeRow(self, Table: QTableView, tab: [List]):
-        # usunięcie aktualnych scalan
-        Table.clearSpans()
+        ''' Metoda scala komórki w kolumnie Liczba jedynek w tablicy wektorów
+            Przyjmuje widget TableView, w którym sprawdza wiersze oraz tablice z danymi,
+            a następnie łączy komórki o tych samych wartościach
+        '''
+        Table.clearSpans()           # usunięcie aktualnych scalan
         start = 0
         stop = len(tab)
 
@@ -88,24 +92,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 Table.setSpan(start, 0, count, 1)
             start = x
 
-    # ODKOMENTOWAĆ
-    # def init_schema(self, source):
-    #     # print("init schema")
-    #     try:
-    #         self.schema = ViewSchema(source)
-    #     except Exception:
-    #         print("init graph")
-    #
-    #     self.stackedWidget.addWidget(self.schema.return_canvas())
-    #     self.stackedWidget.setCurrentWidget(self.schema.return_canvas())
+    def GenerateData(self, buttn) -> bool:
+        ''' Metoda przyjmuje dane wpisane od użytkownika i wykonuje wszystkie czynności
+                    potrzebne do wyświetlenia wyniku
+        '''
 
-
-    def GetData(self, buttn):
         # sprawdzenie czy wprowadzono dane
         if self.lnMinterm.displayText() == '':
             button = QMessageBox.information(self, "Brak danych", "<font size = 8> Podaj Mintermy </font>")
             self.lnMinterm.setFocus()
-            return
+            return False
 
         self.lnMinterm.setFocus()
 
@@ -123,16 +119,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ListVariable = self.obj.getVariablesAsString()
             self.ListImplicants = self.obj.getTestImplicant()
 
+            # sprawdzenie czy liczba wpisanych liczb odpawiada (ilością) wpisanym zmiennych
             countVariables = len(self.obj.getVariablesAsList())
             maxAcceptMinterm = pow(2, countVariables) - 1
-
-            tab = [0,6,12,15]
+            tab = self.obj.getInitNumbers()
             maxGiveNumber = max(tab)
-
             if maxGiveNumber > maxAcceptMinterm:
-                print("Za duze liczby")
                 button = QMessageBox.information(self, f"Niepoprawne dane", "Podano zbyt duże liczby. Dodaj zmienną lub "
                                                  f" wprowadź liczby w zakresie 0 - {maxAcceptMinterm}")
+                return False
+
         except Exception:
             print("Problem z generowaniem obiektu InputData")
 
@@ -140,12 +136,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ImportDataFrameToTruthTable(self.tblBinary, self.obj)
             self.ImportDataFrameToTableMinterm(self.tblMinterm, self.obj)
         except Exception:
-            print("Problem z przekazaniem obiektu InputData do metody ImportDataFrame")
+            print("Problem z utworzeniem tabel (ImportDataFrame)")
 
         # utworzenie Schema
         try:
             self.schema = Schema(self.ListVariable, self.obj.getImplicantsAsBinary(), self.obj.getTruthTable())
-            self.schema.GenerateSchema()
+            f = self.schema.GenerateSchema(truth_table=False)
         except Exception:
             print("Problem z wygenerowaniem obiektu Schema")
 
@@ -155,43 +151,55 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.lblSchemat.setScaledContents(True)
 
         obj_formula = ResultEntrance(self.obj.getImplicantsAsInput())
-        str1 = obj_formula.GenerateAsMath()
         obj_formula.RenderImage()
         pix1 = QPixmap('formula.png')
         self.lblResultMath.setPixmap(pix1)
         self.btnShow.setEnabled(True)
 
-    def ShowNewWindow(self, buttn):
-        self.schema.ShowWithTruthTable()
+        return True
 
-    def CheckNumbersAndVariables(self):
-        print()
+    def ShowWindowSchema(self, buttn):
+        f = self.schema.GenerateSchema(truth_table=True, draw=True, save_schem=False)
 
-
-    def ImportDataFrameToTruthTable(self, table: QTableView, obj: InputData):
+    def ImportDataFrameToTruthTable(self, table: QTableView, obj: InputData) -> None:
         source = obj.getTruthTable().astype(str)
         model = TableModelBinary(source)
         table.setModel(model)
 
         vertHead = table.verticalHeader()
-        vertHead.setDefaultSectionSize(35)
-        vertHead.setMaximumWidth(50)
+        vertHead.setDefaultSectionSize(34)
         vertHead.setDefaultAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
         horiHead = table.horizontalHeader()
-        horiHead.setDefaultSectionSize(40)
+        horiHead.setDefaultSectionSize(10)
         horiHead.setFixedHeight(36)
-        table.setColumnWidth(obj.getTruthTable().shape[1] - 1, 52)
+
         table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
+
         if obj.getTruthTable().shape[0] > 16:
+            table.setColumnWidth(obj.getTruthTable().shape[1] - 1, 40)
+            table.setFixedWidth(290)
             table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-            table.setFixedWidth(310)
         else:
-            table.setFixedWidth(250)
+            table.setColumnWidth(obj.getTruthTable().shape[1] - 1, 50)
+            table.setFixedWidth(248)
             table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-    def ImportDataFrameToTableMinterm(self, table: QTableView, obj: InputData):
+        # if obj.getTruthTable().shape[0] > 16:
+        #     table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        #
+        # else:
+        #     table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+        # if obj.getTruthTable().shape[0] > 16:
+        #     table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        #     table.setFixedWidth(310)
+        # else:
+        #     table.setFixedWidth(250)
+        #     table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+    def ImportDataFrameToTableMinterm(self, table: QTableView, obj: InputData) -> None:
         source = obj.getGroupImplicants()
         df = source.rename({"Liczba jedynek": "Grupa", "Liczba Binarna": "Binarnie", "Liczba Dziesiętna": "Dziesiętnie"}, axis=1)
         model = TableModelMinterm(df)
@@ -201,10 +209,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         row = table.verticalHeader()
         row.setDefaultSectionSize(40)
         column.setDefaultSectionSize(100)
-        table.setColumnWidth(0, 150)
-        table.setColumnWidth(1, 130)
+        table.setColumnWidth(0, 120)
+        table.setColumnWidth(1, 100)
         table.setColumnWidth(2, 100)
-        table.setFixedWidth(402)
+        table.setFixedWidth(343)
         table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         table.verticalHeader().hide()
@@ -224,7 +232,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         cb.setText(self.label_9.text(), mode=cb.Clipboard)
 
     def DrawSchema(self):
-
         try:
             self.obj = InputData(self.lnVariable.text(), str(self.lnMinterm.text()), str(self.lnDontCare.text()))
             print(self.obj.getTruthTable())

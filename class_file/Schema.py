@@ -1,4 +1,6 @@
 from typing import List, Dict, Optional, Union, Any
+
+import matplotlib.pyplot as plt
 import schemdraw
 import schemdraw.elements as elm
 from schemdraw import logic
@@ -39,7 +41,6 @@ class Schema:
     def GetCountIn(self) -> int:
         return len(self.listVariable)
 
-
     @staticmethod
     def StrToList(source: Any) -> Union[List, str]:
         if isinstance(source, list):
@@ -48,8 +49,10 @@ class Schema:
             formated_tekst = re.findall('\w+', source)  # e.g. ['1', '3', '1', '1', ...]
             return formated_tekst
 
-
     def SetListImplicant(self, listImp: Any) ->List[List[str]]:
+        ''' Konwersja prowadzonych implikantów ['--10', '1--0'...]
+                    na odpowiadające im wejścia: [['c', '-d'], ['a', '-d'], ... ]
+        '''
         if len(listImp) == 0:
             print("Brak implikantów...")
             return []
@@ -72,6 +75,9 @@ class Schema:
         return tab_end
 
     def CheckVariableAndImplicants(self) -> bool:
+        ''' Sprawdzenie podanych danych
+                    Porónywanie uzyskanych implikanótw ze zmiennymi
+        '''
         all_term = [item.replace("-", "") for sublist in self.listResult for item in sublist]
         check_if_exist = all(item in self.listVariable for item in all_term)
 
@@ -83,42 +89,61 @@ class Schema:
                 return False
             else:
                 print("Nieokreślony błąd.")
-        # return True if check_if_exist else False
+                return False
 
-    # type    1 - node,  2 - not
     def CreateInput(self, input: str, lbl: str, type: Optional[int] = 1) -> schemdraw.Drawing:
-        if type == 1:
+        ''' Tworzenie wejść i ich negacji
+             Args:
+                 input: nazwa obiektu
+                 lbl: ustawienie etykiety
+                 type:
+                        1: utworzenie węzła
+                        0: utworzenie negacji
+        '''
+        if type == 0:
+            new_node = logic.Not().scale(0.7).down()
+            self.dictInput[input] = new_node
+        elif type == 1:
             new_node = logic.Dot(radius=0).label("$" + lbl + "$", fontsize=20)
             self.dictInput[input] = new_node
         else:
-            new_node = logic.Not().scale(0.7).down()
-            self.dictInput[input] = new_node
+            print("Niezidentyfikowany obiekt...")
+            new_node = None
         return new_node
 
-    def CreateGate(self, name: str, nr_in: Optional[int] = 2, type: Optional[int] = 1) -> Union[logic.And, logic.Dot]:
-        if type == 1:
-            new_gate = logic.And(inputs=nr_in).right().anchor('in1')
-            self.dictGates[name] = new_gate
-        else:  # utworzenie node
-            new_gate = logic.Dot(radius=0)
-            self.dictGates[name] = new_gate
+    def CreateGateAnd(self, name: str, nr_in: Optional[int] = 2) -> Union[logic.And, logic.Dot]:
+        ''' Utworzenie bramki AND
+             Args:
+                 name: nazwa obiektu
+                 nr_in: liczba wejść bramki AND
+        '''
+
+        new_gate = logic.And(inputs=nr_in).right().anchor('in1')
+        self.dictGates[name] = new_gate
         return new_gate
 
     def CreateNode(self, name: str) -> logic.Dot:
+        ''' Utworzenie węzła
+             Args:
+                 name: nazwa obiektu
+        '''
         new_node = logic.Dot(radius=0)
         self.dictGates[name] = new_node
         return new_node
 
     def GetLengthDownLine(self) -> float:
+        ''' Ustawienie długości dolnej linii wychodzącej z Input '''
+
         length = 2.5
         for impl in self.listResult:
             if len(impl) > 1:
-                length += len(impl) * 0.5
+                length += len(impl) * 0.45
             else:
-                length += 0.7 + 0.5
+                length += 0.6 + 0.5
         return length
 
     def DrawInputs(self) -> None:
+        ''' Rysowanie wszystkich wejść i ich negacji '''
         # rysowanie wejść
         for x in range(0, self.GetCountIn()):
             variable = self.listVariable[x]
@@ -129,7 +154,7 @@ class Schema:
             tmp_label = variable[0] if len(variable) == 1 else variable[0] + '_{' + (('').join(variable[1:])) + '}'
             # new_input = InputNode(variable, tmp_label)
             # tworzymy nowy input
-            new_input = self.CreateInput(variable, tmp_label)
+            new_input = self.CreateInput(variable, tmp_label, type=1)
             # dodajemy input do schematu
             self.MainSchema.add(new_input)
 
@@ -145,11 +170,12 @@ class Schema:
             self.MainSchema.add(logic.Line().right())
 
             # utworzenie bramki not, dodanie do listy wejść i dodanie do schematu
-            new_not = self.CreateInput(f'-{variable}', '', type=2)
+            new_not = self.CreateInput(f'-{variable}', '', type=0)
             self.MainSchema.add(new_not)
             self.MainSchema.add(logic.Line().down().length(lenDownLine - 0.85))
 
-    def DrawGatesAndInput(self):
+    def DrawGatesAndInput(self) -> None:
+        ''' Rysowanie bramek(węzłów) i łączenie z ich wejściami wejść (zmiennych) '''
         # start - odległość pozioma bramek od linii wejść
         start = self.GetCountIn() * 1.4
         # step - odległość pomiędzy bramkami AND
@@ -169,7 +195,7 @@ class Schema:
                 step -= 1.5
                 if count > 3:
                     step -= 0.8
-                new_gate = self.CreateGate(f'AND{nrAND}', nr_in=len(implicant))
+                new_gate = self.CreateGateAnd(f'AND{nrAND}', nr_in=len(implicant))
                 self.MainSchema.add(new_gate)
 
             # łączenie  wejść   bramek
@@ -188,7 +214,8 @@ class Schema:
                     self.MainSchema.add(logic.Line().to(new_gate.end))
             nrAND += 1
 
-    def DrawGateOr(self):
+    def DrawGateOr(self) -> None:
+        ''' Rysowanie bramki OR i połączenie jej z bramkami AND '''
         top = list(self.dictGates.values())[0]  # pierwsza bramka
         bottom = list(self.dictGates.values())[-1]  # ostatnia bramka
 
@@ -205,9 +232,10 @@ class Schema:
         self.ConnectInputswithOr(gate_OR)
         self.MainSchema.pop()
 
-    def ConnectInputswithOr(self, gate: schemdraw.Drawing):
+    def ConnectInputswithOr(self, gate: schemdraw.Drawing) -> None:
+        ''' Łączęnie wejść bramki OR z wyjściami bramek AND '''
         # utworzenie listy ze współrzędnymi (obiekt Point) wejść bramki OR (ze słownika gate_OR.absanchors)
-
+        self.MainSchema.push()      # zapamiętanie pozycji wyjścia bramki OR
         coordInOr = [v for k, v in gate.absanchors.items() if k.startswith('in')]
         coordInOr.reverse()
 
@@ -255,7 +283,10 @@ class Schema:
             # zmniejszamy długość linii od wyjść bramek
             decrease -= 0.35
 
-    def DrawKmap(self):
+        self.MainSchema.pop()       # powrót do wyjścia bramki OR
+
+    def DrawKmap(self) -> None:
+        ''' Rysowanie mapki Karnaugha. TYLKO DLA 4 ZMIENNYCH '''
         # Generowanie siatki Karnaugha dla 4 zmiennych
         if len(self.listVariable) <= 4:
             truthTab = self.truthTable.astype(str)
@@ -284,9 +315,13 @@ class Schema:
         else:
             print("Siatka Karnaugha generuje się tylka dla 4 zmiennych")
 
-    def DrawTruthTable(self):
+    def DrawTruthTable(self) -> None:
+        ''' Rysowanie tablicy prawdy '''
         self.MainSchema.push()
-        self.MainSchema.move(8, 6)
+        if(self.GetCountIn() > 4):
+            self.MainSchema.move(2, 5)
+        else:
+            self.MainSchema.move(8, 6)
         table = self.truthTable.to_markdown(index=False)
         form = (self.truthTable.shape[1] - 1) * "c" + "||" + "c"
 
@@ -297,7 +332,8 @@ class Schema:
             self.MainSchema.add(logic.Table(table, colfmt=form))
         self.MainSchema.pop()
 
-    def DrawFormula(self):
+    def DrawFormula(self) -> None:
+        ''' Rysowanie funkcji wyjścia '''
         lbl = ResultEntrance(self.listResult).GenerateAsMathBar()
         if isinstance(list(self.dictGates.values())[-1], schemdraw.logic.logic.And):
             startFrom = list(self.dictGates.values())[-1].out
@@ -307,7 +343,9 @@ class Schema:
         self.MainSchema.move(-2, -1.5)
         self.MainSchema.add(logic.Dot(radius=0).label(lbl, fontsize=20, halign='left', valign='top', color='navy'))
 
-    def DrawSOP(self):
+    def DrawSOP(self) -> None:
+        ''' Rysowanie kanonicznej postaci sumacyjnej funkcji '''
+        self.MainSchema.push()      # zapamiętanie pozycji wyjścia bramki OR
         df = self.truthTable
         minterm = df.index[df.Y == 1].tolist()
         dontcare = df.index[df.Y == 'X'].tolist()
@@ -322,34 +360,85 @@ class Schema:
         if len(dontcare) > 0:
             text += "$\,+\,d(" + lblDont + ")$"
 
-        self.MainSchema.here = (2, 2.8)
+        if self.GetCountIn() > 4:
+            self.MainSchema.here = (2, 2.2)
+        else:
+            self.MainSchema.here = (2, 2.8)
+
         self.MainSchema.add(logic.Dot(radius=0).label(text,
-                                                      fontsize=24,
-                                                      halign='left',
-                                                      valign='top'))
-    def SaveSchema(self):
+                                                        fontsize=24,
+                                                        halign='left',
+                                                        valign='top'))
+        self.MainSchema.pop()  # powrót do pozycji wyjścia bramki OR
+
+    def SaveSchema(self, filename: str) -> None:
+        ''' Zapisanie schematu w pliku o nazwie - filename, format: "schemat.png" '''
         if bool(self.MainSchema.elements):
-            filename = "schema.png"
-            self.MainSchema.save(filename, transparent=False, dpi=300)
+            f = self.MainSchema.save(filename, transparent=False, dpi=300)
+            plt.close(f)
             print(f"Zapisano schemat w pliku \"{filename}\"")
         else:
             print("Nie zapisano schematu. Brak elementów.")
 
-    def ShowWithTruthTable(self):
+    def DrawSchema(self, show: bool = True):
+        ''' Wyświetlenie schematu '''
+        self.MainSchema.draw()
+
+
+    # def GenerateSchema(self):
+    #     try:
+    #         checkYourData = self.CheckVariableAndImplicants()
+    #         if checkYourData:
+    #             self.DrawInputs()
+    #             self.DrawGatesAndInput()
+    #             self.DrawGateOr()
+    #             self.DrawKmap()
+    #             # self.DrawTruthTable()
+    #             # self.DrawFormula()
+    #             self.DrawSOP()
+    #             # self.MainSchema.draw()
+    #             self.SaveSchema()
+    #         else:
+    #             print("Błędne dane. Sprawdź zmienne i implikanty!")
+    #     except Exception:
+    #         print(self.listResult)
+    #         print("[Wyjątek] Nie wygenerowano schematu")
+
+    def GenerateSchema(self,
+                                sop: bool = True,
+                                kmap: bool = True,
+                                truth_table: bool = True,
+                                save_schem: bool = True,
+                                formula: bool = False,
+                                draw: bool = False) -> None:
+        ''' Generowanie schematu z wybranymi elementami
+
+            Args:
+                kmap: [True/False] - rysowanie siatki Karnaugha (Tylko dla czterech zmiennych)
+                truth_table: [True/False] - rysowanie tablicy prawdy
+                save_schem: [True/False] - zapis schematu w formacie png
+                draw: [True/False] - wyświetlenie schematu na ekranie
+        '''
+
         try:
             checkYourData = self.CheckVariableAndImplicants()
             if checkYourData:
-                self.MainSchema.elements.clear()
                 self.DrawInputs()
                 self.DrawGatesAndInput()
                 self.DrawGateOr()
-                self.DrawKmap()
-                self.DrawTruthTable()
-                # self.DrawFormula()
-                self.DrawSOP()
-                self.MainSchema.draw()
-
-                #self.SaveSchema()
+                # Opcjonalne:
+                if sop:
+                    self.DrawSOP()
+                if kmap:
+                    self.DrawKmap()
+                if truth_table:
+                    self.DrawTruthTable()
+                if formula:
+                    self.DrawFormula()
+                if draw:
+                    self.DrawSchema()
+                if save_schem:
+                    self.SaveSchema("schema.png")
             else:
                 print("Błędne dane. Sprawdź zmienne i implikanty!")
         except Exception:
@@ -357,25 +446,17 @@ class Schema:
             print("[Wyjątek] Nie wygenerowano schematu")
 
 
-    def GenerateSchema(self):
-        try:
-            checkYourData = self.CheckVariableAndImplicants()
-            if checkYourData:
-                self.DrawInputs()
-                self.DrawGatesAndInput()
-                self.DrawGateOr()
-                self.DrawKmap()
-                # self.DrawTruthTable()
-                # self.DrawFormula()
-                self.DrawSOP()
-                # self.MainSchema.draw()
-                self.SaveSchema()
-                self.MainSchema.elements.clear()
-            else:
-                print("Błędne dane. Sprawdź zmienne i implikanty!")
-        except Exception:
-            print(self.listResult)
-            print("[Wyjątek] Nie wygenerowano schematu")
+if __name__ == "__main__":
+    variable = 'A, B, C, D'
+    sop = '0,1,2,7,9,11,12,13,14'
+    dontcare = ''
+
+    data = InputData(variable, sop, dontcare)
+    schema = Schema(variable, data.getImplicantsAsBinary(), data.getTruthTable())
+    schema.GenerateSchema1()
+
+
+
 
 
 # variable = 'A, B, C, D'
@@ -390,4 +471,11 @@ class Schema:
 # schema.GenerateSchema()
 #
 # print(schema.listImplicants)
+
+# d = schemdraw.Drawing()
+# d.add(elm.Resistor())
+# schemfig = d.draw()
+# schemfig.ax.axvline(.5, color='purple', ls='--')
+# schemfig.ax.axvline(2.5, color='orange', ls='-', lw=3)
+# schemfig.show()
 

@@ -56,6 +56,9 @@ class InputData:
     def getTestImplicant(self):
         return ['000-', '-010', '011-']
 
+    def getInitNumbers(self):
+        return self.InputObject.get_odebrane_dane()
+
 
 def StrToList(text: str) -> List[str]:
     tab = re.findall('\w+', text)  # e.g. ['1', '3', '1', '1', ...]

@@ -27,93 +27,46 @@ class PDF(FPDF):
                 self.cell(40, 6, col, 1)
             self.ln()
 
-    def colored_table(self, headings, rows, szer=55, nazwa='', prawda=False, y=None, x=None, grupa=False):
+    def colored_table(self, headings, rows, szer=55, nazwa='', x=None, y=None):
+
         self.cell(0, 10, '')
         self.ln()
         self.cell(0, 10, nazwa)
         self.ln()
-        line_width = self.line_width
-        if not prawda:
-            self.set_fill_color(15, 111, 198)
-            self.set_text_color(255)
-            self.set_draw_color(15, 111, 198)
-            self.set_line_width(0.3)
-            # self.set_font(style="B")
+
+        self.set_fill_color(15, 111, 198)
+        self.set_text_color(255)
+        self.set_draw_color(15, 111, 198)
+        self.set_line_width(0.3)
+        self.set_font(style="B")
         print(headings)
         if len(headings[0].split(' ')) > 1:
+
             splited_x = [x.split(' ') for x in headings]
             x = [x[0] for x in splited_x]
             y = [y[1] for y in splited_x]
             for x_ in x:
-                self.cell(szer, 10, x_, "TLR", 0, "B", True)
+                self.cell(szer, 7, x_, "TLR", 0, "C", True)
             self.ln()
             for y_ in y:
-                self.cell(szer, 10, y_, "BLR", 0, "T", True)
+                self.cell(szer, 7, y_, "BLR", 0, "C", True)
         else:
-            if prawda:
-                self.set_fill_color(255, 255, 255)
-                self.set_text_color(0)
-                for i, heading in enumerate(headings):
-                    # self.set_line_width(1)
+            for heading in headings:
+                self.cell(szer, 7, heading, 55, 0, "C", True)
 
-                    if i == len(headings) - 1:
-                        self.cell(1, 7, '', "LB", 0, "C")
-                        # self.set_font(style='B')
-                        self.cell(szer, 7, heading, "LB", 0, "C")
-                    else:
-                        self.cell(szer, 7, heading, "B", 0, "C")
-            else:
-                for heading in headings:
-                    self.cell(szer, 10, heading, 55, 0, "C", True)
-
-
-        # self.set_line_width(line_width)
         self.ln()
         # Color and font restoration:
         self.set_fill_color(224, 235, 255)
         self.set_text_color(0)
         self.set_font()
         fill = False
-        if prawda:
-            for row in rows:
-                for i, row_ in enumerate(row):
-                    if i == len(row) - 1:
-                        # self.set_font(style='B')
-                        self.cell(1, 8, '', "L", 0, "C", markdown=True)
-                        self.cell(szer, 8, row_, "L", 0, "C", markdown=True)
-                    else:
-                        self.cell(szer, 8, row_, "", 0, "C")
-                self.set_font()
-                self.ln()
-                fill = not fill
-        else:
-            szerx = [x[0] for x in rows]
-            if grupa:
-                items = []
-                print(rows)
-                for row in rows:
-                    for i, row_ in enumerate(row):
-                        if i == 0:
-                            zm = row_ if row_ not in items else ''
-                            items.append(row_)
-                            if zm:
-                                self.cell(szer, 8 * szerx.count(row_) , 'Grupa '+zm, "TLR", 0, "C", fill)
-                            else:
-                                self.cell(szer, 8, zm, "LR", 0, "C", fill)
-                        else:
-                            self.cell(szer, 8, row_, "TLR", 0, "C", fill)
-                    self.ln()
-                    if not grupa:
-                        fill = not fill
-            else:
-                for row in rows:
-                    for row_ in row:
-                        self.cell(szer, 8, row_, "LR", 0, "C", fill)
+        for row in rows:
+            for row_ in row:
+                self.cell(szer, 6, row_, "LR", 0, "C", fill)
 
-                    self.ln()
-                    fill = not fill
-        if not prawda:
-            self.cell(len(headings)*szer, 0, "", "T")
+            self.ln()
+            fill = not fill
+        self.cell(len(headings)*szer, 0, "", "T")
         self.ln()
 
     def napis(self):
@@ -146,21 +99,18 @@ class PDF(FPDF):
 
     def grupowanie(self):
         df = self.tab.get_pierwsza_grupa()
-        # df.rename(columns={"Liczba Dziesiętna": "Liczba Dziesietna"}, inplace=True)
-        df.rename(columns={"Liczba Dziesiętna": "Dziesietna",
-                           "Liczba Binarna": "Binarna",
-                           "Liczba jedynek": "Grupa"}, inplace=True)
+        df.rename(columns={"Liczba Dziesiętna": "Liczba Dziesietna"}, inplace=True)
         df = df.astype(str)
         headings = list(df.columns)
         rows = df.values.tolist()
-        return self.colored_table(headings, rows, nazwa='Wektory:', szer=30, grupa=True)
+        return self.colored_table(headings, rows, nazwa='Wektory:', szer=30)
 
     def tablica_prawdy(self):
         df = self.tab.get_tablica_prawdy()
         df = df.astype(str)
         headings = list(df.columns)
         rows = df.values.tolist()
-        return self.colored_table(headings, rows, nazwa='Tablica prawdy:', szer=10, prawda=True)
+        return self.colored_table(headings, rows, nazwa='Tablica prawdy:', szer=15)
 
     def tablica_pokryc(self):
         df = self.tab.get_tab_pokryc()
@@ -172,7 +122,7 @@ class PDF(FPDF):
 
 
 getVariable = 'A B C D'
-getMinterm = '0 1 2 3 4  '
+getMinterm = '1, 2, 3, 4'
 getDontCare = '5, 6'
 implikanty = ['0-0-', '-0-1']
 
