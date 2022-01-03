@@ -90,13 +90,13 @@ class ResultEntrance:
         text = fig.text(0, 0, formula)
 
         dpi = 200
-        fig.savefig('formula.png', dpi=dpi)
+        fig.savefig('png/formula.png', dpi=dpi)
         bbox = text.get_window_extent()
         width, height = bbox.size / float(dpi) + 0.12
         fig.set_size_inches((3, height))
         dy = (bbox.ymin / float(dpi)) / height
         text.set_position((0.01, -dy+0.1))
-        fig.savefig('formula.png', dpi=dpi)
+        fig.savefig('png/formula.png', dpi=dpi)
         pylab.close()
 
     # @staticmethod

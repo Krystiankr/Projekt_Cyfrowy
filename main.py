@@ -145,7 +145,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except Exception:
             print("Problem z wygenerowaniem obiektu Schema")
 
-        pix = QPixmap('schema.png')
+        pix = QPixmap('png/schema.png')
         pix = pix.scaled(self.lblSchemat.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.lblSchemat.setPixmap(pix)
         # self.lblSchemat.setScaledContents(True)
@@ -159,7 +159,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return True
 
     def ShowWindowSchema(self, buttn):
-        f = self.schema.GenerateSchema(truth_table=True, draw=True, save_schem=False)
+        f = self.schema.GenerateSchema(truth_table=True, formula=True, draw=True, save_schem=False)
 
     def ImportDataFrameToTruthTable(self, table: QTableView, obj: InputData) -> None:
         source = obj.getTruthTable().astype(str)

@@ -380,37 +380,17 @@ class Schema:
         else:
             print("Nie zapisano schematu. Brak elementów.")
 
-    def DrawSchema(self, show: bool = True):
+    def DrawSchema(self):
         ''' Wyświetlenie schematu '''
         self.MainSchema.draw()
 
-
-    # def GenerateSchema(self):
-    #     try:
-    #         checkYourData = self.CheckVariableAndImplicants()
-    #         if checkYourData:
-    #             self.DrawInputs()
-    #             self.DrawGatesAndInput()
-    #             self.DrawGateOr()
-    #             self.DrawKmap()
-    #             # self.DrawTruthTable()
-    #             # self.DrawFormula()
-    #             self.DrawSOP()
-    #             # self.MainSchema.draw()
-    #             self.SaveSchema()
-    #         else:
-    #             print("Błędne dane. Sprawdź zmienne i implikanty!")
-    #     except Exception:
-    #         print(self.listResult)
-    #         print("[Wyjątek] Nie wygenerowano schematu")
-
     def GenerateSchema(self,
-                                sop: bool = True,
-                                kmap: bool = True,
-                                truth_table: bool = True,
-                                save_schem: bool = True,
-                                formula: bool = False,
-                                draw: bool = False) -> None:
+                            sop: bool = True,
+                            kmap: bool = True,
+                            truth_table: bool = True,
+                            save_schem: bool = True,
+                            formula: bool = False,
+                            draw: bool = False) -> None:
         ''' Generowanie schematu z wybranymi elementami
 
             Args:
@@ -438,7 +418,7 @@ class Schema:
                 if draw:
                     self.DrawSchema()
                 if save_schem:
-                    self.SaveSchema("schema.png")
+                    self.SaveSchema("png/schema.png")
             else:
                 print("Błędne dane. Sprawdź zmienne i implikanty!")
         except Exception:
@@ -454,9 +434,6 @@ if __name__ == "__main__":
     data = InputData(variable, sop, dontcare)
     schema = Schema(variable, data.getImplicantsAsBinary(), data.getTruthTable())
     schema.GenerateSchema1()
-
-
-
 
 
 # variable = 'A, B, C, D'
