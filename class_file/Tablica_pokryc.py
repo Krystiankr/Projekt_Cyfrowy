@@ -200,3 +200,4 @@ if __name__ == "__main__":
                            postac_sumacyjna='1 2 3 4',
                            dont_care='5 6')
     print(tab.get_odebrane_dane())
+
