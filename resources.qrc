@@ -27,4 +27,10 @@
         <file>fonts/OpenSans-SemiBold.ttf</file>
         <file>fonts/OpenSans-SemiBoldItalic.ttf</file>
     </qresource>
+    <qresource prefix="/png">
+        <file>png/kkz3.png</file>
+        <file>png/formula.png</file>
+        <file>png/pdf.png</file>
+        <file>png/schema.png</file>
+    </qresource>
 </RCC>

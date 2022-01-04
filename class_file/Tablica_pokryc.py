@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from typing import List, Tuple, Dict
 from collections import Counter
-from Reprezentacja_sumacyjna import CreateTable
+from class_file.Reprezentacja_sumacyjna import CreateTable
 
 
 class DostepneMetody:
@@ -160,6 +160,9 @@ class DostepneMetody:
     def get_pierwsza_grupa(self) -> pd.DataFrame:
         return self._tab.get_pierwsza_grupa()
 
+    def get_odebrane_dane(self) -> List[int]:
+        return self._tab.get_postacsum_dontcare()
+
     def generuj_funkcje(self) -> str:
         # Generuje funkcje na podstawie poprzednich wyników.
         # Nazwy zmiennych są brane z nazw zmiennych podanych na początku.
@@ -190,3 +193,11 @@ class DostepneMetody:
                 primes.append(col)
                 # print(f"PRIME! {col}")
         return primes
+
+
+if __name__ == "__main__":
+    tab = DostepneMetody(zmienne='x1 x2 x3 x4',
+                           postac_sumacyjna='1 2 3 4',
+                           dont_care='5 6')
+    print(tab.get_odebrane_dane())
+
